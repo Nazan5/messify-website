@@ -1,0 +1,29 @@
+# Messify
+
+> Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis and International City, from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.
+
+Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily and all meals are 100% halal.
+
+## Meal plan prices (AED)
+- 1 meal a day, weekly: AED 215 (7 meals, AED 30.71 per meal)
+- 2 meals a day, weekly: AED 415 (14 meals, AED 29.64 per meal)
+- 3 meals a day, weekly: AED 610 (21 meals, AED 29.05 per meal)
+- 1 meal a day, monthly: AED 715 (26 meals, AED 27.50 per meal)
+- 2 meals a day, monthly: AED 1,400 (52 meals, AED 26.92 per meal)
+- 3 meals a day, monthly: AED 1,999 (78 meals, AED 25.63 per meal)
+
+## Key pages
+- [Meal plans and prices](https://www.messify.me/meal-plans/): plans, the token system, delivery and FAQs
+- [Meal plans in Dubai Academic City](https://www.messify.me/meal-plans/academic-city/): delivery to universities and student residences in DIAC, including KSK Homes and The Myriad
+- [Meal plans in Dubai Silicon Oasis](https://www.messify.me/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
+- [Meal plans in International City](https://www.messify.me/meal-plans/international-city/): where Messify meals are cooked
+- [Catering](https://www.messify.me/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [About Messify](https://www.messify.me/about/): key facts in one table
+
+## Contact
+- Phone and WhatsApp: +971 50 251 3033
+- Email: info@messify.me
+- Instagram: @messify.me
+- Opening hours: every day, 8 AM to 11 PM (Gulf Standard Time)
+- App Store: https://apps.apple.com/ae/app/my-messify/id6749799177
+- Google Play: https://play.google.com/store/apps/details?id=com.messifyfzc.messify

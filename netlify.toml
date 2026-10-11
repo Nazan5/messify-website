@@ -1,0 +1,22 @@
+# The site is pre-built: Netlify just serves the dist folder as it is.
+[build]
+  publish = "dist"
+  command = ""
+
+# Long cache for images, styles and scripts; pages always fresh.
+[[headers]]
+  for = "/assets/img/*"
+  [headers.values]
+    Cache-Control = "public, max-age=2592000"
+
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=86400"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "SAMEORIGIN"

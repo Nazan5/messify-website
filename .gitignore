@@ -1,0 +1,4 @@
+__pycache__/
+*.bak
+*.bak[0-9]
+.DS_Store
