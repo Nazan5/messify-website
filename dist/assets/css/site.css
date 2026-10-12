@@ -591,3 +591,31 @@ input[type="range"]{flex:1;min-width:0;accent-color:var(--accent);height:30px}
   .rise,.gate__cue span,.two-ways span.line,.bubble .dots i{animation:none}
   .reveal-ready [data-reveal],.reveal-ready [data-reveal] img{opacity:1!important;transform:none!important;transition:none!important}
 }
+
+/* ---------- guides ---------- */
+.article{max-width:780px}
+.article h1{margin-bottom:14px}
+.byline{font-size:.84rem;color:var(--muted);margin:0 0 28px}
+.article h2{font-size:clamp(1.3rem,2.2vw,1.65rem);line-height:1.2;margin:52px 0 14px;letter-spacing:-.015em}
+.article h3{font-size:1.1rem;margin:28px 0 8px}
+.article > p,.article > ul li,.article > ol li{color:var(--muted);line-height:1.75}
+.article > p b,.article > ul b,.article > ol b{color:var(--fg);font-weight:600}
+.article > ul,.article > ol{padding-left:1.25em;display:grid;gap:8px}
+.article > p a,.article > ul a,.article > ol a{color:var(--accent-ink);text-underline-offset:3px}
+.article .table-wrap{margin:22px 0 8px}
+.article .ptable small{color:var(--muted);font-weight:400}
+.article .faq{margin-top:8px}
+.guide-card{text-decoration:none;color:inherit;display:flex;flex-direction:column;gap:10px}
+.guide-card h2,.guide-card h3{margin:0;font-size:1.12rem;font-weight:600;line-height:1.3}
+.guide-card .link-arrow{margin-top:auto;color:var(--accent-ink)}
+.guide-card:hover h2,.guide-card:hover h3{color:var(--accent-ink)}
+.calc{margin:24px 0;border:1px solid var(--line-strong);border-radius:var(--r-lg);background:var(--surface);padding:clamp(20px,3vw,32px);display:grid;gap:18px}
+.calc__title{margin:-6px 0 0;font-size:1.25rem}
+.calc__out{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));border-top:1px solid var(--line);padding-top:16px}
+.calc__out div{padding-right:12px;min-width:0}
+.calc__out div + div{padding-left:12px;border-left:1px solid var(--line)}
+.calc__out small{display:block;font-size:.76rem;color:var(--muted);line-height:1.3;margin-bottom:4px}
+.calc__out b{font-size:clamp(1.05rem,2.6vw,1.45rem);font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc__diff b{color:var(--accent-ink)}
+.calc .fine{margin:0}
+@media (max-width:520px){.calc__out{grid-template-columns:1fr 1fr}.calc__diff{grid-column:1/-1;border-left:0!important;padding-left:0!important;border-top:1px solid var(--line);padding-top:12px;margin-top:12px}}

@@ -7,7 +7,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-10-12'
+TODAY = '2026-10-13'
 UPDATED_LABEL = 'October 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
@@ -209,6 +209,7 @@ FOOTER = f'''<footer class="foot">
       </ul></div>
       <div><h2>Company</h2><ul>
         <li><a href="/about/">About Messify</a></li>
+        <li><a href="/guides/">Meal plan guides</a></li>
         <li><a href="/meal-plans/#contact">Contact us</a></li>
         <li><a href="/terms/">Terms &amp; conditions</a></li>
         <li><a href="/privacy/">Privacy</a></li>
@@ -289,7 +290,7 @@ def plans_section(title='Pick a plan in ten seconds.', with_table=True):
       <button type="button" data-dur="monthly" aria-pressed="true">Monthly <span class="save">Best value</span></button>
     </div>
     {plan_cards()}
-    <p class="fine">Prices in AED. Monthly plans are 26 days of meals to use within 30 days. Weekly plans are 7 days of meals to use within 9 days. Price per meal = plan price ÷ tokens.</p>
+    <p class="fine">Prices in AED. Monthly plans are 26 days of meals to use within 30 days. Weekly plans are 7 days of meals to use within 9 days. Price per meal = plan price ÷ tokens. <a href="/guides/meal-plan-cost-dubai/#calculator">Compare with ordering in</a>.</p>
     {table}
   </div>
 </section>'''
@@ -662,6 +663,7 @@ AREAS = {
     ('home', 'Student accommodation', ['KSK Homes', 'The Myriad'], 'And other student residences in Academic City'),
   ],
   'why_title': 'Why students in Academic City choose Messify.',
+  'guide': ('/guides/student-meal-plans-dubai/', 'Read our guide to student meal plans in Dubai'),
   'reasons': [
     ('Priced for students', 'Monthly plans start at AED 715 for a meal a day, and the 3-meal plan works out to AED 25.63 a meal, with nothing to decide each day.'),
     ('Built around the semester', 'Exam week or a long weekend? Skip a day in the app and use that token on another day. Weekly plans fit neatly around trips home.'),
@@ -778,6 +780,7 @@ def page_area(slug):
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Why Messify</p><h2 class="h2" id="why-title">{a['why_title']}</h2></div>
     <div class="reasons">{reasons}</div>
+    <a class="link-arrow" style="margin-top:28px" href="{a.get('guide', GUIDES[0])[0]}">{a.get('guide', GUIDES[0])[1]} {I["arrow"]}</a>
   </div>
 </section>
 
@@ -1250,10 +1253,237 @@ def page_404():
 </section>'''
     render(page, body)
 
+# ---------------------------------------------------------------- guides (content pages for search)
+GUIDES = [
+    ('/guides/meal-plan-cost-dubai/', 'How much does a meal plan cost in Dubai?',
+     'What you actually pay per meal, what pushes the price up, and a calculator to compare a meal plan with ordering in.'),
+    ('/guides/student-meal-plans-dubai/', 'Student meal plans in Dubai',
+     'Budgets, exam weeks, residences in Academic City and Silicon Oasis, and how to pick a plan that fits a semester.'),
+    ('/guides/weekly-vs-monthly-meal-plan/', 'Weekly or monthly meal plan: which is better?',
+     'The real difference in price per meal and flexibility, and who should start with which.'),
+]
+
+def article_schema(path, headline, desc, published='2026-10-13'):
+    return {'@type': 'Article', '@id': BASE + path + '#article', 'headline': headline, 'description': desc,
+            'url': BASE + path, 'mainEntityOfPage': BASE + path, 'inLanguage': 'en-AE', 'image': OG_IMAGE,
+            'datePublished': published, 'dateModified': TODAY,
+            'author': {'@id': BASE + '/#organization'}, 'publisher': {'@id': BASE + '/#organization'}}
+
+def guide_more(exclude):
+    items = ''.join(f'<a class="reason guide-card" href="{p}"><h3>{t}</h3><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>'
+                    for p, t, d in GUIDES if p != exclude)
+    return f'''<section class="sec sec--tint sec--tight" aria-labelledby="more-guides">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Guides</p><h2 class="h3" id="more-guides" style="font-size:1.4rem">Keep reading</h2></div>
+    <div class="reasons">{items}</div>
+  </div>
+</section>'''
+
+def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after=''):
+    cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/'), (crumb, path)])
+    page = {'path': path, 'mode': 'meals', 'nav': 'meals', 'title': title, 'desc': desc,
+            'schema': [ORG, BUSINESS, article_schema(path, h1, desc), faq_schema(faqs), crs]}
+    body = f'''<section class="sec sec--first">
+  <div class="wrap article">
+    {cr}
+    <h1 class="h2"><span class="kicker">{kicker}</span> {h1}</h1>
+    <p class="byline">By the Messify team · Updated {UPDATED_LABEL} · 5 min read</p>
+    <div class="answer">
+      <p class="answer__label">Quick answer</p>
+      <p class="answer__lead">{quick}</p>
+    </div>
+    {sections}
+    <h2 id="faq">Questions people ask</h2>
+    {faq_html(faqs, open_first=False)}
+  </div>
+</section>
+{extra_after}
+{guide_more(path)}
+{band()}'''
+    render(page, body)
+
+def calculator():
+    return f'''<div class="calc" data-calc id="calculator">
+      <p class="answer__label">Calculator</p>
+      <h3 class="calc__title">Meal plan vs ordering in</h3>
+      <fieldset class="field">
+        <legend>Meals a day</legend>
+        <div class="seg seg--3">
+          <label><input type="radio" name="calc-meals" value="1"><span>1 meal</span></label>
+          <label><input type="radio" name="calc-meals" value="2" checked><span>2 meals</span></label>
+          <label><input type="radio" name="calc-meals" value="3"><span>3 meals</span></label>
+        </div>
+      </fieldset>
+      <div class="field"><label for="calc-spend">What you usually spend per delivery order (AED, including fees)</label>
+        <input id="calc-spend" type="number" inputmode="decimal" min="10" max="300" step="1" value="45"></div>
+      <div class="calc__out" aria-live="polite">
+        <div><small>Ordering in, 26 days</small><b data-calc-order>AED 2,340</b></div>
+        <div><small>Messify monthly plan</small><b data-calc-plan>AED 1,400</b></div>
+        <div class="calc__diff"><small>Difference a month</small><b data-calc-diff>AED 940</b></div>
+      </div>
+      <p class="fine">AED 45 is only a starting example. Change it to what you really spend, including delivery and service fees. Messify figures use the monthly plan: 26 days of meals to use within 30 days.</p>
+    </div>'''
+
+def page_guides():
+    cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/')])
+    page = {'path': '/guides/', 'mode': 'meals', 'nav': 'meals', 'title': 'Meal Plan Guides for Dubai | Messify',
+            'desc': 'Straight answers about meal plans in Dubai: what they cost, student meal plans, and weekly vs monthly plans.',
+            'schema': [ORG, {'@type': 'CollectionPage', '@id': BASE + '/guides/#page', 'url': BASE + '/guides/', 'name': 'Messify meal plan guides',
+                             'hasPart': [{'@id': BASE + p + '#article'} for p, _, _ in GUIDES]}, crs]}
+    items = ''.join(f'<a class="reason guide-card" href="{p}"><h2 class="h3">{t}</h2><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>' for p, t, d in GUIDES)
+    body = f'''<section class="sec sec--first">
+  <div class="wrap">
+    {cr}
+    <div class="sec-head" style="max-width:760px">
+      <h1 class="h2"><span class="kicker">Guides</span> Meal plans in Dubai, explained.</h1>
+      <p class="lede">Straight answers to the questions we get every day on WhatsApp, with real prices.</p>
+    </div>
+    <div class="reasons">{items}</div>
+  </div>
+</section>
+{band()}'''
+    render(page, body)
+
+def page_guide_cost():
+    p = {m: {ln: (t, pr) for mm, ln, t, pr in PLANS if mm == m} for m in (1, 2, 3)}
+    sections = f'''
+    <h2>The number that matters: price per meal</h2>
+    <p>Meal plans in Dubai are sold in very different ways: by the week, by the month, by calories or by number of meals. The only fair way to compare them is the price of one meal: <b>plan price ÷ number of meals</b>. Then check what that price includes, because delivery fees, VAT and how many days you get to use your meals change the real cost.</p>
+    <p>Broadly, Dubai meal plans fall into two groups. <b>Diet and fitness plans</b> (calorie-counted, macro-tracked, often with snacks and juices) cost the most per meal. <b>Everyday meal plans</b>, which replace ordering in or cooking, cost less and are built around normal home-style meals. Messify is an everyday meal plan.</p>
+
+    <h2>What a Messify meal plan costs</h2>
+    <p>Every price below is for the whole plan. Each meal is one token you can use for breakfast, lunch or dinner.</p>
+    {plans_table('Messify meal plan prices in Dubai (AED)')}
+    <p>The cheapest price per meal is the 3-meal monthly plan at <b>AED {per(p[3]['monthly'][1], p[3]['monthly'][0])}</b>. The lowest total price is the 1-meal weekly plan at <b>AED {p[1]['weekly'][1]}</b>, which is the easiest way to try us. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Prices include VAT unless stated otherwise.</p>
+
+    <h2>Meal plan vs ordering in: run your own numbers</h2>
+    <p>Most people who start a meal plan were ordering in before. Put in what you usually spend on one delivery order, including delivery and service fees, and compare it with a month of Messify.</p>
+    {calculator()}
+
+    <h2>Five things that change the real price</h2>
+    <ol>
+      <li><b>Meals you actually eat.</b> A cheap plan you can't fully use is expensive. Check how long you have to use your meals and whether you can skip days. With Messify you skip a day in the app and use that meal later in your plan.</li>
+      <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers all of the day's meals together every morning in one chilled bag.</li>
+      <li><b>Menu variety.</b> If you get bored by week two, you'll go back to ordering in. Messify's menu changes every day and you pick tomorrow's meals in the app by 6 PM.</li>
+      <li><b>Dietary fit.</b> Every Messify meal is 100% halal and there's a vegetarian option every day, for every meal.</li>
+      <li><b>Where you live.</b> Plans only help if they deliver to you. Messify meal plans deliver to Dubai Academic City, Dubai Silicon Oasis and International City.</li>
+    </ol>
+
+    <h2>Is a meal plan worth it?</h2>
+    <p>If you mostly order in, a meal plan usually costs less per meal and removes the daily decision of what to eat. If you cook most of your meals and enjoy it, cooking is cheaper on ingredients. Many students and professionals in Dubai sit in between: no time or kitchen to cook properly, and tired of delivery apps. That's who an everyday meal plan is for.</p>
+    <p>See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page, or check delivery in <a href="/meal-plans/academic-city/">Academic City</a>, <a href="/meal-plans/silicon-oasis/">Silicon Oasis</a> and <a href="/meal-plans/international-city/">International City</a>.</p>'''
+    faqs = [
+        ('How much is a meal plan in Dubai per month?', f"It depends on the type of plan. Messify monthly plans cost AED {p[1]['monthly'][1]:,} for 1 meal a day, AED {p[2]['monthly'][1]:,} for 2 and AED {p[3]['monthly'][1]:,} for 3, which works out to AED 25.63 to 27.50 per meal. Diet and fitness plans with calorie tracking usually cost more per meal."),
+        ('What is the cheapest way to get a meal plan in Dubai?', 'Compare the price per meal, not the plan price. With Messify, the 3-meal monthly plan has the lowest price per meal, at AED 25.63. The 1-meal weekly plan, at AED 215, is the cheapest way to try it.'),
+        ('Is a weekly meal plan more expensive than a monthly one?', f"Per meal, yes. A Messify weekly plan costs AED {per(p[1]['weekly'][1], p[1]['weekly'][0])} to {per(p[3]['weekly'][1], p[3]['weekly'][0])} per meal, while monthly plans cost AED 25.63 to 27.50. Weekly plans are the easy way to try us first."),
+        ('Do Messify prices include VAT?', 'Yes. Prices include VAT unless stated otherwise.'),
+        ('Can I skip days on a meal plan?', 'With Messify, yes. Skip a day in the app and use that meal on another day of your plan. Monthly plans give you 30 days to use 26 days of meals; weekly plans give you 9 days to use 7.'),
+    ]
+    article_page('/guides/meal-plan-cost-dubai/', 'Meal plan cost', 'How Much Does a Meal Plan Cost in Dubai? (2026) | Messify',
+                 'What meal plans in Dubai really cost per meal, what changes the price, and a calculator to compare a meal plan with ordering in.',
+                 'How much does a meal plan cost in Dubai?', 'Meal plan prices · 2026',
+                 f"Compare meal plans by price per meal. Messify meal plans in Dubai cost AED 25.63 to 30.71 per meal: AED 215–610 a week or AED 715–1,999 a month for 1 to 3 meals a day. Diet and fitness plans with calorie tracking usually cost more per meal.",
+                 sections, faqs)
+
+def page_guide_students():
+    sections = f'''
+    <h2>Why students in Dubai use meal plans</h2>
+    <p>Student life in Dubai makes eating well harder than it should be. Residences often have small or shared kitchens, lectures and labs run through lunch, and delivery apps add up fast. A meal plan fixes the daily question of what to eat and puts a ceiling on what you spend on food each month.</p>
+
+    <h2>What a student meal plan costs</h2>
+    <p>Messify plans start from AED 25 a meal. Most students pick one of these:</p>
+    <ul>
+      <li><b>1 meal a day, monthly: AED 715.</b> Lunch or dinner sorted, AED 27.50 a meal.</li>
+      <li><b>2 meals a day, monthly: AED 1,400.</b> Lunch and dinner, AED 26.92 a meal.</li>
+      <li><b>1 meal a day, weekly: AED 215.</b> The easiest way to try it before committing to a month.</li>
+    </ul>
+    <p>Monthly plans are 26 days of meals to use within 30 days, and weekly plans are 7 days of meals to use within 9 days. Compare it with your delivery spending in our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a>.</p>
+
+    <h2>Where we deliver for students</h2>
+    <p>Messify meals are cooked daily in our partner kitchen in International City and delivered every morning to:</p>
+    <ul>
+      <li><a href="/meal-plans/academic-city/">Dubai Academic City (DIAC)</a>: University of Birmingham Dubai, Middlesex University Dubai, Manipal Academy of Higher Education, BITS Pilani Dubai Campus, Amity University Dubai, Curtin University Dubai, plus residences such as KSK Homes and The Myriad.</li>
+      <li><a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis (DSO)</a>: RIT Dubai and DSOA University Residence.</li>
+      <li><a href="/meal-plans/international-city/">International City</a>: every cluster.</li>
+    </ul>
+    <p class="disclaim">Universities and residences are named only to describe where we deliver. Messify is not affiliated with them.</p>
+
+    <h2>Exams, trips home and long weekends</h2>
+    <p>Your week won't always be the same, and your plan shouldn't punish you for it. With Messify, every meal is a token: skip a busy day in the app and use that meal on another day of your plan, or double up when a friend comes over. Going home for the break? Start a weekly plan, or start your monthly plan when you're back.</p>
+
+    <h2>Halal, vegetarian and variety</h2>
+    <p>Every Messify meal is 100% halal, and there's a vegetarian option every day, for every meal. The menu changes daily, so you won't be eating the same thing all week. You see tomorrow's menu in the app and choose your meals by 6 PM.</p>
+
+    <h2>How to choose a student meal plan</h2>
+    <ol>
+      <li><b>Check delivery to your exact building</b> before paying.</li>
+      <li><b>Compare price per meal</b>, not the plan price.</li>
+      <li><b>Check how long you have to use your meals</b> and whether you can skip days.</li>
+      <li><b>Look at the menu</b>: does it change often enough that you'll keep eating it?</li>
+      <li><b>Start small.</b> A weekly plan is a cheap way to test the food and the delivery.</li>
+    </ol>
+    <p>Ready? See all <a href="/meal-plans/">meal plans in Dubai</a> or <a href="/start/">start your plan</a> in the Messify app.</p>'''
+    faqs = [
+        ('What is the best meal plan for students in Dubai?', 'The best student meal plan is one that delivers to your building, fits your budget per meal and lets you skip busy days. Messify delivers to Academic City, Silicon Oasis and International City from AED 25 a meal, and every meal is a token you can use on another day of your plan.'),
+        ('How much should a student spend on food in Dubai?', 'It varies widely. A useful benchmark: a Messify 2-meal monthly plan is AED 1,400, or AED 26.92 a meal. Use our calculator to compare that with what you spend ordering in.'),
+        ('Do you deliver to KSK Homes, The Myriad and DSOA University Residence?', 'Yes. We deliver every morning to KSK Homes and The Myriad in Academic City, and to DSOA University Residence in Silicon Oasis.'),
+        ('Can I pause my meal plan during exams?', 'You can skip days in the app and use those meals on other days of your plan. Monthly plans give you 30 days to use 26 days of meals; weekly plans give you 9 days to use 7.'),
+        ('Is the food halal?', 'Yes. Every Messify meal is 100% halal, with a vegetarian option every day, for every meal.'),
+    ]
+    article_page('/guides/student-meal-plans-dubai/', 'Student meal plans', 'Student Meal Plans in Dubai: Prices & Delivery | Messify',
+                 'A practical guide to student meal plans in Dubai: costs per meal, delivery to Academic City and Silicon Oasis residences, exams and halal food.',
+                 'Student meal plans in Dubai', 'For students · 2026',
+                 'Student meal plans in Dubai with Messify start from AED 25 a meal, delivered every morning to Dubai Academic City, Silicon Oasis and International City. A 2-meal monthly plan costs AED 1,400 (AED 26.92 a meal), and you can skip busy days and use those meals later in your plan.',
+                 sections, faqs)
+
+def page_guide_weekly_monthly():
+    rows = ''.join(
+        f'<tr><th scope="row">{mlabel(m)}</th>'
+        + ''.join(f'<td class="num">{aed(pr)}<br><small>AED {per(pr, t)} a meal</small></td>' for mm, ln, t, pr in PLANS if mm == m and ln == 'weekly')
+        + ''.join(f'<td class="num">{aed(pr)}<br><small>AED {per(pr, t)} a meal</small></td>' for mm, ln, t, pr in PLANS if mm == m and ln == 'monthly')
+        + '</tr>' for m in (1, 2, 3))
+    table = f'''<div class="table-wrap"><table class="ptable">
+  <caption>Messify weekly vs monthly meal plans (AED)</caption>
+  <thead><tr><th scope="col">Meals a day</th><th scope="col" class="num">Weekly (7 days of meals)</th><th scope="col" class="num">Monthly (26 days of meals)</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>'''
+    sections = f'''
+    <h2>The short version</h2>
+    <ul>
+      <li><b>Choose weekly</b> if you're trying a meal plan for the first time, your schedule is unpredictable, or you're only in Dubai for part of the month.</li>
+      <li><b>Choose monthly</b> once you know you like the food: it gives you the best price per meal and covers your whole month.</li>
+    </ul>
+
+    <h2>Price per meal, side by side</h2>
+    {table}
+    <p>On every plan size, monthly costs less per meal. On the 2-meal plan, for example, you pay AED 26.92 a meal monthly against AED 29.64 weekly.</p>
+
+    <h2>Flexibility</h2>
+    <p>Both plans work the same way: every meal is a token you can use for breakfast, lunch or dinner, and you can skip a day and have that meal later in your plan. Weekly plans are 7 days of meals to use within 9 days. Monthly plans are 26 days of meals to use within 30 days, which leaves room for weekends away and busy days.</p>
+
+    <h2>Who usually picks which</h2>
+    <ul>
+      <li><b>First-time customers:</b> weekly, then switch to monthly.</li>
+      <li><b>Students during term:</b> monthly. Around exams and trips home, weekly.</li>
+      <li><b>Office workers in Silicon Oasis:</b> monthly, often 1 or 2 meals a day for workday lunches and dinners.</li>
+      <li><b>Teams:</b> monthly office plans with one morning delivery for everyone.</li>
+    </ul>
+    <p>See every option on our <a href="/meal-plans/">meal plans in Dubai</a> page, or read <a href="/guides/meal-plan-cost-dubai/">how much a meal plan costs in Dubai</a>.</p>'''
+    faqs = [
+        ('Is a monthly meal plan cheaper than a weekly one?', 'Per meal, yes. Messify monthly plans cost AED 25.63 to 27.50 a meal; weekly plans cost AED 29.05 to 30.71 a meal.'),
+        ('How long do I have to use a weekly or monthly plan?', 'Weekly plans are 7 days of meals to use within 9 days. Monthly plans are 26 days of meals to use within 30 days.'),
+        ('Can I switch from weekly to monthly?', 'Yes. Most people start with a week to try the food, then choose a monthly plan in the app.'),
+        ('Which plan is best for students?', 'Monthly during term for the best price per meal; weekly around exams, trips home or if you are trying Messify for the first time.'),
+    ]
+    article_page('/guides/weekly-vs-monthly-meal-plan/', 'Weekly vs monthly', 'Weekly vs Monthly Meal Plans in Dubai | Messify',
+                 'Weekly or monthly meal plan? Compare the price per meal, flexibility and who each plan suits, with real Messify prices in Dubai.',
+                 'Weekly or monthly meal plan: which is better?', 'Choosing a plan · 2026',
+                 'Monthly meal plans cost less per meal: Messify monthly plans are AED 25.63 to 27.50 a meal against AED 29.05 to 30.71 on weekly plans. Start weekly if you want to try the food first, then switch to monthly.',
+                 sections, faqs)
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
-            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
+            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
@@ -1297,6 +1527,9 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis]({BASE}/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City]({BASE}/meal-plans/international-city/): where Messify meals are cooked
 - [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
+- [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
+- [Weekly vs monthly meal plans]({BASE}/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
 - [About Messify]({BASE}/about/): key facts in one table
 
 ## Contact
@@ -1345,4 +1578,5 @@ if __name__ == '__main__':
     sync_js_prices()
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
+    page_guides(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly()
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()

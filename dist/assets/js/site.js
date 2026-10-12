@@ -310,5 +310,20 @@
     });
   });
 
+  /* ---------- Meal plan vs ordering-in calculator (guides) ---------- */
+  $$('[data-calc]').forEach(function (box) {
+    var spend = $('#calc-spend', box);
+    var fmt = function (n) { return 'AED ' + Math.round(n).toLocaleString('en-US'); };
+    var run = function () {
+      var m = +(($('input[name="calc-meals"]:checked', box) || {}).value || 2);
+      var each = Math.max(0, parseFloat(spend.value) || 0);
+      var order = m * 26 * each, plan = PLANS[m].monthly.price, diff = order - plan;
+      $('[data-calc-order]', box).textContent = fmt(order);
+      $('[data-calc-plan]', box).textContent = fmt(plan);
+      $('[data-calc-diff]', box).textContent = (diff >= 0 ? '' : '−') + fmt(Math.abs(diff)) + (diff >= 0 ? ' saved' : ' more');
+    };
+    box.addEventListener('input', run); box.addEventListener('change', run); run();
+  });
+
   onScroll();
 })();

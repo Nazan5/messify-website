@@ -11,6 +11,7 @@ dist/                    the finished website (this is what Netlify publishes)
     silicon-oasis/       Meal plans in Dubai Silicon Oasis
     international-city/  Meal plans in International City
   catering/              Catering (includes party, buffet and home events)
+  guides/                Guides: meal plan cost (with calculator), student meal plans, weekly vs monthly
   start/                 Start page: app or WhatsApp (hidden from Google)
   about/                 Messify at a glance (key facts for Google and AI assistants)
   terms/                 Terms and conditions
