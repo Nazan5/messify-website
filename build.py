@@ -7,7 +7,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-10-11'
+TODAY = '2026-10-12'
 UPDATED_LABEL = 'October 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
@@ -197,7 +197,7 @@ FOOTER = f'''<footer class="foot">
     <div class="foot__grid">
       <div><span class="mark" role="img" aria-label="Messify"></span><p>Daily meal plans and event catering in Dubai. Cooked fresh every day in International City.</p></div>
       <div><h2>Meal plans</h2><ul>
-        <li><a href="/meal-plans/">Meal plans &amp; prices</a></li>
+        <li><a href="/meal-plans/">Meal plans in Dubai</a></li>
         <li><a href="/meal-plans/academic-city/">Academic City</a></li>
         <li><a href="/meal-plans/silicon-oasis/">Silicon Oasis</a></li>
         <li><a href="/meal-plans/international-city/">International City</a></li>
@@ -438,7 +438,7 @@ def page_home():
           <p class="eyebrow" style="margin:0">Meal plans</p>
           <h3 class="h3">Your meals, handled.</h3>
           {ticklist(['From AED 25 a meal, weekly or monthly', 'New menu every day, see it a day ahead', 'Skip a day, have it later in your plan'], 'x')}
-          <span class="link-arrow">Explore meal plans {I["arrow"]}</span>
+          <span class="link-arrow">Explore meal plans in Dubai {I["arrow"]}</span>
         </div>
       </a>
       <a class="card-link card-link--dark" href="/catering/">
@@ -446,7 +446,7 @@ def page_home():
         <div class="card-link__body">
           <p class="eyebrow" style="margin:0;color:#D8B48A">Catering</p>
           <h3 class="h3">Your event, fed properly.</h3>
-          {ticklist(['Corporate, parties, university events, weddings', 'Fully customisable menus, quoted by headcount', 'Dubai, Sharjah, Ajman and Abu Dhabi'], 'x')}
+          {ticklist(['Corporate, parties, weddings and buffet setups', 'Fully customisable menus, quoted by headcount', 'Dubai, Sharjah, Ajman and Abu Dhabi'], 'x')}
           <span class="link-arrow">Explore catering {I["arrow"]}</span>
         </div>
       </a>
@@ -518,7 +518,7 @@ def page_meal_plans():
     page = {
         'path': '/meal-plans/', 'mode': 'meals', 'nav': 'meals', 'exact': True,
         'title': 'Meal Plans in Dubai, Weekly & Monthly | Messify',
-        'desc': 'Affordable weekly and monthly meal plans in Dubai. 1, 2 or 3 meals a day from AED 715 a month, delivered every morning. Skip a day, have it later.',
+        'desc': 'Affordable weekly and monthly meal plans in Dubai from AED 25 a meal. 1, 2 or 3 fresh, 100% halal meals a day, delivered together every morning.',
         'preload': '<link rel="preload" as="image" href="/assets/img/bag-sofa-640.webp" imagesrcset="/assets/img/bag-sofa-640.webp 640w, /assets/img/bag-sofa.webp 900w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
         'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs],
     }
@@ -544,7 +544,7 @@ def page_meal_plans():
   </div>
 </section>
 
-{plans_section()}
+{plans_section('Meal plans in Dubai, priced per meal.')}
 
 <section class="sec sec--tight" aria-label="Quick answer">
   <div class="wrap">
