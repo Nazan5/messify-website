@@ -9,7 +9,7 @@
     formEndpoint: 'https://formsubmit.co/ajax/info@messify.me'
   };
 
-  // Plans in AED. Weekly = 7 days, monthly = 26 days. 1 meal = 1 token. Per meal = price ÷ tokens.
+  // Plans in AED. Weekly = 7 days of meals to use within 9 days, monthly = 26 days of meals to use within 30 days. 1 meal = 1 token.
   var PLANS = {
     1: { weekly: { price: 215, tokens: 7 }, monthly: { price: 715, tokens: 26 } },
     2: { weekly: { price: 415, tokens: 14 }, monthly: { price: 1400, tokens: 52 } },
@@ -109,7 +109,7 @@
       card.querySelector('[data-price]').textContent = 'AED ' + fmt(p.price);
       card.querySelector('[data-unit]').textContent = dur === 'weekly' ? '/ week' : '/ month';
       card.querySelector('[data-per]').textContent = 'AED ' + (p.price / p.tokens).toFixed(2) + ' per meal';
-      card.querySelector('[data-tokens]').textContent = p.tokens + ' tokens, covers ' + (dur === 'weekly' ? 7 : 26) + ' days';
+      card.querySelector('[data-tokens]').textContent = p.tokens + ' tokens · ' + (dur === 'weekly' ? '7 days of meals, use within 9 days' : '26 days of meals, use within 30 days');
     });
     $$('a[data-start-meals]').forEach(function (a) {
       a.href = a.getAttribute('href').split('?')[0] + '?meals=' + a.dataset.startMeals + '&duration=' + dur;
@@ -133,7 +133,7 @@
       $('[data-s-name]').textContent = mealsLabel(pick.meals) + ' · ' + (pick.dur === 'weekly' ? 'Weekly' : 'Monthly');
       $('[data-s-price]').textContent = 'AED ' + fmt(p.price);
       $('[data-s-unit]').textContent = pick.dur === 'weekly' ? '/ week' : '/ month';
-      $('[data-s-meta]').textContent = 'AED ' + (p.price / p.tokens).toFixed(2) + ' per meal · ' + p.tokens + ' tokens · covers ' + (pick.dur === 'weekly' ? 7 : 26) + ' days';
+      $('[data-s-meta]').textContent = 'AED ' + (p.price / p.tokens).toFixed(2) + ' per meal · ' + p.tokens + ' tokens · ' + (pick.dur === 'weekly' ? '7 days of meals, use within 9 days' : '26 days of meals, use within 30 days');
       $('[data-s-appline]').innerHTML = 'You’ll confirm <b>' + mealsLabel(pick.meals) + ', ' + pick.dur + '</b> in the app.';
       var count = $('[data-s-count]');
       count.dataset.target = p.tokens;

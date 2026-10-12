@@ -2,7 +2,7 @@
 
 > Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis and International City, from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.
 
-Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily and all meals are 100% halal.
+Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily, all meals are 100% halal, and there is a vegetarian option every day, for every meal. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Meal plan delivery covers Dubai Academic City, Dubai Silicon Oasis and International City only.
 
 ## Meal plan prices (AED)
 - 1 meal a day, weekly: AED 215 (7 meals, AED 30.71 per meal)

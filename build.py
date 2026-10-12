@@ -94,7 +94,7 @@ WEBSITE = {'@type': 'WebSite', '@id': BASE + '/#website', 'url': BASE + '/', 'na
 def offer_catalog():
     return {'@type': 'OfferCatalog', 'name': 'Messify meal plans', 'itemListElement': [
         {'@type': 'Offer', 'name': f'{mlabel(m)}, {ln}', 'price': str(p), 'priceCurrency': 'AED',
-         'description': f'{t} meals (tokens), covers {7 if ln == "weekly" else 26} days. AED {per(p, t)} per meal.',
+         'description': f'{t} meals (tokens): {7 if ln == "weekly" else 26} days of meals to use within {9 if ln == "weekly" else 30} days. AED {per(p, t)} per meal.',
          'url': BASE + '/meal-plans/#plans'} for m, ln, t, p in PLANS]}
 
 def faq_schema(faqs):
@@ -183,7 +183,7 @@ def header(page):
       <span class="switch__thumb" aria-hidden="true"></span>
       {a('/meal-plans/', 'Meal plans', 'meals')}{a('/catering/', 'Catering', 'catering')}
     </nav>
-    <div class="bar__end"><a class="btn btn--sm" href="{cta[0]}"><span class="cta-long">{cta[1]}</span><span class="cta-short">{cta[2]}</span></a></div>
+    <div class="bar__end"><a class="btn btn--sm" href="{cta[0]}"{f' data-messibot="{page["cta_bot"]}"' if page.get("cta_bot") else ''}><span class="cta-long">{cta[1]}</span><span class="cta-short">{cta[2]}</span></a></div>
   </div>
 </header>'''
 
@@ -230,6 +230,7 @@ def render(page, body):
 </main>
 {FOOTER}
 <script src="/assets/js/site.js" defer></script>
+<script src="/assets/js/messibot.js" defer></script>
 </body>
 </html>
 '''
@@ -242,9 +243,9 @@ def render(page, body):
 # ---------------------------------------------------------------- reusable sections
 def plan_cards():
     cards = [
-        (1, False, 'AED 715', 'AED 27.50 per meal', '26 tokens, covers 26 days', ['Lunch only, or any meal you pick', 'Skip a day, have it later in your plan']),
-        (2, True,  'AED 1,400', 'AED 26.92 per meal', '52 tokens, covers 26 days', ['Lunch and dinner, sorted', 'Skip a day, have it later in your plan']),
-        (3, False, 'AED 1,999', 'AED 25.63 per meal', '78 tokens, covers 26 days', ['Breakfast, lunch and dinner in one bag', 'Best price per meal']),
+        (1, False, 'AED 715', 'AED 27.50 per meal', '26 tokens · 26 days of meals, use within 30 days', ['Lunch only, or any meal you pick', 'Skip a day, have it later in your plan']),
+        (2, True,  'AED 1,400', 'AED 26.92 per meal', '52 tokens · 26 days of meals, use within 30 days', ['Lunch and dinner, sorted', 'Skip a day, have it later in your plan']),
+        (3, False, 'AED 1,999', 'AED 25.63 per meal', '78 tokens · 26 days of meals, use within 30 days', ['Breakfast, lunch and dinner in one bag', 'Best price per meal']),
     ]
     out = []
     for m, pop, price, perm, tok, extra in cards:
@@ -283,13 +284,13 @@ def plans_section(title='Pick a plan in ten seconds.', with_table=True):
       <button type="button" data-dur="monthly" aria-pressed="true">Monthly <span class="save">Best value</span></button>
     </div>
     {plan_cards()}
-    <p class="fine">Prices in AED. Weekly plans cover 7 days, monthly plans cover 26 days. Price per meal = plan price ÷ tokens.</p>
+    <p class="fine">Prices in AED. Monthly plans are 26 days of meals to use within 30 days. Weekly plans are 7 days of meals to use within 9 days. Price per meal = plan price ÷ tokens.</p>
     {table}
   </div>
 </section>'''
 
 def meal_form(area_default='', heading='Talk to us.', lede="Have a question before you start? Tell us which plan you're considering and we'll get back to you, usually on WhatsApp.", tint=True):
-    areas = ['Dubai Academic City', 'Dubai Silicon Oasis', 'International City', 'Somewhere else in Dubai']
+    areas = ['Dubai Academic City', 'Dubai Silicon Oasis', 'International City', 'Somewhere else (join the waitlist)']
     opts = ''.join(f'<option{" selected" if a == area_default else ""}>{a}</option>' for a in areas)
     return f'''<section class="sec{' sec--tint' if tint else ''}" id="contact" aria-labelledby="contact-title">
   <div class="wrap form-grid">
@@ -373,7 +374,7 @@ def areas_cards(exclude=None, heading_level='h3'):
 FAQ_PRICE = ('How much does a meal plan cost in Dubai with Messify?',
              'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999. That works out to AED 25.63 to 30.71 per meal.')
 FAQ_AREAS = ('Which areas do you deliver meal plans to?',
-             'We deliver meal plans every morning across Dubai Academic City, Dubai Silicon Oasis, International City and nearby areas. Message us on WhatsApp to check your building.')
+             'We deliver meal plans every morning to three areas: Dubai Academic City, Dubai Silicon Oasis and International City. Message us on WhatsApp to check your building.')
 FAQ_START = ('How do I start a meal plan?',
              'Download the Messify app, pick your plan and pay in the app. Prefer to talk first? Message us on WhatsApp at +971 50 251 3033.')
 FAQ_SKIP = ('Can I skip a day?', 'Yes. Skip a day in the app and use that token on another day of your plan.')
@@ -471,6 +472,7 @@ def page_home():
         <tr><th scope="row">Meal plan prices</th><td>AED 215–610 a week or AED 715–1,999 a month (AED 25.63–30.71 per meal)</td></tr>
         <tr><th scope="row">Delivery</th><td>Every morning, all the day's meals in one chilled bag</td></tr>
         <tr><th scope="row">Food</th><td>Balanced and 100% halal, with a new menu every day</td></tr>
+        <tr><th scope="row">Vegetarian</th><td>A vegetarian option every day, for every meal</td></tr>
         <tr><th scope="row">Flexibility</th><td>1 meal = 1 token. Skip a day and use the token later in your plan.</td></tr>
         <tr><th scope="row">Meal plan areas</th><td>Dubai Academic City, Dubai Silicon Oasis, International City</td></tr>
         <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman and Abu Dhabi</td></tr>
@@ -495,12 +497,13 @@ def page_home():
 
 def page_meal_plans():
     faqs = [FAQ_PRICE,
-            ("What's the difference between weekly and monthly plans?", 'Monthly saves you more on every meal. Weekly is the easy way to try us out first.'),
+            ("What's the difference between weekly and monthly plans?", 'Monthly plans are 26 days of meals to use within 30 days, and save you more on every meal. Weekly plans are 7 days of meals to use within 9 days, the easy way to try us out first.'),
             FAQ_SKIP,
             ('Can I order extra meals?', 'Yes. Two lunches in one day, or a friend coming over? Spend an extra token.'),
             ('When do meals arrive?', "Every morning, all together in one Messify bag with an ice pack. Meals are blast-chilled, so you reheat them when you're ready to eat."),
             ('Can I see the menu in advance?', "Yes. The menu changes every day, and tomorrow's menu is in the app the day before. Choose your meals by 6 PM for next-morning delivery."),
             ('Is Messify food halal?', 'Yes. All Messify meals are 100% halal.'),
+            ('Do you have vegetarian meals?', 'Yes. There is a vegetarian option every day, for every meal: breakfast, lunch and dinner.'),
             FAQ_AREAS, FAQ_START]
     cr, crs = crumbs([('Home', '/'), ('Meal plans', '/meal-plans/')])
     service = {'@type': 'Service', '@id': BASE + '/meal-plans/#service', 'name': 'Messify meal plans', 'serviceType': 'Meal plan delivery',
@@ -591,7 +594,7 @@ def page_meal_plans():
 
 <section class="sec" aria-labelledby="menu-title">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">On the menu</p><h2 class="h2" id="menu-title">A new menu every day. <span class="sample">Sample dishes</span></h2><p class="lede">Healthy, balanced home-style meals, with a different menu every day so the week never gets repetitive.</p></div>
+    <div class="sec-head"><p class="eyebrow">On the menu</p><h2 class="h2" id="menu-title">A new menu every day. <span class="sample">Sample dishes</span></h2><p class="lede">Healthy, balanced home-style meals, with a different menu every day so the week never gets repetitive. There's a vegetarian option every day, for every meal.</p></div>
     <div class="dishes">
       <article class="dish"><div class="photo"><img src="/assets/img/biryani.webp" alt="Paneer makhani with saffron rice" width="1600" height="1181" loading="lazy"></div><div class="dish__body"><span class="dish__tag">Indian</span><h3>Paneer makhani with saffron rice</h3><p>Soft paneer in a rich tomato gravy.</p></div></article>
       <article class="dish"><div class="photo"><img src="/assets/img/stroganoff.webp" alt="Creamy chicken with peppers and herb rice" width="1200" height="885" loading="lazy"></div><div class="dish__body"><span class="dish__tag">Continental</span><h3>Creamy chicken with herb rice</h3><p>Peppers and mushrooms in a light cream sauce.</p></div></article>
@@ -621,14 +624,15 @@ def page_meal_plans():
 <section class="sec" aria-labelledby="where-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Where we deliver</p><h2 class="h2" id="where-title">Delivered every morning, close to where it's cooked.</h2>
-      <p class="lede">Daily meal delivery across these areas and nearby neighbourhoods. Meals are cooked in International City and arrive every morning.</p></div>
+      <p class="lede">Daily meal delivery to three areas: Academic City, Silicon Oasis and International City. Meals are cooked in International City and arrive every morning.</p></div>
     {areas_cards()}
   </div>
 </section>
 
 <section class="sec sec--tint" aria-labelledby="faq-title">
   <div class="wrap split split--top">
-    <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Good to know.</h2></div>
+    <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Good to know.</h2>
+      <a class="link-arrow" href="#contact" data-messibot="meals" style="margin-top:18px">Ask a question {I["arrow"]}</a></div>
     {faq_html(faqs)}
   </div>
 </section>
@@ -814,7 +818,7 @@ def page_start():
         <div>
           <p class="summary__name" data-s-name>2 meals a day · Monthly</p>
           <div class="summary__price"><b data-s-price>AED 1,400</b><span data-s-unit>/ month</span></div>
-          <p class="summary__meta" data-s-meta>AED 26.92 per meal · 52 tokens · covers 26 days</p>
+          <p class="summary__meta" data-s-meta>AED 26.92 per meal · 52 tokens · 26 days of meals, use within 30 days</p>
         </div>
         <div class="summary__edit">
           <fieldset class="mini"><legend>Meals a day</legend>
@@ -910,7 +914,7 @@ def page_catering():
     page = {'path': '/catering/', 'mode': 'catering', 'nav': 'catering', 'exact': True,
             'title': 'Catering Services Dubai, Sharjah & Abu Dhabi | Messify',
             'desc': 'Custom catering and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.',
-            'cta': ('#quote', 'Get a quote', 'Quote'),
+            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
             'preload': '<link rel="preload" as="image" href="/assets/img/cat-serving-640.webp" imagesrcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
             'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs]}
     events = [
@@ -932,7 +936,7 @@ def page_catering():
       <h1 class="h2 rise"><span class="kicker">Catering in Dubai, Sharjah &amp; Abu Dhabi</span> Your event, <em class="it">fed properly.</em></h1>
       <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
-        <a class="btn" href="#quote">Get a quote</a>
+        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
         <a class="btn btn--ghost" href="{WA}?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener">WhatsApp us</a>
       </div>
       <div class="facts">
@@ -1068,15 +1072,16 @@ def page_about():
     rows = [
         ('What Messify does', 'Daily meal plans and event catering in Dubai and the UAE.'),
         ('Where meals are cooked', 'Partner kitchen in International City, Dubai'),
-        ('Meal plan delivery areas', 'Dubai International Academic City, Dubai Silicon Oasis, International City and nearby areas'),
+        ('Meal plan delivery areas', 'Dubai International Academic City, Dubai Silicon Oasis and International City only'),
         ('Who it serves', 'Students, working professionals, office teams and residents'),
-        ('Meal plan options', '1, 2 or 3 meals a day, weekly (7 days) or monthly (26 days)'),
+        ('Meal plan options', '1, 2 or 3 meals a day. Monthly: 26 days of meals to use within 30 days. Weekly: 7 days of meals to use within 9 days.'),
         ('Meal plan prices', plans),
         ('Price per meal', 'AED 25.63 to AED 30.71'),
         ('Token system', '1 meal = 1 token. Skip a day and use the token later in your plan. Spend extra tokens to double up.'),
         ('Delivery', "Every morning. All of the day's meals arrive together in one chilled Messify bag with an ice pack."),
         ('Menu', "Changes every day. Tomorrow's menu is visible in the app the day before; choose your meals by 6 PM for next-morning delivery."),
         ('Halal', 'All meals are 100% halal'),
+        ('Vegetarian', 'A vegetarian option every day, for every meal'),
         ('Food safety', 'Prepared with gloved hands, blast-chilled after cooking, sealed in kraft bowls, packed cold.'),
         ('Catering', 'Corporate and office, parties and home events, university events, weddings, buffet setups and bulk catering. Fully customisable menus, quoted by headcount.'),
         ('Catering areas', 'Dubai, Sharjah, Ajman and Abu Dhabi'),
@@ -1211,12 +1216,13 @@ def page_privacy():
     <p class="lede">This notice explains how Messify handles the information you send through this website. Using the Messify app and our meal plans is covered by our <a href="/terms/">terms and conditions</a>.</p>
     <h2>What we collect</h2>
     <p>When you fill in a form on messify.me, we receive your name, phone number and the details you choose to share, such as your plan preference, area, event date, headcount, location and notes.</p>
+    <p>If you use Messibot, the chat assistant on this website, the answers you give it (such as your name, area, plan or event details) are sent to us as a summary when you reach the end of the chat, so our team can follow up. Messibot is a scripted assistant and does not use AI.</p>
     <h2>How we use it</h2>
     <p>We use these details only to reply to your enquiry, prepare a quote or help you start a meal plan. We may contact you by phone, WhatsApp or email.</p>
     <h2>Website analytics</h2>
     <p>We use Google Analytics to understand how people use this website, such as which pages are visited, the type of device and the approximate city. It uses cookies and does not give us your name or contact details. You can block cookies in your browser settings or install Google's Analytics opt-out add-on.</p>
     <h2>How it reaches us</h2>
-    <p>Form submissions are delivered to our inbox at {EMAIL} through FormSubmit, an email forwarding service. We do not sell or rent your details to anyone.</p>
+    <p>Form submissions and Messibot summaries are delivered to our inbox at {EMAIL} through FormSubmit, an email forwarding service. We do not sell or rent your details to anyone.</p>
     <h2>How long we keep it</h2>
     <p>We keep enquiry details for as long as we need them to serve you, and delete them on request.</p>
     <h2>Your choices</h2>
@@ -1275,7 +1281,7 @@ Sitemap: {BASE}/sitemap.xml
 
 > {ONE_LINER}
 
-Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily and all meals are 100% halal.
+Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily, all meals are 100% halal, and there is a vegetarian option every day, for every meal. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Meal plan delivery covers Dubai Academic City, Dubai Silicon Oasis and International City only.
 
 ## Meal plan prices (AED)
 {plan_lines}
@@ -1304,8 +1310,8 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 /privacy-policy/        /privacy/        301
 /about-us               /about/          301
 /about-us/              /about/          301
-/faqs                   /meal-plans/#faq-title  301
-/faqs/                  /meal-plans/#faq-title  301
+/faqs                   /meal-plans/     301
+/faqs/                  /meal-plans/     301
 '''
     open(os.path.join(DIST, '_redirects'), 'w').write(redirects)
     manifest = {'name': 'Messify', 'short_name': 'Messify', 'description': 'Daily meal plans and catering in Dubai.', 'start_url': '/',

@@ -32,6 +32,10 @@ Every change saved (committed) to the `main` branch of this repository is publis
 - **Prices** live in one place: the `PLANS` list at the top of `build.py`. Running `python3 build.py` updates every page and the website script.
 - **Photos:** replace a file in `dist/assets/img/` with one of the same name and size ratio.
 
+## Messibot (chat assistant)
+
+`dist/assets/js/messibot.js` is a scripted chat assistant (no AI, no server), loaded on every page. Any link or button with `data-messibot="meals"` or `data-messibot="catering"` opens it. Prices, areas and answers live in the `CONFIG` and `FAQ` blocks inside that file. Its lead summaries are emailed to info@messify.me through FormSubmit.
+
 ## Contact forms
 
 Both forms (meal plans and catering) email **info@messify.me** through FormSubmit, a free form service.
