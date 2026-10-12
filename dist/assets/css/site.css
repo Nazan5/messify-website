@@ -619,3 +619,16 @@ input[type="range"]{flex:1;min-width:0;accent-color:var(--accent);height:30px}
 .calc__diff b{color:var(--accent-ink)}
 .calc .fine{margin:0}
 @media (max-width:520px){.calc__out{grid-template-columns:1fr 1fr}.calc__diff{grid-column:1/-1;border-left:0!important;padding-left:0!important;border-top:1px solid var(--line);padding-top:12px;margin-top:12px}}
+.ptable--wrap{min-width:560px}
+.ptable--wrap th,.ptable--wrap td{white-space:normal;vertical-align:top}
+.ptable--wrap a{color:var(--accent-ink);font-weight:600}
+@media (max-width:600px){
+  .ptable--wrap{min-width:0}
+  .ptable--wrap thead{display:none}
+  .ptable--wrap caption{display:block;padding:16px 16px 4px}
+  .ptable--wrap tbody,.ptable--wrap tr,.ptable--wrap th,.ptable--wrap td{display:block;width:100%}
+  .ptable--wrap tr{padding:12px 16px;border-top:1px solid var(--line)}
+  .ptable--wrap th,.ptable--wrap td{border:0;padding:2px 0}
+  .ptable--wrap th{font-size:1rem}
+  .ptable--wrap td::before{content:attr(data-label) ": ";color:var(--muted);font-size:.78rem;font-weight:600}
+}

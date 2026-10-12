@@ -780,7 +780,7 @@ def page_area(slug):
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Why Messify</p><h2 class="h2" id="why-title">{a['why_title']}</h2></div>
     <div class="reasons">{reasons}</div>
-    <a class="link-arrow" style="margin-top:28px" href="{a.get('guide', GUIDES[0])[0]}">{a.get('guide', GUIDES[0])[1]} {I["arrow"]}</a>
+    <a class="link-arrow" style="margin-top:28px" href="{a.get('guide', GUIDES[1])[0]}">{a.get('guide', GUIDES[1])[1]} {I["arrow"]}</a>
   </div>
 </section>
 
@@ -1255,6 +1255,8 @@ def page_404():
 
 # ---------------------------------------------------------------- guides (content pages for search)
 GUIDES = [
+    ('/guides/best-meal-plans-dubai/', 'The best meal plans in Dubai, compared',
+     'Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me side by side, with published prices and who each one suits.'),
     ('/guides/meal-plan-cost-dubai/', 'How much does a meal plan cost in Dubai?',
      'What you actually pay per meal, what pushes the price up, and a calculator to compare a meal plan with ordering in.'),
     ('/guides/student-meal-plans-dubai/', 'Student meal plans in Dubai',
@@ -1349,7 +1351,7 @@ def page_guide_cost():
     sections = f'''
     <h2>The number that matters: price per meal</h2>
     <p>Meal plans in Dubai are sold in very different ways: by the week, by the month, by calories or by number of meals. The only fair way to compare them is the price of one meal: <b>plan price ÷ number of meals</b>. Then check what that price includes, because delivery fees, VAT and how many days you get to use your meals change the real cost.</p>
-    <p>Broadly, Dubai meal plans fall into two groups. <b>Diet and fitness plans</b> (calorie-counted, macro-tracked, often with snacks and juices) cost the most per meal. <b>Everyday meal plans</b>, which replace ordering in or cooking, cost less and are built around normal home-style meals. Messify is an everyday meal plan.</p>
+    <p>Broadly, Dubai meal plans fall into two groups. <b>Diet and fitness plans</b> (calorie-counted, macro-tracked, often with snacks and juices) cost the most per meal. <b>Everyday meal plans</b>, which replace ordering in or cooking, cost less and are built around normal home-style meals. Messify is an everyday meal plan. See how Dubai's meal plans <a href="/guides/best-meal-plans-dubai/">compare side by side</a>.</p>
 
     <h2>What a Messify meal plan costs</h2>
     <p>Every price below is for the whole plan. Each meal is one token you can use for breakfast, lunch or dinner.</p>
@@ -1480,10 +1482,80 @@ def page_guide_weekly_monthly():
                  'Monthly meal plans cost less per meal: Messify monthly plans are AED 25.63 to 27.50 a meal against AED 29.05 to 30.71 on weekly plans. Start weekly if you want to try the food first, then switch to monthly.',
                  sections, faqs)
 
+def page_guide_best():
+    checked = '13 October 2026'
+    providers = [
+        # name, type, published price, what stands out, source url
+        ('Messify', 'Everyday meal plan', 'AED 25.63–30.71 a meal (AED 215 a week, AED 715 a month and up)',
+         'Breakfast, lunch and dinner delivered together each morning; skip a day and use the meal later; 100% halal with a vegetarian option every meal',
+         '/meal-plans/'),
+        ('Right Bite', 'Diet & nutrition plans', 'From AED 22 a meal (Essentials); goal-based plans from AED 25–42 a meal',
+         'Wide range of goal plans, including weight loss, diabetic and GLP-1 support', 'https://rightbite.com/en-ae/subscribe-to-a-plan'),
+        ('Calo', 'Diet & nutrition plans', 'From AED 46.88 a day (minimum 2 meals a day)',
+         'Personalised plans such as balanced, custom macros, low-carb, high-protein and vegetarian; weekly, monthly or 3-month payment', 'https://calo.app/en-ae/plans-and-packages'),
+        ('Kcal', 'Diet & nutrition plans', 'Offer from AED 2,116 a month on an 8-week plan',
+         'Large rotating menu of portion-controlled meals; offers built around 4, 8 and 12-week plans', 'https://kcallife.com/get-started/'),
+        ('VMeals', 'Diet plans', 'From AED 81 a day (vegetarian); other diets from AED 88–111 a day',
+         'Diet-specific plans including Indian fusion, keto, and gluten and dairy free', 'https://vmeals.ae/'),
+        ('Meals On Me', 'Calorie-counted plans', 'Prices on request',
+         'Goal-based plans plus lunch and dinner plans in Arabic, Indian, keto and vegetarian styles', 'https://hellomealsonme.com/'),
+    ]
+    def link(name, url):
+        return f'<a href="{url}">{name}</a>' if url.startswith('/') else f'<a href="{url}" target="_blank" rel="nofollow noopener">{name}</a>'
+    rows = ''.join(f'<tr><th scope="row">{link(n, u)}</th><td data-label="Type">{t}</td><td data-label="Published price">{p}</td></tr>' for n, t, p, s, u in providers)
+    table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>Dubai meal plans compared: published starting prices, checked {checked}</caption>
+  <thead><tr><th scope="col">Company</th><th scope="col">Type</th><th scope="col">Published price</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>'''
+    profiles = ''.join(f'<h3>{n}</h3><p><b>{t}.</b> {s}. Published price: {p if p.startswith('AED') else p[0].lower() + p[1:]}. {"See <a href=\"/meal-plans/\">Messify meal plans</a>." if u.startswith("/") else f"Source: {link(n + chr(39) + "s website", u)}."}</p>' for n, t, p, s, u in providers)
+    sections = f'''
+    <p>We're Messify, so we're not neutral. To keep this useful, we've stuck to what each company publishes on its own website, linked every source, and listed prices exactly as shown on {checked}. Prices and offers change often, so check the latest before you buy.</p>
+
+    <h2>Dubai meal plans at a glance</h2>
+    {table}
+    <p>Plans are priced in different ways (per meal, per day or per month), so compare carefully. Our <a href="/guides/meal-plan-cost-dubai/">meal plan cost guide</a> explains how to work out the price per meal.</p>
+
+    <h2>Two kinds of meal plan</h2>
+    <p><b>Diet and nutrition plans</b> are built around a goal: weight loss, muscle gain, calorie targets or a specific diet such as keto. Most of the well-known names in Dubai, including Calo, Right Bite, Kcal and VMeals, are in this group.</p>
+    <p><b>Everyday meal plans</b> replace ordering in or cooking. They focus on normal, balanced, home-style food at a predictable price, without calorie tracking. Messify is an everyday meal plan.</p>
+
+    <h2>The companies, one by one</h2>
+    {profiles}
+
+    <h2>Which meal plan is best for you?</h2>
+    <ul>
+      <li><b>You want to lose weight or hit macros:</b> a diet plan such as Calo, Right Bite, Kcal or VMeals, which are built for calorie and macro targets.</li>
+      <li><b>You want the lowest published price per meal:</b> Right Bite lists its Essentials plan from AED 22 a meal; Messify's 3-meal monthly plan is AED 25.63 a meal. Check what each price includes and how many days you get to use your meals.</li>
+      <li><b>You live or study in Academic City, Silicon Oasis or International City and just want your everyday meals sorted:</b> Messify, from AED 25 a meal, with the whole day's meals delivered every morning.</li>
+      <li><b>You need vegetarian food:</b> Messify has a vegetarian option every day, for every meal; Calo, VMeals and Meals On Me also list vegetarian plans.</li>
+      <li><b>Your schedule changes week to week:</b> look for plans that let you skip days. With Messify, every meal is a token you can use later in your plan.</li>
+    </ul>
+
+    <h2>How to choose: a 5-point checklist</h2>
+    <ol>
+      <li><b>Delivery to your exact building.</b> Coverage varies a lot between companies.</li>
+      <li><b>Price per meal</b>, not the headline plan price.</li>
+      <li><b>Days to use your meals</b>, and whether you can skip or pause.</li>
+      <li><b>Menu variety</b>, so you keep eating it after week two.</li>
+      <li><b>Dietary needs:</b> halal, vegetarian, allergies or a specific diet.</li>
+    </ol>'''
+    faqs = [
+        ('What is the best meal plan in Dubai?', 'It depends on your goal. For weight loss or calorie targets, diet plans such as Calo, Right Bite, Kcal and VMeals are built for that. For everyday meals at a predictable price in Academic City, Silicon Oasis or International City, Messify starts from AED 25 a meal.'),
+        ('What is the cheapest meal plan in Dubai?', f'Of the published prices we checked on {checked}, Right Bite listed its Essentials plan from AED 22 a meal, and Messify\'s 3-meal monthly plan is AED 25.63 a meal. Compare what each price includes, delivery coverage and how long you have to use your meals.'),
+        ('Are Dubai meal plans halal?', 'Every Messify meal is 100% halal. Check each company\'s website for its own policy.'),
+        ('Which Dubai meal plans have vegetarian options?', 'Messify has a vegetarian option every day, for every meal. Calo, VMeals and Meals On Me also list vegetarian plans.'),
+        ('Can I skip days on a meal plan?', 'With Messify, yes: skip a day in the app and use that meal later in your plan. Monthly plans give you 30 days to use 26 days of meals, and weekly plans give you 9 days to use 7.'),
+    ]
+    article_page('/guides/best-meal-plans-dubai/', 'Best meal plans in Dubai', 'Best Meal Plans in Dubai 2026: Prices Compared | Messify',
+                 'Dubai meal plans compared with published prices: Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me. What each costs and who it suits.',
+                 'The best meal plans in Dubai, compared', 'Updated October 2026',
+                 f'The best meal plan in Dubai depends on your goal. For weight loss and macros, diet plans like Calo, Right Bite, Kcal and VMeals lead. For everyday meals, Messify costs AED 25.63–30.71 a meal and delivers all the day\'s meals every morning in Academic City, Silicon Oasis and International City. Prices below are as published on {checked}.',
+                 sections, faqs)
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
-            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
+            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
@@ -1527,6 +1599,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis]({BASE}/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City]({BASE}/meal-plans/international-city/): where Messify meals are cooked
 - [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [The best meal plans in Dubai, compared]({BASE}/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans]({BASE}/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
@@ -1578,5 +1651,5 @@ if __name__ == '__main__':
     sync_js_prices()
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
-    page_guides(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly()
+    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly()
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()

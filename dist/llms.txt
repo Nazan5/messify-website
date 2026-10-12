@@ -18,6 +18,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis](https://www.messify.me/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City](https://www.messify.me/meal-plans/international-city/): where Messify meals are cooked
 - [Catering](https://www.messify.me/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [The best meal plans in Dubai, compared](https://www.messify.me/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?](https://www.messify.me/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai](https://www.messify.me/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans](https://www.messify.me/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
