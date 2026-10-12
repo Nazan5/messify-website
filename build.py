@@ -124,6 +124,11 @@ def contact_lines():
   <div><span class="ci">{I["clock"]}</span><small>Open</small><b>{HOURS_LABEL}</b></div>
 </div>'''
 
+def ver(rel):
+    """Short content hash so browsers fetch a changed stylesheet or script straight away."""
+    import hashlib
+    return hashlib.md5(open(os.path.join(DIST, rel.lstrip('/')), 'rb').read()).hexdigest()[:8]
+
 def head(page):
     url = BASE + page['path']
     robots = '<meta name="robots" content="noindex, follow">' if page.get('noindex') else '<meta name="robots" content="index, follow, max-image-preview:large">'
@@ -163,7 +168,7 @@ def head(page):
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
-{preload}<link rel="stylesheet" href="/assets/css/site.css">
+{preload}<link rel="stylesheet" href="/assets/css/site.css?v={ver('/assets/css/site.css')}">
 {json_ld(page['schema'])}
 </head>'''
 
@@ -229,8 +234,8 @@ def render(page, body):
 {body}
 </main>
 {FOOTER}
-<script src="/assets/js/site.js" defer></script>
-<script src="/assets/js/messibot.js" defer></script>
+<script src="/assets/js/site.js?v={ver('/assets/js/site.js')}" defer></script>
+<script src="/assets/js/messibot.js?v={ver('/assets/js/messibot.js')}" defer></script>
 </body>
 </html>
 '''
