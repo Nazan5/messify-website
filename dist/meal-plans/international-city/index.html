@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=2238e742">
+<link rel="stylesheet" href="/assets/css/site.css?v=8f99b140">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -52,7 +52,7 @@
     "https://apps.apple.com/ae/app/my-messify/id6749799177",
     "https://play.google.com/store/apps/details?id=com.messifyfzc.messify"
    ],
-   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis and International City, from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi."
+   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi."
   },
   {
    "@type": "FoodEstablishment",
@@ -63,7 +63,7 @@
    "logo": "https://www.messify.me/assets/img/messify-logo.png",
    "telephone": "+971502513033",
    "email": "info@messify.me",
-   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis and International City, from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.",
+   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.",
    "priceRange": "AED 25.63–30.71 per meal",
    "address": {
     "@type": "PostalAddress",
@@ -83,6 +83,10 @@
     {
      "@type": "Place",
      "name": "International City, Dubai"
+    },
+    {
+     "@type": "Place",
+     "name": "Dubai Festival City"
     },
     {
      "@type": "City",
@@ -358,7 +362,7 @@
 <section class="sec sec--tint sec--tight" aria-labelledby="nearby-title">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Nearby</p><h2 class="h3" id="nearby-title" style="font-size:1.4rem">We also deliver to</h2></div>
-    <div class="areas"><a class="area" href="/meal-plans/academic-city/"><small>Dubai International Academic City</small><b>Meal plans in Academic City</b><span>Universities and student residences, including KSK Homes and The Myriad.</span><span class="link-arrow">See the area <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="area" href="/meal-plans/silicon-oasis/"><small>Dubai Silicon Oasis</small><b>Meal plans in Silicon Oasis</b><span>Offices, residents, RIT Dubai and DSOA University Residence.</span><span class="link-arrow">See the area <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
+    <div class="areas"><a class="area" href="/meal-plans/academic-city/"><small>Dubai International Academic City</small><b>Meal plans in Academic City</b><span>Universities and student residences, including KSK Homes and The Myriad.</span><span class="link-arrow">See the area <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="area" href="/meal-plans/silicon-oasis/"><small>Dubai Silicon Oasis</small><b>Meal plans in Silicon Oasis</b><span>Offices, residents, RIT Dubai and DSOA University Residence.</span><span class="link-arrow">See the area <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a><a class="area" href="/meal-plans/festival-city/"><small>Dubai Festival City (DFC)</small><b>Meal plans in Festival City</b><span>Homes in Al Badia and offices across DFC.</span><span class="link-arrow">See the area <svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg></span></a></div>
   </div>
 </section>
 
@@ -396,7 +400,7 @@
             <label><input type="radio" name="length" data-label="Plan length" value="Monthly" id="c-monthly" checked><span>Monthly</span></label>
           </div>
         </fieldset>
-        <div class="field"><label for="c-area">Your area</label><select id="c-area" name="area" data-label="Area"><option>Dubai Academic City</option><option>Dubai Silicon Oasis</option><option selected>International City</option><option>Somewhere else (join the waitlist)</option></select></div>
+        <div class="field"><label for="c-area">Your area</label><select id="c-area" name="area" data-label="Area"><option>Dubai Academic City</option><option>Dubai Silicon Oasis</option><option selected>International City</option><option>Dubai Festival City (DFC)</option><option>Somewhere else (join the waitlist)</option></select></div>
         <div class="field"><label for="c-note">Note <span class="opt-tag">(optional)</span></label><textarea id="c-note" name="note" data-label="Note" placeholder="Your building, start date or any questions"></textarea></div>
         <div class="hp" aria-hidden="true"><label for="c-web">Leave this empty</label><input id="c-web" name="website" tabindex="-1" autocomplete="off"></div>
         <button class="btn" type="submit">Send message</button>
@@ -432,6 +436,7 @@
         <li><a href="/meal-plans/academic-city/">Academic City</a></li>
         <li><a href="/meal-plans/silicon-oasis/">Silicon Oasis</a></li>
         <li><a href="/meal-plans/international-city/">International City</a></li>
+        <li><a href="/meal-plans/festival-city/">Dubai Festival City</a></li>
       </ul></div>
       <div><h2>Catering</h2><ul>
         <li><a href="/catering/">Catering services</a></li>
@@ -455,7 +460,7 @@
     <div class="foot__base"><span>© <span data-year>2026</span> Messify. International City, Dubai, UAE.</span><span><a href="https://apps.apple.com/ae/app/my-messify/id6749799177" target="_blank" rel="noopener">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.messifyfzc.messify" target="_blank" rel="noopener">Google Play</a></span></div>
   </div>
 </footer>
-<script src="/assets/js/site.js?v=7b7c6694" defer></script>
-<script src="/assets/js/messibot.js?v=82f77781" defer></script>
+<script src="/assets/js/site.js?v=8219f4c6" defer></script>
+<script src="/assets/js/messibot.js?v=8df625a5" defer></script>
 </body>
 </html>

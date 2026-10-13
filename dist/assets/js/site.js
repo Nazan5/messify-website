@@ -140,7 +140,7 @@
       count.textContent = '+' + p.tokens;
       var line = 'Hi Messify! I’m interested in the ' + mealsLabel(pick.meals) + ' ' + pick.dur + ' plan.';
       $('[data-s-chat1]').textContent = line;
-      $('[data-s-wa]').href = waLink(line + ' Can you help me get started?');
+      var waHref = waLink(line + ' Can you help me get started?'); $$('[data-s-wa]').forEach(function (a) { a.href = waHref; });
       $$('[data-s="meals"] .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(Number(c.dataset.value) === pick.meals)); });
       $$('[data-s="dur"] .chip').forEach(function (c) { c.setAttribute('aria-pressed', String(c.dataset.value === pick.dur)); });
       try { history.replaceState(null, '', location.pathname + '?meals=' + pick.meals + '&duration=' + pick.dur); } catch (e) {}

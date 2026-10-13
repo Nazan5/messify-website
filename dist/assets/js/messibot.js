@@ -62,7 +62,7 @@ const CONFIG = {
   whatsapp: "971502513033",
   whatsappDisplay: "+971 50 251 3033",
   email: "info@messify.me",
-  areas: ["Academic City", "Dubai Silicon Oasis", "International City"],
+  areas: ["Academic City", "Dubai Silicon Oasis", "International City", "Dubai Festival City"],
   emirates: ["Dubai", "Sharjah", "Ajman", "Abu Dhabi"],
   daysPerWeek: 7, daysPerMonth: 26,
   plans: [
@@ -256,7 +256,7 @@ const plural = n => n + " meal" + (n > 1 ? "s" : "");
 function planFor(m){ return CONFIG.plans.find(p => p.mpd === m) || CONFIG.plans[0]; }
 function pitchText(){ const p = planFor(lead.meals_per_day || 1);
   return `For ${plural(p.mpd)} a day, I'd go monthly: ${fmt(p.monthly)} for ${p.mpd * 26} meals, about AED ${per(p, "monthly").toFixed(1)} a meal, and you get 30 days to use them. Want to try it first? Weekly is ${fmt(p.weekly)} for ${p.mpd * 7} meals, to use within 9 days.`; }
-const AREA_KEYS = [["Academic City", / academic /], ["Dubai Silicon Oasis", / silicon | dso /], ["International City", / international | intl city | warsan /]];
+const AREA_KEYS = [["Academic City", / academic /], ["Dubai Silicon Oasis", / silicon | dso /], ["International City", / international | intl city | warsan /], ["Dubai Festival City", / festival | dfc | al badia | badia /]];
 function areaMatch(t){ const hit = AREA_KEYS.find(([, re]) => re.test(t)); return hit ? hit[0] : undefined; }
 function mealsIn(t, cur){
   if (!cur && !/ meal| meals | a day | per day /.test(t)) return;

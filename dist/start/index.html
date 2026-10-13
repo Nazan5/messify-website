@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=2238e742">
+<link rel="stylesheet" href="/assets/css/site.css?v=8f99b140">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -52,7 +52,7 @@
     "https://apps.apple.com/ae/app/my-messify/id6749799177",
     "https://play.google.com/store/apps/details?id=com.messifyfzc.messify"
    ],
-   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis and International City, from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi."
+   "description": "Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi."
   }
  ]
 }
@@ -73,22 +73,21 @@
 </header>
 <main id="content">
 <div data-start-page>
-<section class="sec sec--first">
+<section class="sec sec--first start-top">
   <div class="wrap">
     <a class="back" href="/meal-plans/#plans"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M19 12H5M11 6l-6 6 6 6"/></svg>Back to plans</a>
-    <div class="start-hero">
+    <div class="start-hero start-hero--compact">
       <div>
         <p class="eyebrow rise">Almost there</p>
-        <h1 class="h2 rise">Your bag is almost packed.</h1>
-        <p class="lede rise">You've picked your plan. Now choose how you'd like to begin: straight from the Messify app, or with a quick chat with our team on WhatsApp.</p>
+        <h1 class="h2 rise">Two ways to start your plan.</h1>
+        <p class="lede rise">Orders aren't taken on this website. Download the Messify app and start your plan there, or talk to us on WhatsApp and we'll get you started.</p>
       </div>
-      <div class="summary" aria-live="polite">
-        <div class="summary__top"><small>Your plan</small><div class="coins" data-s-coins></div></div>
-        <div>
-          <p class="summary__name" data-s-name>2 meals a day · Monthly</p>
+      <div class="summary summary--compact" aria-live="polite">
+        <div class="summary__row">
+          <div><small class="summary__label">Your plan</small><p class="summary__name" data-s-name>2 meals a day · Monthly</p></div>
           <div class="summary__price"><b data-s-price>AED 1,400</b><span data-s-unit>/ month</span></div>
-          <p class="summary__meta" data-s-meta>AED 26.92 per meal · 52 tokens · 26 days of meals, use within 30 days</p>
         </div>
+        <p class="summary__meta" data-s-meta>AED 26.92 per meal · 52 tokens · 26 days of meals, use within 30 days</p>
         <div class="summary__edit">
           <fieldset class="mini"><legend>Meals a day</legend>
             <div class="chips" data-s="meals">
@@ -104,13 +103,30 @@
             </div>
           </fieldset>
         </div>
+        <div class="coins" data-s-coins hidden></div>
       </div>
     </div>
-    <div class="two-ways"><span class="line" aria-hidden="true"></span>Two ways to start</div>
+    <div class="start-ways" id="start-app">
+      <div class="start-way">
+        <p class="eyebrow way__num"><i>1</i>Download the app</p>
+        <h2 class="h3">Start in the Messify app</h2>
+        <p>Pick your plan, pay securely and choose tomorrow's meals.</p>
+        <div class="stores stores--tight">
+          <a class="store" href="https://apps.apple.com/ae/app/my-messify/id6749799177" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="2" width="12" height="20" rx="3"/><path d="M11 18h2"/></svg><span><small>Download on the</small><b>App Store</b></span></a>
+          <a class="store" href="https://play.google.com/store/apps/details?id=com.messifyfzc.messify" target="_blank" rel="noopener"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3.5v17l14-8.5-14-8.5Z"/></svg><span><small>Get it on</small><b>Google Play</b></span></a>
+        </div>
+      </div>
+      <div class="start-way">
+        <p class="eyebrow way__num"><i>2</i>Talk to us</p>
+        <h2 class="h3">Start on WhatsApp</h2>
+        <p>A real person helps you choose, checks your building and gets you started.</p>
+        <div class="actions"><a class="btn wa-btn" href="https://wa.me/971502513033" target="_blank" rel="noopener" data-s-wa><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>Chat on WhatsApp</a></div>
+      </div>
+    </div>
   </div>
 </section>
 
-<section class="sec sec--tint" id="start-app" style="padding-top:clamp(56px,7vw,96px)">
+<section class="sec sec--tint" id="app-more">
   <div class="wrap way way--rev">
     <div>
       <p class="eyebrow way__num"><i>1</i>The Messify app</p>
@@ -168,6 +184,7 @@
         <li><a href="/meal-plans/academic-city/">Academic City</a></li>
         <li><a href="/meal-plans/silicon-oasis/">Silicon Oasis</a></li>
         <li><a href="/meal-plans/international-city/">International City</a></li>
+        <li><a href="/meal-plans/festival-city/">Dubai Festival City</a></li>
       </ul></div>
       <div><h2>Catering</h2><ul>
         <li><a href="/catering/">Catering services</a></li>
@@ -191,7 +208,7 @@
     <div class="foot__base"><span>© <span data-year>2026</span> Messify. International City, Dubai, UAE.</span><span><a href="https://apps.apple.com/ae/app/my-messify/id6749799177" target="_blank" rel="noopener">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.messifyfzc.messify" target="_blank" rel="noopener">Google Play</a></span></div>
   </div>
 </footer>
-<script src="/assets/js/site.js?v=7b7c6694" defer></script>
-<script src="/assets/js/messibot.js?v=82f77781" defer></script>
+<script src="/assets/js/site.js?v=8219f4c6" defer></script>
+<script src="/assets/js/messibot.js?v=8df625a5" defer></script>
 </body>
 </html>
