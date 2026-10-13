@@ -691,6 +691,7 @@ AREAS = {
     ('cap', 'Students', ['RIT Dubai', 'DSOA University Residence'], 'And other student housing in DSO'),
   ],
   'why_title': 'Why people in Silicon Oasis choose Messify.',
+  'guide': ('/guides/office-lunch-delivery-silicon-oasis/', 'Read our guide to office lunch delivery in Silicon Oasis'),
   'reasons': [
     ('Lunch sorted before work starts', 'Lunch delivery that beats the rush: your meals arrive together every morning, so lunch is handled before the workday gets busy. No more 1 pm delivery queues.'),
     ('Plans for whole teams', 'Feed your office on one monthly plan, with one delivery for everyone. Each person still chooses their meals in the app.'),
@@ -1263,6 +1264,8 @@ GUIDES = [
      'Budgets, exam weeks, residences in Academic City and Silicon Oasis, and how to pick a plan that fits a semester.'),
     ('/guides/weekly-vs-monthly-meal-plan/', 'Weekly or monthly meal plan: which is better?',
      'The real difference in price per meal and flexibility, and who should start with which.'),
+    ('/guides/office-lunch-delivery-silicon-oasis/', 'Office lunch delivery in Dubai Silicon Oasis',
+     'Lunch on your desk before the 1 PM rush: how morning delivery works, prices, team plans and work-from-home days.'),
 ]
 
 def article_schema(path, headline, desc, published='2026-10-13'):
@@ -1329,7 +1332,7 @@ def calculator():
 def page_guides():
     cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/')])
     page = {'path': '/guides/', 'mode': 'meals', 'nav': 'meals', 'title': 'Meal Plan Guides for Dubai | Messify',
-            'desc': 'Straight answers about meal plans in Dubai: what they cost, student meal plans, and weekly vs monthly plans.',
+            'desc': 'Straight answers about meal plans in Dubai: what they cost, student meal plans, weekly vs monthly plans and office lunch in Silicon Oasis.',
             'schema': [ORG, {'@type': 'CollectionPage', '@id': BASE + '/guides/#page', 'url': BASE + '/guides/', 'name': 'Messify meal plan guides',
                              'hasPart': [{'@id': BASE + p + '#article'} for p, _, _ in GUIDES]}, crs]}
     items = ''.join(f'<a class="reason guide-card" href="{p}"><h2 class="h3">{t}</h2><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>' for p, t, d in GUIDES)
@@ -1552,10 +1555,70 @@ def page_guide_best():
                  f'The best meal plan in Dubai depends on your goal. For weight loss and macros, diet plans like Calo, Right Bite, Kcal and VMeals lead. For everyday meals, Messify costs AED 25.63–30.71 a meal and delivers all the day\'s meals every morning in Academic City, Silicon Oasis and International City. Prices below are as published on {checked}.',
                  sections, faqs)
 
+def page_guide_office_dso():
+    sections = f'''
+    <h2>The lunch problem in Silicon Oasis</h2>
+    <p>Dubai Silicon Oasis is full of offices, business centres and tech companies, and most of them hit the same wall around 1 PM. Everyone orders at once, riders queue at the same buildings, and lunch turns up late, or not until after the next meeting. Then it happens again tomorrow, with the same daily question of what to order and the same delivery fees.</p>
+    <p>There are three common ways to fix it: order in every day, bring food from home, or get lunch delivered before the workday starts. This guide walks through what each one costs you in time and money, and how to set up the third.</p>
+
+    <h2>Three ways to sort office lunch</h2>
+    <ul>
+      <li><b>Ordering in every day.</b> The most choice, but you decide every day, pay delivery and service fees on each order, and depend on the lunchtime rush.</li>
+      <li><b>Bringing lunch from home.</b> Low cost on ingredients, but it needs time to cook and pack, which is exactly what most people working in DSO are short of.</li>
+      <li><b>A morning meal plan delivery.</b> Your meals arrive before work, so lunch is already on your desk or in the office fridge when you get hungry. You pay one plan price and choose your meals ahead in an app.</li>
+    </ul>
+
+    <h2>How Messify office lunch delivery works</h2>
+    <ol>
+      <li><b>Pick a plan.</b> 1, 2 or 3 meals a day, weekly or monthly. Many office workers start with 1 meal a day for lunch, or 2 for lunch and dinner.</li>
+      <li><b>Choose tomorrow's meals by 6 PM.</b> The menu changes every day, and you see it in the Messify app the day before.</li>
+      <li><b>Get your bag every morning.</b> All of the day's meals arrive together in one chilled bag with an ice pack, delivered to your office or your home in Silicon Oasis.</li>
+      <li><b>Reheat and eat.</b> Meals are blast-chilled after cooking, so keep lunch cold until you're ready, then reheat it for a few minutes.</li>
+    </ol>
+    <p>Meals are cooked fresh every day in our partner kitchen in nearby International City. Every meal is 100% halal, and there's a vegetarian option every day, for every meal.</p>
+
+    <h2>What it costs</h2>
+    <p>Messify meal plans start from AED 25 a meal. For a working lunch, these are the usual starting points:</p>
+    <ul>
+      <li><b>1 meal a day, weekly: AED 215.</b> The easiest way to try office lunch delivery for a week.</li>
+      <li><b>1 meal a day, monthly: AED 715.</b> 26 days of meals to use within 30 days, AED 27.50 a meal.</li>
+      <li><b>2 meals a day, monthly: AED 1,400.</b> Lunch at work and dinner at home, AED 26.92 a meal.</li>
+    </ul>
+    <p>To see how that compares with what you spend on delivery apps, use our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a>. Every price is on our <a href="/meal-plans/">meal plans in Dubai</a> page.</p>
+
+    <h2>Weekends, leave and days you work from home</h2>
+    <p>Office weeks are rarely the same. With Messify, every meal is a token: skip a day in the app and use that meal later in your plan. Weekly plans give you 9 days to use 7 days of meals, and monthly plans give you 30 days to use 26 days of meals, which leaves room for weekends, leave and days at home.</p>
+
+    <h2>Lunch for the whole team</h2>
+    <p>If several people in your office want lunch sorted, a team plan keeps it simple: one monthly plan, one morning delivery for everyone, and each person still chooses their own meals in the app. Message us on WhatsApp with your team size and office location and we'll set it up.</p>
+    <p>Planning a one-off meeting lunch, a launch or a company event instead? That's catering: custom menus quoted by headcount, with buffet setups if you want them. See <a href="/catering/">corporate catering in Dubai</a>.</p>
+
+    <h2>A quick checklist before you start</h2>
+    <ol>
+      <li><b>Confirm delivery to your building.</b> Message us your building in DSO and we'll confirm the drop-off point.</li>
+      <li><b>Check there's a fridge and a microwave</b> at the office, or a pantry you can use.</li>
+      <li><b>Decide on 1 or 2 meals a day:</b> lunch only, or lunch plus dinner at home.</li>
+      <li><b>Try a week first</b>, then move to monthly for a lower price per meal.</li>
+    </ol>
+    <p>Read more about delivery in <a href="/meal-plans/silicon-oasis/">meal plans in Dubai Silicon Oasis</a>, or <a href="/start/">start your plan</a> in the Messify app.</p>'''
+    faqs = [
+        ('Do you deliver lunch to offices in Dubai Silicon Oasis?', "Yes. Messify delivers every morning to offices and business centres across Dubai Silicon Oasis. All of the day's meals arrive together in one chilled bag, so lunch is sorted before the workday starts."),
+        ('How much does office lunch delivery cost in Silicon Oasis?', 'Messify meal plans start from AED 25 a meal. A 1-meal weekly plan costs AED 215, and a 1-meal monthly plan costs AED 715, or AED 27.50 a meal.'),
+        ('Can our whole team get lunch delivered together?', 'Yes. Teams can share one monthly plan with one morning delivery for everyone, and each person chooses their own meals in the app. Message us on WhatsApp with your team size and office location.'),
+        ('What if I work from home some days?', 'Skip that day in the app and use the meal later in your plan. Monthly plans give you 30 days to use 26 days of meals, and weekly plans give you 9 days to use 7.'),
+        ('Is the food halal? Are there vegetarian options?', 'Every Messify meal is 100% halal, and there is a vegetarian option every day, for every meal.'),
+    ]
+    article_page('/guides/office-lunch-delivery-silicon-oasis/', 'Office lunch in Silicon Oasis',
+                 'Office Lunch Delivery in Dubai Silicon Oasis | Messify',
+                 'How to sort office lunch in Dubai Silicon Oasis: morning delivery, prices from AED 25 a meal, team plans and what to do on work-from-home days.',
+                 'Office lunch delivery in Dubai Silicon Oasis', 'For offices in DSO · 2026',
+                 'Messify delivers office lunch in Dubai Silicon Oasis every morning, before the lunchtime rush. All of the day\'s meals arrive together in one chilled bag, from AED 25 a meal (AED 215 for a 1-meal weekly plan). Teams can share one monthly plan with one delivery for everyone.',
+                 sections, faqs)
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
-            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
+            ('/meal-plans/international-city/', '0.8'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
@@ -1603,6 +1666,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans]({BASE}/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
+- [Office lunch delivery in Dubai Silicon Oasis]({BASE}/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
 - [About Messify]({BASE}/about/): key facts in one table
 
 ## Contact
@@ -1651,5 +1715,5 @@ if __name__ == '__main__':
     sync_js_prices()
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
-    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly()
+    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso()
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()

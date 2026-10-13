@@ -22,6 +22,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [How much does a meal plan cost in Dubai?](https://www.messify.me/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai](https://www.messify.me/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans](https://www.messify.me/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
+- [Office lunch delivery in Dubai Silicon Oasis](https://www.messify.me/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
 - [About Messify](https://www.messify.me/about/): key facts in one table
 
 ## Contact
