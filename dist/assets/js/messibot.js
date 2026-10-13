@@ -236,8 +236,8 @@ function track(kind){
   } catch (e) {}
 }
 function logLead(summary){
-  if (logged) return; logged = true;
-  const data = { _subject: (topic === "catering" ? "Messibot catering brief" : "Messibot meal plan lead") + (lead.name ? " · " + lead.name : ""),
+  if (logged || !lead.phone) return; logged = true; // no number = nothing to follow up; the WhatsApp message itself is the lead
+  const data = { _subject: (topic === "catering" ? "Messibot catering brief" : (lead.in_area === false ? "Messibot waitlist" : "Messibot meal plan lead")) + (lead.name ? " · " + lead.name : "") + " · " + lead.phone,
     _template: "table", _captcha: "false", Topic: topic === "catering" ? "Catering" : "Meal plans", Summary: summary, Page: location.href };
   for (const [k, v] of Object.entries(lead)) if (v !== "" && v != null) data[k] = String(v);
   try { fetch(FORM_ENDPOINT, { method: "POST", headers: { "Content-Type": "application/json", "Accept": "application/json" }, body: JSON.stringify(data), keepalive: true }).catch(() => {}); } catch (e) {}
@@ -269,6 +269,14 @@ const CUISINES = [["Indian", / indian | desi | biryani /], ["Arabic", / arab| le
 const COURSES = [["appetisers", / appeti| starter| canape/], ["main course", / main/], ["salads", / salad/], ["desserts", / dessert| sweet/], ["beverages", / beverage| drink| juice| coffee | tea /]];
 const listJoin = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
 
+let phoneTries = 0;
+const PHONE_STEP = { key: "phone", label: "WhatsApp number",
+  ask: () => phoneTries ? "That doesn't look like a phone number. Type it like 050 123 4567, or tap Skip." : "And your WhatsApp number, so the team can reach you even if the chat doesn't open? You can skip this.",
+  chips: () => ["Skip"],
+  grab: (t, cur) => { if (cur && /^ (skip|no|no thanks|nah) $/.test(t)) return ""; const m = t.replace(/[ -]/g, "").match(/\+?\d{8,15}/); return m ? m[0] : undefined; },
+  free: (raw, t) => { if (/ skip | no /.test(t)) { lead.phone = ""; } else { phoneTries++; } return true; },
+  set: v => { lead.phone = v; }, ack: () => lead.phone ? "Got it, thanks." : "" };
+
 const SCRIPTS = {
   meals: {
     steps: [
@@ -281,9 +289,8 @@ const SCRIPTS = {
       { key: "area", label: "Delivery area",
         ask: () => "Where should we deliver?", chips: () => [...CONFIG.areas, "Somewhere else"],
         grab: t => areaMatch(t), set: v => { lead.area = v; lead.in_area = true; },
-        free: (raw, t) => { lead.area = / somewhere else | other | outside /.test(t) ? "Outside current areas" : raw; lead.in_area = false; return true; },
-        ack: () => `Great, we deliver to ${lead.area}.`,
-        stop: () => lead.in_area === false ? { reply: "We're not delivering there yet, but we're expanding. Tap below and we'll add you to the waitlist, so you're first to know when we reach you.", handoff: true } : null },
+        free: (raw, t) => { lead.area = / somewhere else | other | outside /.test(t) ? "Outside current areas" : raw; lead.in_area = false; if (!("meals_per_day" in lead)) lead.meals_per_day = ""; if (!("plan" in lead)) lead.plan = ""; return true; },
+        ack: () => lead.in_area === false ? "We're not delivering there yet, but we're expanding. Leave your details and you'll be first to know when we reach you." : `Great, we deliver to ${lead.area}.` },
       { key: "meals_per_day", label: "Meals a day",
         ask: () => "How many meals a day do you want handled?", chips: () => ["1 meal", "2 meals", "3 meals"],
         grab: (t, cur) => mealsIn(t, cur), set: v => { lead.meals_per_day = v; stage = "recommend"; } },
@@ -299,9 +306,12 @@ const SCRIPTS = {
         ask: () => "Last thing: what's your first name, so the team knows who's messaging?", chips: () => ["Skip"],
         grab: (t, cur) => { if (cur && /^ (skip|no|no thanks|nah) $/.test(t)) return ""; const m = t.match(/ (?:my name is|this is|call me) ([a-z]+) /); return m ? cap(m[1]) : undefined; },
         free: (raw, t) => { lead.name = / skip | no /.test(t) ? "" : cap(raw.split(/\s+/).slice(0, 3).join(" ")); return true; },
-        set: v => { lead.name = v; } }
+        set: v => { lead.name = v; } },
+      PHONE_STEP
     ],
-    done: () => ({ reply: `Thanks${lead.name ? ", " + lead.name : ""}! Tap below to send this to our team on WhatsApp. They'll confirm your start date and get you set up in minutes.`, handoff: true })
+    done: () => ({ reply: lead.in_area === false
+      ? `Thanks${lead.name ? ", " + lead.name : ""}! You're on the waitlist. Tap below to send it on WhatsApp too, and the team will message you when we reach your area.`
+      : `Thanks${lead.name ? ", " + lead.name : ""}! Tap below to send this to our team on WhatsApp. They'll confirm your start date and get you set up in minutes.`, handoff: true })
   },
   catering: {
     steps: [
@@ -352,7 +362,8 @@ const SCRIPTS = {
       { key: "name", label: "Name & company",
         ask: () => "Who should the team address the quote to? Your name, and company if it's for one.", chips: () => ["Skip"],
         grab: (t, cur) => { if (cur && /^ (skip|no|no thanks|nah) $/.test(t)) return ""; const m = t.match(/ (?:my name is|this is|call me) ([a-z]+) /); return m ? cap(m[1]) : undefined; },
-        free: (raw, t) => { lead.name = / skip | no /.test(t) ? "" : raw; return true; }, set: v => { lead.name = v; } }
+        free: (raw, t) => { lead.name = / skip | no /.test(t) ? "" : raw; return true; }, set: v => { lead.name = v; } },
+      PHONE_STEP
     ],
     done: () => ({ reply: `Thank you${lead.name ? ", " + lead.name.split(/[ ,]/)[0] : ""}. That's everything the team needs. Here's your brief: tap below to send it on WhatsApp and they'll come back with a quote.`, handoff: true })
   }
@@ -504,7 +515,7 @@ function showDoors(){
 }
 function openTopic(t, silent){
   closeView(); ctl?.abort();
-  lastHit = null; topic = t; lead = {}; turns = []; stage = "qualify"; busy = false; sendBtn.disabled = false;
+  lastHit = null; topic = t; lead = {}; phoneTries = 0; turns = []; stage = "qualify"; busy = false; sendBtn.disabled = false;
   const go = () => {
     setTheme(t); $("#switch").hidden = false;
     const C = TOPICS[t];
