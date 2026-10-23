@@ -214,9 +214,11 @@ FOOTER = f'''<footer class="foot">
       </ul></div>
       <div><h2>Catering</h2><ul>
         <li><a href="/catering/">Catering services</a></li>
+        <li><a href="/catering/corporate-events/">Corporate catering</a></li>
+        <li><a href="/catering/weddings/">Wedding catering</a></li>
+        <li><a href="/catering/iftar/">Iftar catering</a></li>
         <li><a href="/catering/dubai/">Catering in Dubai</a></li>
         <li><a href="/catering/sharjah/">Catering in Sharjah</a></li>
-        <li><a href="/catering/abu-dhabi/">Catering in Abu Dhabi</a></li>
         <li><a href="/guides/#catering-guides">Catering guides</a></li>
         <li><a href="/catering/#quote">Get a quote</a></li>
       </ul></div>
@@ -987,15 +989,7 @@ def page_catering():
             'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
             'preload': '<link rel="preload" as="image" href="/assets/img/cat-serving-640.webp" imagesrcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
             'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs]}
-    events = [
-        ('case', 'Corporate &amp; office', 'Corporate and office catering for team lunches, meetings and company events, delivered on time.'),
-        ('party', 'Parties &amp; home events', 'Party catering for birthdays, family gatherings and house parties, at home.'),
-        ('cap', 'University events', 'Orientation days, society nights and campus functions.'),
-        ('rings', 'Weddings', 'Wedding catering with generous menus built around your guest list.'),
-        ('serve', 'Buffet setups', 'Full buffets set up at your venue, from office lunches to weddings.'),
-        ('box', 'Bulk catering', 'Large daily volumes for sites, institutions and events.'),
-    ]
-    ev = ''.join(f'<div class="event">{I[i]}<h3 class="h3">{t}</h3><p>{d}</p></div>' for i, t, d in events)
+    ev = event_tiles(CATER_EVENTS)
     def chips(group, items, on, multi=True):
         return f'<div class="chips" data-group="{group}"{" data-multi" if multi else ""}>' + ''.join(
             f'<button type="button" class="chip" aria-pressed="{"true" if x in on else "false"}" data-value="{x}">{x}</button>' for x in items) + '</div>'
@@ -1065,14 +1059,23 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec sec--tint" aria-labelledby="uae-title">
+<section class="sec sec--tint" aria-labelledby="occasions-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Every occasion</p><h2 class="h2" id="occasions-title">Catering for every kind of event.</h2></div>
+    {type_cards('event')}
+    <div class="sec-head" style="margin:56px 0 28px"><p class="eyebrow">Seasonal and festive</p><h2 class="h3" id="season-title" style="font-size:1.6rem">Ramadan, Eid, Diwali, National Day and the festive season.</h2></div>
+    {type_cards('occasion')}
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="uae-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Where we cater</p><h2 class="h2" id="uae-title">Catering across the UAE.</h2></div>
     {emirate_cards()}
   </div>
 </section>
 
-<section class="sec" aria-labelledby="steps-title">
+<section class="sec sec--tint" aria-labelledby="steps-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">How it works</p><h2 class="h2" id="steps-title">From enquiry to plated, in four steps.</h2></div>
     <ol class="steps" style="max-width:820px">
@@ -1084,25 +1087,26 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec sec--tint" aria-labelledby="faq-title">
+<section class="sec" aria-labelledby="faq-title">
   <div class="wrap split split--top">
     <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Good to know.</h2></div>
     {faq_html(faqs)}
   </div>
 </section>
 
-<section class="sec" aria-labelledby="cguides-title">
+<section class="sec sec--tint" aria-labelledby="cguides-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Planning help</p><h2 class="h2" id="cguides-title">Catering guides.</h2><p class="lede">How much food to order, how catering is priced and what to sort before the day.</p></div>
     {guide_cards(CATERING_GUIDES)}
   </div>
 </section>
 
-{catering_form()}'''
+{catering_form(tint=False)}'''
     render(page, body)
 
-def catering_form(emirate='Dubai', title="Let's build your next event.", tint=True):
+def catering_form(emirate='Dubai', title="Let's build your next event.", tint=True, event=None):
     opts = ''.join(f'<option{" selected" if e == emirate else ""}>{e}</option>' for e in CATER_EMIRATES)
+    topts = ''.join(f'<option{" selected" if e == event else ""}>{e}</option>' for e in FORM_TYPES)
     return f'''<section class="sec{' sec--tint' if tint else ''}" id="quote" aria-labelledby="quote-title">
   <div class="wrap form-grid">
     <div>
@@ -1119,7 +1123,7 @@ def catering_form(emirate='Dubai', title="Let's build your next event.", tint=Tr
           <div class="field"><label for="q-phone">Phone number (WhatsApp)</label><input id="q-phone" name="phone" data-label="Phone (WhatsApp)" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 000 0000" required><span class="err" aria-live="polite"></span></div>
         </div>
         <div class="row">
-          <div class="field"><label for="q-type">Event type</label><select id="q-type" name="type" data-label="Event type"><option>Corporate &amp; office</option><option>Party or home event</option><option>University event</option><option>Wedding</option><option>Buffet setup</option><option>Bulk catering</option><option>Other</option></select></div>
+          <div class="field"><label for="q-type">Event type</label><select id="q-type" name="type" data-label="Event type">{topts}</select></div>
           <div class="field"><label for="q-emirate">Emirate</label><select id="q-emirate" name="emirate" data-label="Emirate">{opts}</select></div>
         </div>
         <div class="row">
@@ -1361,7 +1365,7 @@ def guide_more(exclude, guides=None):
     return f'''<section class="sec sec--tint sec--tight" aria-labelledby="more-guides">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Guides</p><h2 class="h3" id="more-guides" style="font-size:1.4rem">Keep reading</h2></div>
-    {guide_cards(guides or GUIDES, exclude)}
+    {guide_cards([g for g in (guides or GUIDES) if g[0] != exclude][:6])}
   </div>
 </section>'''
 
@@ -2255,13 +2259,16 @@ def page_guide_affordable():
 
 # ---------------------------------------------------------------- catering by emirate
 CATER_EVENTS = [
-    ('case', 'Corporate &amp; office', 'Team lunches, meetings, launches and company events, delivered on time.'),
-    ('party', 'Parties &amp; home events', 'Birthdays, family gatherings and house parties, catered at home.'),
-    ('cap', 'University events', 'Orientation days, society nights and campus functions.'),
-    ('rings', 'Weddings', 'Generous menus built around your guest list.'),
-    ('serve', 'Buffet setups', 'Full buffets set up at your venue, from office lunches to weddings.'),
-    ('box', 'Bulk catering', 'Large volumes for sites, institutions and events.'),
+    ('case', 'Corporate &amp; office', 'Team lunches, meetings, launches and company events, delivered on time.', '/catering/corporate-events/'),
+    ('party', 'Parties &amp; home events', 'Birthdays, family gatherings and house parties, catered at home.', '/catering/family-gatherings/'),
+    ('cap', 'University events', 'Orientation days, society nights and campus functions.', '/catering/university-events/'),
+    ('rings', 'Weddings', 'Generous menus built around your guest list.', '/catering/weddings/'),
+    ('serve', 'Buffet setups', 'Full buffets set up at your venue, from office lunches to weddings.', '/guides/buffet-vs-plated-catering/'),
+    ('box', 'Bulk catering', 'Large volumes for sites, institutions and events.', ''),
 ]
+
+def event_tiles(items):
+    return ''.join((f'<a class="event" href="{u}">' if u else '<div class="event">') + f'{I[i]}<h3 class="h3">{t}</h3><p>{d}</p>' + ('</a>' if u else '</div>') for i, t, d, u in items)
 
 def catering_catalog():
     return {'@type': 'OfferCatalog', 'name': 'Catering services', 'itemListElement': [
@@ -2422,7 +2429,7 @@ def page_cater_area(slug):
             'schema': [ORG, BUSINESS, service, faq_schema(c['faqs']), crs]}
     small, big, w, h, alt = c['img']
     srcset = f' srcset="/assets/img/{small} 640w, /assets/img/{big} {w}w" sizes="(min-width: 900px) 45vw, 100vw"' if small != big else ''
-    ev = ''.join(f'<div class="event">{I[i]}<h3 class="h3">{t}</h3><p>{d}</p></div>' for i, t, d in CATER_EVENTS)
+    ev = event_tiles(CATER_EVENTS)
     groups = ''.join(f'<div class="place-group"><h3>{I[ico]}{title}</h3><ul>' + ''.join(f'<li>{I["tick"]}<span>{x}</span></li>' for x in items) + '</ul></div>'
                      for ico, title, items in c['groups'])
     wa = f'{WA}?text=' + quote(f"Hi Messify, I'd like a catering quote for an event in {c['name']}.")
@@ -2500,11 +2507,714 @@ def page_cater_area(slug):
 </section>'''
     render(page, body)
 
+# ---------------------------------------------------------------- occasion guides
+CATERING_GUIDES += [
+    ('/guides/uae-event-catering-calendar/', 'UAE event catering calendar 2026–27',
+     'Halloween, Diwali, Thanksgiving, National Day, Christmas, Ramadan, Eid and graduation season: dates and when to book.'),
+    ('/guides/corporate-iftar-planning/', 'How to plan a corporate iftar',
+     'Timing around Maghrib, headcount, menu, venue and the details that make a Ramadan iftar for your team work.'),
+    ('/guides/diwali-party-food-planning/', 'Planning food for a Diwali party',
+     'A vegetarian Diwali menu, how much to order, snacks and sweets, and timing for a party at home or the office.'),
+    ('/guides/office-year-end-party-catering/', 'Catering an office year-end party',
+     'Dates, budget, menu, dietary needs and logistics for a December office party in the UAE.'),
+]
+OG_DATE = '2026-10-23'
+
+def page_guide_calendar():
+    rows = [
+        ('31 October 2026', 'Halloween', 'Kids\' and themed parties at home, school and community events.', '1–2 weeks', '/catering/birthday-parties/'),
+        ('8 November 2026', 'Diwali', 'Dhanteras is 6 November and Bhai Dooj 10 November. Parties at home, office celebrations, community events.', '2–3 weeks', '/catering/diwali/'),
+        ('26 November 2026', 'Thanksgiving (US)', 'Expat dinners and Friendsgivings, usually on the nearest weekend.', '2 weeks', '/catering/christmas-year-end-parties/'),
+        ('2–3 December 2026', 'UAE National Day (Eid Al Etihad)', 'Office celebrations in the days before the holiday, community and family events.', '3–4 weeks', '/catering/national-day/'),
+        ('December 2026', 'Year-end and Christmas parties', 'The busiest weeks of the year for office parties. Christmas is 25 December.', '4–6 weeks', '/catering/christmas-year-end-parties/'),
+        ('31 December 2026', 'New Year\'s Eve', 'House parties and gatherings; a night in very high demand.', '3–4 weeks', '/catering/christmas-year-end-parties/'),
+        ('6 February 2027', 'Chinese New Year', 'Office and community celebrations.', '2 weeks', '/catering/corporate-events/'),
+        ('About 8 February to 9 March 2027', 'Ramadan', 'Corporate iftars, family iftars, majlis gatherings, ghabga nights and staff iftars. Expected dates, subject to the moon sighting.', '4–6 weeks', '/catering/iftar/'),
+        ('About 9 or 10 March 2027', 'Eid al-Fitr', 'Family lunches, open houses and office Eid celebrations. Expected, subject to the moon sighting.', '3–4 weeks', '/catering/eid/'),
+        ('About 16 or 17 May 2027', 'Eid al-Adha', 'Family gatherings and open houses. Expected, subject to the moon sighting.', '3–4 weeks', '/catering/eid/'),
+        ('May to June 2027', 'Graduation season', 'Graduation parties for students and families, school and university events.', '2–3 weeks', '/catering/university-events/'),
+        ('Late August to September 2027', 'New academic year', 'Orientation days, welcome events and society fairs on campus.', '3–4 weeks', '/catering/university-events/'),
+    ]
+    trs = ''.join(f'<tr><th scope="row">{o}</th><td data-label="Date">{d}</td><td data-label="What people cater">{w}</td><td data-label="Book ahead">{b}</td></tr>' for d, o, w, b, _ in rows)
+    table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>UAE catering calendar, October 2026 to September 2027</caption>
+  <thead><tr><th scope="col">Occasion</th><th scope="col">Date</th><th scope="col">What people cater</th><th scope="col">Book ahead</th></tr></thead>
+  <tbody>{trs}</tbody></table></div>'''
+    sections = f'''
+    <h2>Why the calendar matters for catering</h2>
+    <p>In the UAE, demand for catering isn't spread evenly through the year. From October to April the weather is cooler and events pile up: Diwali, National Day, year-end parties, Christmas and New Year all land within about eight weeks, followed by Ramadan and Eid. Book late in those weeks and you choose from what's left. This calendar lists the occasions people most often cater for, their dates and how early to book.</p>
+
+    <h2>The calendar at a glance</h2>
+    {table}
+    <p class="disclaim">Islamic dates depend on the moon sighting and are confirmed close to the day. Book for the expected date and confirm your final numbers once it is announced.</p>
+
+    <h2>October and November: Halloween, Diwali and Thanksgiving</h2>
+    <p><b>Halloween</b> (31 October) is mostly children's parties and themed house parties: finger food, mild dishes for children and something proper for the adults. See <a href="/catering/birthday-parties/">party catering</a>.</p>
+    <p><b>Diwali</b> falls on Sunday 8 November 2026. Menus are mostly vegetarian, with snacks and sweets to share, and many families host on the weekend around it. See <a href="/catering/diwali/">Diwali catering</a> and our <a href="/guides/diwali-party-food-planning/">Diwali food guide</a>.</p>
+    <p><b>Thanksgiving</b> is Thursday 26 November 2026. In the UAE it is usually celebrated by American and other expat families and friends on the nearest weekend, as a roast-style dinner.</p>
+
+    <h2>December: National Day, year-end parties, Christmas and New Year</h2>
+    <p>December is the most crowded month. <b>UAE National Day</b> (Eid Al Etihad) is a public holiday on 2 and 3 December 2026, and offices celebrate in the days before it. <b>Year-end office parties</b> cluster in the first three weeks of December, then come <b>Christmas</b> and <b>New Year's Eve</b>. If your company holds a December party, fix the date and book in October or early November. See <a href="/catering/national-day/">National Day catering</a> and <a href="/catering/christmas-year-end-parties/">year-end party catering</a>.</p>
+
+    <h2>February and March: Ramadan and Eid al-Fitr</h2>
+    <p><b>Ramadan 2027</b> is expected to begin around 8 February 2027. Iftar catering is in demand every evening of the month, especially at weekends and in the last ten days. Corporate iftars need booking four to six weeks ahead. <b>Eid al-Fitr</b> is expected around 9 or 10 March 2027, when families host lunches and open houses. See <a href="/catering/iftar/">iftar catering</a>, our <a href="/guides/corporate-iftar-planning/">corporate iftar guide</a> and <a href="/catering/eid/">Eid catering</a>.</p>
+
+    <h2>May to September: Eid al-Adha, graduations and the new academic year</h2>
+    <p><b>Eid al-Adha</b> is expected around 16 or 17 May 2027. <b>Graduation season</b> runs from May into June. Summer is quieter as many residents travel, then <b>orientation weeks</b> bring campus events from late August. See <a href="/catering/university-events/">university event catering</a>.</p>
+
+    <h2>Events that happen all year</h2>
+    <p>Weddings, birthdays, family gatherings, business meetings and corporate events happen in every month, though weddings and outdoor events are concentrated in the cooler months. See <a href="/catering/weddings/">wedding catering</a>, <a href="/catering/family-gatherings/">family gatherings</a>, <a href="/catering/business-meetings/">business meetings</a> and <a href="/catering/corporate-events/">corporate events</a>.</p>
+
+    <h2>How early to book, in short</h2>
+    <ul>
+      <li><b>Peak dates</b> (December parties, iftars, Eid, New Year's Eve): four to six weeks.</li>
+      <li><b>Busy-season weekends</b> (October to April): two to four weeks.</li>
+      <li><b>Weekday office lunches and small parties</b>: a few days to a week, if the date is quiet.</li>
+    </ul>
+    <p>Whatever the occasion, send us your date, location, headcount and serving time for a <a href="/catering/#quote">catering quote</a>.</p>'''
+    faqs = [
+        ('When is the busiest time for catering in the UAE?', 'The cooler months from October to April, and especially December (National Day, year-end parties, Christmas and New Year) and Ramadan.'),
+        ('When is Ramadan 2027?', 'Ramadan 2027 is expected to begin around 8 February 2027 and end around 9 March 2027, subject to the moon sighting.'),
+        ('When is Diwali 2026 in the UAE?', 'Diwali falls on Sunday 8 November 2026, with Dhanteras on 6 November and Bhai Dooj on 10 November.'),
+        ('When is UAE National Day 2026?', 'The Eid Al Etihad public holiday in 2026 is on 2 and 3 December.'),
+        ('How far in advance should I book catering for the festive season?', 'Four to six weeks for December parties, iftars, Eid and New Year\'s Eve; two to four weeks for other busy-season weekends.'),
+    ]
+    article_page('/guides/uae-event-catering-calendar/', 'Catering calendar', 'UAE Event Catering Calendar 2026–27: Dates | Messify',
+                 'Key UAE catering dates for 2026–27: Halloween, Diwali, Thanksgiving, National Day, Christmas, Ramadan, Eid and graduations, and when to book.',
+                 'UAE event catering calendar 2026–27', 'Catering guide · 2026–27',
+                 'The busiest catering dates in the UAE for 2026–27 are Diwali (8 November 2026), UAE National Day (2–3 December), December year-end parties, Christmas and New Year, then Ramadan (expected from about 8 February 2027) and Eid al-Fitr (about 9–10 March 2027). Book four to six weeks ahead for peak dates.',
+                 sections, faqs, kind='catering', published=OG_DATE)
+
+def page_guide_corporate_iftar():
+    sections = '''
+    <h2>Why a corporate iftar needs more planning than a lunch</h2>
+    <p>An iftar has a fixed moment: the call to Maghrib. Food that arrives five minutes late, or is still being set up when guests break their fast, is the one mistake everyone remembers. Add heavy traffic in the hour before iftar, guests arriving straight from work, and a time that moves a little each day, and it pays to plan carefully.</p>
+
+    <h2>1. Pick the date and confirm the iftar time</h2>
+    <p>Ramadan 2027 is expected to begin around 8 February 2027, subject to the moon sighting. Maghrib moves a minute or two each day, so check the iftar time for your date and city. Weekday iftars in the first two weeks are usually easier to book than weekends and the last ten days.</p>
+
+    <h2>2. Decide the format</h2>
+    <ul>
+      <li><b>Iftar at the office:</b> simple to organise, and staff don't need to travel in iftar traffic. Needs space for a buffet and seating.</li>
+      <li><b>Iftar at a venue:</b> more of an occasion, especially for clients and partners. Check whether the venue allows outside catering.</li>
+      <li><b>Ghabga:</b> a later evening gathering after taraweeh, more relaxed, with lighter food. It suits teams who prefer to break their fast at home.</li>
+      <li><b>Iftar meals for staff:</b> individual meals delivered to staff accommodation or sites, often sponsored by the company.</li>
+    </ul>
+
+    <h2>3. Headcount and guests</h2>
+    <p>Invite non-fasting colleagues too: a corporate iftar is a team occasion. Collect RSVPs early and give the caterer a final number a few days before. Because many guests arrive in the last minutes before Maghrib, make sure people know the start time and where to go.</p>
+
+    <h2>4. Build the menu in stages</h2>
+    <ol>
+      <li><b>Break the fast:</b> dates, water and laban, ready on the tables before Maghrib.</li>
+      <li><b>Light start:</b> lentil soup or harees, samosas or sambousek, and salads such as fattoush.</li>
+      <li><b>Main meal:</b> after Maghrib prayer, a rice dish such as biryani, mandi or ouzi, with grills or curries and a vegetarian main.</li>
+      <li><b>To finish:</b> luqaimat, kunafa or umm ali, fruit, Arabic coffee and tea.</li>
+    </ol>
+    <p>For quantities, our <a href="/guides/how-much-food-per-person-catering/">food per person guide</a> applies: iftar guests eat a full meal.</p>
+
+    <h2>5. Set aside space for prayer</h2>
+    <p>Many guests will pray Maghrib before the main meal. Set aside a clean, quiet space with prayer mats, and plan the main meal to be served after the prayer.</p>
+
+    <h2>6. Timing on the day</h2>
+    <ul>
+      <li>Ask the caterer to arrive and set up well before Maghrib, allowing for traffic.</li>
+      <li>Have dates and water on the tables, not on the buffet, so guests can break their fast immediately.</li>
+      <li>Keep speeches short and after the meal.</li>
+    </ul>
+
+    <h2>7. Daytime during Ramadan</h2>
+    <p>If you are catering daytime meetings during Ramadan for non-fasting colleagues, serve food discreetly in a private room, out of sight of colleagues who are fasting.</p>
+
+    <h2>Book your corporate iftar</h2>
+    <p>We cater corporate iftars, ghabga nights and staff iftar meals across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with 100% halal menus planned around Maghrib. See <a href="/catering/iftar/">iftar catering</a> or send your date, venue and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
+    faqs = [
+        ('How far ahead should I book a corporate iftar?', 'Four to six weeks ahead. Weekends and the last ten days of Ramadan fill up first.'),
+        ('What should a corporate iftar menu include?', 'Dates, water and laban to break the fast, then soup and savoury bites, a main course with a rice dish, grills or curries and a vegetarian option, and sweets with Arabic coffee and tea.'),
+        ('What is a ghabga?', 'A Ramadan evening gathering held later at night, after taraweeh prayers. It is more relaxed than an iftar, with lighter food.'),
+        ('Should non-fasting colleagues be invited to an iftar?', 'Yes. A corporate iftar is a team occasion, and colleagues of every background are usually welcome.'),
+        ('When is Ramadan 2027?', 'Ramadan 2027 is expected to begin around 8 February 2027, subject to the moon sighting.'),
+    ]
+    article_page('/guides/corporate-iftar-planning/', 'Corporate iftar', 'How to Plan a Corporate Iftar in the UAE | Messify',
+                 'Plan a corporate iftar in Dubai and the UAE: timing around Maghrib, format, headcount, menu in stages, prayer space and when to book for Ramadan 2027.',
+                 'How to plan a corporate iftar', 'Ramadan guide · 2027',
+                 'Book a corporate iftar four to six weeks ahead. Confirm the Maghrib time for your date, choose the format (office, venue, ghabga or staff meals), collect RSVPs, have dates and water on the tables before Maghrib, set aside space for prayer, and serve the main meal after the prayer. Ramadan 2027 is expected to begin around 8 February 2027.',
+                 sections, faqs, kind='catering', published=OG_DATE)
+
+def page_guide_diwali():
+    rows = [('Snacks (samosas, pakoras, dhokla)', '4–6 pieces'), ('Rice, biryani or pulao (cooked)', '150 g'), ('Paneer, dal and vegetable curries (all together)', '250 g'),
+            ('Breads (puri, naan or roti)', '2 pieces'), ('Raita and salad', '75 g'), ('Indian sweets and desserts', '2–3 pieces or 1 portion')]
+    trs = ''.join(f'<tr><th scope="row">{a}</th><td data-label="Per adult guest">{b}</td></tr>' for a, b in rows)
+    table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>Vegetarian Diwali dinner: planning amounts per adult guest</caption>
+  <thead><tr><th scope="col">Item</th><th scope="col">Per adult guest</th></tr></thead>
+  <tbody>{trs}</tbody></table></div>'''
+    sections = f'''
+    <h2>Diwali 2026 dates in the UAE</h2>
+    <p>Diwali (Lakshmi Puja) falls on <b>Sunday 8 November 2026</b>. Dhanteras is on Friday 6 November and Bhai Dooj on Tuesday 10 November in the UAE. Many families host on the weekend around Diwali, and offices often celebrate in the working days just before or after, so book early.</p>
+
+    <h2>Build a vegetarian menu</h2>
+    <p>Most Diwali menus are vegetarian. A balanced spread has four parts:</p>
+    <ul>
+      <li><b>Snacks</b> for guests as they arrive: samosas, pakoras, dhokla, chaat-style bites.</li>
+      <li><b>Two or three curries:</b> one paneer dish, one dal, one vegetable or chole.</li>
+      <li><b>Rice and breads:</b> a biryani or pulao, with puri, naan or roti.</li>
+      <li><b>Sweets:</b> the heart of Diwali. Gulab jamun, kheer and mithai, plus chai.</li>
+    </ul>
+
+    <h2>How much food to order</h2>
+    {table}
+    <p>Count children under 10 as half a guest. If guests are visiting several homes on the same evening, they will eat less at each, so lean towards snacks and sweets rather than a full dinner.</p>
+
+    <h2>Pure vegetarian and Jain guests</h2>
+    <p>Some guests only eat food cooked in a pure-vegetarian kitchen, and Jain guests avoid onion, garlic and root vegetables. Ask your caterer directly whether their kitchen also cooks meat, and whether they can do Jain dishes. Our partner kitchen cooks both vegetarian and non-vegetarian food, so if this matters to your guests, tell us and we will say upfront what we can do.</p>
+
+    <h2>Timing for a Diwali party</h2>
+    <ul>
+      <li>Serve snacks as guests arrive, and dinner after the puja.</li>
+      <li>Tell the caterer when you want to eat, not when guests arrive.</li>
+      <li>Keep candles and diyas well away from the buffet table.</li>
+    </ul>
+
+    <h2>Office Diwali celebrations</h2>
+    <p>For the office, a lunch buffet with two curries, rice, breads and a sweet works well, or snacks and sweets with chai in the afternoon. Make sure non-vegetarian colleagues know the menu is vegetarian, so no one is surprised.</p>
+
+    <h2>Get a Diwali catering quote</h2>
+    <p>We cater Diwali parties at home, office celebrations and community gatherings across the UAE. See <a href="/catering/diwali/">Diwali catering</a> or send your date, location and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
+    faqs = [
+        ('When is Diwali 2026?', 'Diwali (Lakshmi Puja) falls on Sunday 8 November 2026 in the UAE, with Dhanteras on 6 November and Bhai Dooj on 10 November.'),
+        ('What food is served at a Diwali party?', 'Usually a vegetarian spread: snacks such as samosas and pakoras, paneer, dal and vegetable curries, biryani or pulao, puri or naan, and Indian sweets with chai.'),
+        ('How much food do I need for a Diwali party?', 'Per adult, plan about 4–6 snacks, 150 g of rice or biryani, 250 g of curries and dal, 2 breads, some raita and salad, and 2–3 sweets.'),
+        ('Can a caterer provide Jain food?', 'Some can. Ask whether the kitchen can cook without onion, garlic and root vegetables, and whether it also cooks meat.'),
+        ('Does Messify cater Diwali?', 'Yes. We cater Diwali parties at home, office celebrations and community gatherings, with vegetarian Indian menus and sweets.'),
+    ]
+    article_page('/guides/diwali-party-food-planning/', 'Diwali party food', 'Diwali Party Food: Menu & How Much to Order | Messify',
+                 'Plan the food for a Diwali party in the UAE: a vegetarian menu, how much to order per guest, snacks and sweets, Jain guests and timing for 2026.',
+                 'Planning food for a Diwali party', 'Diwali guide · 2026',
+                 'Diwali 2026 is on Sunday 8 November. A Diwali party menu is usually vegetarian: snacks as guests arrive, two or three curries (paneer, dal, vegetables), rice and breads, and Indian sweets with chai. Per adult, plan about 150 g of rice, 250 g of curries, 2 breads and 2–3 sweets.',
+                 sections, faqs, kind='catering', published=OG_DATE)
+
+def page_guide_year_end():
+    sections = '''
+    <h2>Fix the date first</h2>
+    <p>December is the busiest month for events in the UAE. UAE National Day is on 2 and 3 December 2026, and most companies hold their year-end party in the first three weeks of December, before people travel. Popular dates go first, so set your date in October or early November and book the caterer straight away.</p>
+
+    <h2>Choose the format</h2>
+    <ul>
+      <li><b>Lunch at the office:</b> the easiest to organise and the most inclusive, because everyone is already there.</li>
+      <li><b>Evening party at the office or a venue:</b> more of an occasion. Check whether the venue allows outside catering.</li>
+      <li><b>Bites and drinks:</b> lighter and cheaper than dinner, but if it runs past 8 PM, people expect a proper meal.</li>
+    </ul>
+
+    <h2>Set a budget per person</h2>
+    <p>Work out the budget per head, then decide what it covers: food, setup, staff and equipment. Catering is usually quoted per person, so a clear headcount and budget lets the caterer suggest a menu that fits. Our guide to <a href="/guides/catering-cost-dubai/">how catering is priced</a> explains what moves the price.</p>
+
+    <h2>A menu for a mixed team</h2>
+    <p>UAE teams are international, so the best year-end menus mix cuisines: something festive and Continental, an Indian or Arabic favourite, a vegetarian main and a good dessert. Keep it halal so everyone can eat everything.</p>
+
+    <h2>Dietary needs</h2>
+    <p>Collect them with your RSVPs: vegetarian, vegan, allergies and any medical diets. Label dishes on the day.</p>
+
+    <h2>Logistics</h2>
+    <ul>
+      <li>Confirm building access, a delivery pass and the service lift for office towers.</li>
+      <li>Plan space for a buffet table and a queue, and power if food is kept warm.</li>
+      <li>Agree serving time, clean-up and what happens to leftovers.</li>
+      <li>Confirm the final headcount two to three days before.</li>
+    </ul>
+    <p>Our <a href="/guides/corporate-event-catering-checklist/">corporate event catering checklist</a> has the full list.</p>
+
+    <h2>Book your year-end party catering</h2>
+    <p>We cater office year-end parties, Christmas lunches and New Year gatherings across the UAE, with custom 100% halal menus and buffet setups. See <a href="/catering/christmas-year-end-parties/">Christmas and year-end catering</a> or send your date, venue and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
+    faqs = [
+        ('When should we book catering for a December office party?', 'In October or early November. The first three weeks of December are the busiest weeks of the year for events in the UAE.'),
+        ('What food works for an office year-end party?', 'A mix of cuisines for an international team: a festive Continental dish, an Indian or Arabic favourite, a vegetarian main and a good dessert, all halal.'),
+        ('Lunch or evening party?', 'Lunch at the office is the easiest and most inclusive. An evening party feels more like an occasion but needs a venue and more planning.'),
+        ('How much food for an office party?', 'For a full buffet, plan about 150 g of rice, 175 g of mains, 100 g of vegetable dishes, a salad and a dessert per guest. For bites only, around 10 to 12 pieces per guest for two hours.'),
+        ('Does Messify cater office year-end parties?', 'Yes. We cater year-end parties, Christmas lunches and New Year gatherings with custom 100% halal menus and buffet setups.'),
+    ]
+    article_page('/guides/office-year-end-party-catering/', 'Year-end party catering', 'Office Year-End Party Catering in the UAE | Messify',
+                 'Plan catering for an office year-end party in Dubai and the UAE: when to book in December, format, budget per person, a menu for a mixed team and logistics.',
+                 'Catering an office year-end party', 'Catering guide · 2026',
+                 'Book December office party catering in October or early November, because the first three weeks of December are the busiest of the year. Decide between an office lunch, an evening party or bites and drinks, set a budget per person, choose a halal menu that mixes cuisines, and collect dietary needs with RSVPs.',
+                 sections, faqs, kind='catering', published=OG_DATE)
+
+# ---------------------------------------------------------------- catering by event type and occasion
+I.update({
+ 'moon': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M20 14.5A8 8 0 1 1 9.5 4a6.5 6.5 0 0 0 10.5 10.5Z"/></svg>',
+ 'lamp': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M3 14h18a9 9 0 0 1-18 0Z"/><path d="M12 3c1.6 2 2 3.4 0 6-2-2.6-1.6-4 0-6Z"/><path d="M12 9v5"/></svg>',
+ 'gift': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="8" width="18" height="4" rx="1"/><path d="M5 12v9h14v-9M12 8v13"/><path d="M12 8S10.5 3 8 4s0 4 4 4ZM12 8s1.5-5 4-4 0 4-4 4Z"/></svg>',
+ 'flag': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M5 21V4"/><path d="M5 4h13l-2.5 4.5L18 13H5"/></svg>',
+ 'cake': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 21h16v-8H4v8Z"/><path d="M4 16c2 1.5 4 1.5 6 0s4-1.5 6 0 3 1 4 0M8 13V9M12 13V9M16 13V9"/><path d="M8 6v1M12 5v2M16 6v1"/></svg>',
+ 'users': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3.5"/><path d="M2.5 20a6.5 6.5 0 0 1 13 0"/><path d="M16 4.5a3.5 3.5 0 0 1 0 7M18 14a6.5 6.5 0 0 1 3.5 6"/></svg>',
+ 'mic': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>',
+ 'cup': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 8h13v6a5 5 0 0 1-5 5H9a5 5 0 0 1-5-5V8Z"/><path d="M17 10h1.5a2.5 2.5 0 0 1 0 5H17M8 3v2M12 3v2"/></svg>',
+ 'star': '<svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9L12 3Z"/></svg>',
+})
+
+CATER_IMGS = [
+    ('cat-serving-640.webp', 'cat-serving.webp', 1100, 1375, 'A gloved server lifting the lid of a chafing dish at a catered buffet'),
+    ('cat-chef-640.webp', 'cat-chef.webp', 1024, 1024, 'A chef carving at a buffet station while guests serve themselves at an evening event'),
+    ('cat-canapes.webp', 'cat-canapes.webp', 900, 1200, 'Trays of canapés on slate boards at a catered event'),
+]
+
+FORM_TYPES = ['Corporate event', 'Business meeting or office lunch', 'Wedding', 'Family gathering', 'Birthday party', 'University event',
+              'Iftar or Ramadan event', 'Eid', 'Diwali', 'Christmas or year-end party', 'National Day', 'Buffet setup', 'Bulk catering', 'Other']
+
+CATER_TYPES = {
+ # ------------------------------------------------ by event
+ 'corporate-events': {
+  'kind': 'event', 'name': 'Corporate event catering', 'short': 'Corporate events', 'icon': 'case', 'img': 0, 'form': 'Corporate event',
+  'card': 'Conferences, launches, team days, annual parties and award nights.',
+  'title': 'Corporate Event Catering in Dubai & the UAE | Messify',
+  'desc': 'Corporate event catering in Dubai and the UAE: conferences, launches, team days, annual parties and award nights. Custom halal menus and buffet setups.',
+  'kicker': 'Corporate event catering', 'h1': 'Catering for company events, at any scale.',
+  'lede': "From a 40-person team day to a conference for several hundred, we cater corporate events across Dubai, Sharjah, Abu Dhabi and the rest of the UAE. Every menu is custom and 100% halal, quoted by headcount, with buffet setups at your venue.",
+  'facts': [('5,000+', 'meals a day of kitchen capacity'), ('100%', 'halal, custom menus'), ('Buffet', 'setups at your venue')],
+  'offers': [
+    ('mic', 'Conferences and seminars', 'Breakfast, breaks and lunch planned around your agenda, not the other way round.'),
+    ('star', 'Launches and open days', 'Bites and drinks for guests who arrive in waves, or a full buffet for a seated crowd.'),
+    ('users', 'Team days and town halls', 'Generous buffets for the whole company, from one floor to several sites.'),
+    ('gift', 'Annual and year-end parties', 'Evening menus with a sense of occasion for your end-of-year celebration.'),
+    ('serve', 'Award nights and dinners', 'Buffet dinners with dishes that hold well through speeches and presentations.'),
+    ('box', 'Staff and site catering', 'Bulk meals for staff, sites and large teams, delivered on schedule.'),
+  ],
+  'plan_title': 'What makes corporate catering go smoothly.',
+  'plan': '''<p>Corporate events are planned around an agenda, so the food has to be too. Tell us the <b>serving times</b>, not just the start time: a conference might need breakfast at 8:30, a coffee break at 10:45 and lunch at 1 PM. We build the menu and delivery around those times.</p>
+<p>Give us a realistic headcount, including speakers, staff and guests, and collect dietary needs with your registrations. Make sure at least one main dish is vegetarian. If your venue is an office tower, check whether it needs a delivery pass, a service lift booking or a loading bay slot.</p>
+<p>For a full walkthrough, read our <a href="/guides/corporate-event-catering-checklist/">corporate event catering checklist</a>.</p>''',
+  'menu': [('To start', ['Breakfast spreads for early sessions', 'Savoury bites and sandwiches', 'Fresh salads']),
+           ('Mains', ['Biryani, curries and grills', 'Pasta bakes and Continental mains', 'Arabic rice and grills', 'A vegetarian main every time']),
+           ('To finish', ['Desserts and sweet bites', 'Fruit', 'Tea, coffee and juices'])],
+  'faqs': [
+    ('Do you cater conferences and large corporate events?', 'Yes. Our partner kitchen can produce 5,000+ meals a day, so we cater events from a few dozen to several hundred guests, with buffet setups at your venue.'),
+    ('Can you work around our event agenda?', 'Yes. Send us your serving times for breakfast, breaks and lunch, and we plan the menu and delivery around them.'),
+    ('Can you invoice our company?', 'Yes. Share your company details when you request a quote, and tell us if your finance team needs anything specific on the invoice.'),
+    ('How far ahead should we book corporate catering?', 'Two to three weeks is comfortable for most events, and earlier for large events and the busy months from October to April.'),
+    ('Which emirates do you cover for corporate events?', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.'),
+  ],
+  'guides': ['/guides/corporate-event-catering-checklist/', '/guides/how-much-food-per-person-catering/', '/guides/catering-cost-dubai/'],
+ },
+ 'business-meetings': {
+  'kind': 'event', 'name': 'Business meeting catering', 'short': 'Business meetings', 'icon': 'cup', 'img': 2, 'form': 'Business meeting or office lunch',
+  'card': 'Working lunches, board meetings, workshops and training days.',
+  'title': 'Business Meeting & Office Lunch Catering | Messify',
+  'desc': 'Catering for business meetings, working lunches, board meetings, workshops and training days in Dubai and the UAE. Custom halal menus by headcount.',
+  'kicker': 'Business meeting catering', 'h1': 'Meeting and office lunch catering.',
+  'lede': "Working lunches, board meetings, client workshops and training days. We deliver food that is easy to eat around a meeting table, timed to your break, with custom 100% halal menus quoted by headcount.",
+  'facts': [('On time', 'for your break, not before'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
+  'offers': [
+    ('cup', 'Working lunches', 'Food that is easy to eat at the table, so the meeting can keep going.'),
+    ('case', 'Board and client meetings', 'A smarter spread when you are hosting clients or the board.'),
+    ('mic', 'Workshops and training days', 'Breakfast, a mid-morning break and lunch for full-day sessions.'),
+    ('office', 'Office lunches', 'Lunch for the whole team, delivered to your office.'),
+    ('users', 'Interviews and assessment days', 'Simple, reliable food for candidates and panels.'),
+    ('serve', 'Buffet setups', 'A buffet laid out in your meeting room or pantry.'),
+  ],
+  'plan_title': 'Meeting food that works around the meeting.',
+  'plan': '''<p>Meeting food has one job: keep people going without stopping the meeting. Choose dishes that are easy to eat with a fork or by hand, avoid anything messy for client-facing meetings, and keep heavy dishes for after the session rather than before it.</p>
+<p>Tell us the time of the break and the room. We aim to arrive shortly before, so the food is ready when people are, not sitting out through the first agenda item. For full-day workshops, a light breakfast, a mid-morning break and a proper lunch keeps energy up better than one large meal.</p>
+<p>If your team needs lunch every day rather than for one meeting, a meal plan is simpler: see <a href="/guides/office-lunch-delivery-silicon-oasis/">office lunch delivery in Silicon Oasis</a>.</p>''',
+  'menu': [('Easy to eat', ['Wraps and sandwiches', 'Salads and bowls', 'Savoury bites']),
+           ('Hot lunch', ['Rice dishes and curries', 'Grilled chicken and sides', 'Pasta and Continental dishes', 'A vegetarian main every time']),
+           ('Breaks', ['Pastries and breakfast items', 'Fruit and sweet bites', 'Tea, coffee and juices'])],
+  'faqs': [
+    ('Can you deliver lunch for a meeting at our office?', 'Yes. Tell us the time of your break, the room and the headcount, and we deliver lunch timed to your break.'),
+    ('What food works best for a working lunch?', 'Dishes that are easy to eat at the table: wraps, salads, bowls and rice dishes, with a vegetarian option. We help you pick.'),
+    ('Do you cater full-day workshops and training?', 'Yes. We can plan breakfast, a mid-morning break and lunch around your schedule.'),
+    ('Can you set up a buffet in our meeting room?', 'Yes. We can lay out a buffet in your meeting room or pantry if there is space for a table.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/corporate-event-catering-checklist/', '/guides/how-much-food-per-person-catering/', '/guides/buffet-vs-plated-catering/'],
+ },
+ 'weddings': {
+  'kind': 'event', 'name': 'Wedding catering', 'short': 'Weddings', 'icon': 'rings', 'img': 1, 'form': 'Wedding',
+  'card': 'Nikah, receptions, walima, mehndi and henna nights, built around your guest list.',
+  'title': 'Wedding Catering in Dubai & the UAE | Messify',
+  'desc': 'Wedding catering in Dubai and across the UAE: nikah, receptions, walima, mehndi and henna nights. Custom halal menus and full buffet setups.',
+  'kicker': 'Wedding catering', 'h1': 'Wedding catering, built around your guest list.',
+  'lede': "Nikah, reception, walima, mehndi or henna night: we cater weddings across the UAE with generous, custom menus, 100% halal, and full buffet setups at your venue or home. Every quote is built around your guest numbers.",
+  'facts': [('5,000+', 'meals a day of kitchen capacity'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
+  'offers': [
+    ('rings', 'Nikah and reception', 'The main celebration, with a full buffet sized to your guest list.'),
+    ('serve', 'Walima', 'Generous menus for the walima, at a hall, a venue or at home.'),
+    ('party', 'Mehndi and henna nights', 'Lively menus for the night before, often for a separate crowd.'),
+    ('users', 'Separate halls', 'Separate menus, timings and service for men\'s and women\'s halls.'),
+    ('home', 'Weddings at home', 'Buffets set up in villas, gardens and majlis.'),
+    ('star', 'Engagements', 'Smaller celebrations with the same care as the big day.'),
+  ],
+  'plan_title': 'Planning wedding food, without the stress.',
+  'plan': '''<p>Start with your venue: many hotels in the UAE only allow their own kitchens, while halls, gardens and family homes usually give you freedom to choose your caterer. Then agree a realistic guest number with both families, because the number who arrive is often different from the invitation list.</p>
+<p>If your celebration has separate halls, give us a headcount for each, and decide whether each hall gets its own buffet and serving time. If the wedding runs over several days, list every event so we can plan menus that don't repeat.</p>
+<p>Our <a href="/guides/wedding-catering-checklist-uae/">wedding catering checklist for the UAE</a> covers the questions to ask before you book.</p>''',
+  'menu': [('Welcome', ['Savoury bites as guests arrive', 'Fresh juices and soft drinks']),
+           ('The main spread', ['Biryani, mandi or other rice dishes', 'Curries, grills and roasts', 'Arabic, Indian or Continental mains', 'Vegetarian mains']),
+           ('To finish', ['Indian, Arabic and Continental desserts', 'Fruit', 'Tea and coffee'])],
+  'faqs': [
+    ('Do you cater weddings in Dubai and across the UAE?', 'Yes. We cater weddings in Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus and full buffet setups.'),
+    ('Can you cater separate men\'s and women\'s halls?', 'Yes. Give us a headcount for each hall and we will plan the quantities, timings and setup for each.'),
+    ('Can you cater a wedding at a hotel?', 'Many hotels only allow their own catering, so check with your venue first. Halls, gardens and homes usually allow outside caterers.'),
+    ('How early should we book wedding catering?', 'Once your venue and date are confirmed, ideally a few months ahead for a large wedding, and earlier for the busy season from October to April.'),
+    ('Do you cater mehndi, henna nights and walima?', 'Yes. Tell us every event in your wedding and we will quote them together.'),
+  ],
+  'guides': ['/guides/wedding-catering-checklist-uae/', '/guides/how-much-food-per-person-catering/', '/guides/buffet-vs-plated-catering/'],
+ },
+ 'family-gatherings': {
+  'kind': 'event', 'name': 'Family gathering catering', 'short': 'Family gatherings', 'icon': 'users', 'img': 0, 'form': 'Family gathering',
+  'card': 'Family lunches, reunions, aqiqah, baby showers, engagements and housewarmings.',
+  'title': 'Family Gathering Catering in Dubai & the UAE | Messify',
+  'desc': 'Catering for family gatherings at home in Dubai and the UAE: family lunches, reunions, aqiqah, baby showers and housewarmings. Halal buffets by headcount.',
+  'kicker': 'Family gathering catering', 'h1': 'Family gatherings, catered at home.',
+  'lede': "Family lunches, reunions, aqiqah, baby showers, engagements and housewarmings. We cater family gatherings at home across the UAE, with custom 100% halal menus and a buffet setup if you want one, so you get to spend the day with your family instead of in the kitchen.",
+  'facts': [('At home', 'villas, flats, gardens and majlis'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
+  'offers': [
+    ('users', 'Family lunches and reunions', 'Weekend lunches for the whole family, however big it is.'),
+    ('home', 'Housewarmings', 'A spread for friends and neighbours in your new home.'),
+    ('star', 'Aqiqah', 'Generous menus to share with family and friends.'),
+    ('party', 'Baby showers', 'Lighter menus, bites and desserts for an afternoon celebration.'),
+    ('rings', 'Engagements', 'A celebration menu for the families meeting.'),
+    ('serve', 'Majlis gatherings', 'Buffets and platters for guests at your majlis.'),
+  ],
+  'plan_title': 'Catering at home, made easy.',
+  'plan': '''<p>Count adults and children separately (children under 10 eat about half an adult portion), and plan for the number you expect to arrive, which is often more than the number who replied. Tell us when you want to <b>eat</b>, not when guests arrive.</p>
+<p>Think about where the buffet will go: a long table against a wall works for smaller groups, and a table guests can reach from both sides keeps a bigger crowd moving. If you live in a building, let security know about the delivery and book the service lift if needed.</p>
+<p>Our <a href="/guides/party-catering-at-home-dubai/">guide to party catering at home</a> covers space, timing, outdoor heat and food safety.</p>''',
+  'menu': [('To start', ['Samosas, pastries and savoury bites', 'Hummus, salads and dips']),
+           ('Mains', ['Biryani, mandi and rice dishes', 'Curries and grills', 'Pasta bakes for children', 'Vegetarian mains']),
+           ('To finish', ['Desserts and Arabic or Indian sweets', 'Fruit', 'Tea, coffee and juices'])],
+  'faqs': [
+    ('Do you cater family gatherings at home?', 'Yes. We cater family lunches, reunions, aqiqah, baby showers, engagements and housewarmings at home, with a buffet setup if you want one.'),
+    ('How do I count children for catering?', 'Children under 10 count as about half a guest. Tell us how many adults and children you expect and we will size the menu.'),
+    ('Can you set up a buffet in a flat?', 'Yes, if there is space for a table. Let your building security know about the delivery and book the service lift if needed.'),
+    ('Can you include vegetarian dishes?', 'Yes. We can include vegetarian dishes in any menu.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/party-catering-at-home-dubai/', '/guides/how-much-food-per-person-catering/', '/guides/buffet-vs-plated-catering/'],
+ },
+ 'birthday-parties': {
+  'kind': 'event', 'name': 'Birthday party catering', 'short': 'Birthday parties', 'icon': 'cake', 'img': 2, 'form': 'Birthday party',
+  'card': 'Kids\' parties, milestone birthdays and themed parties, at home or at a venue.',
+  'title': 'Birthday Party Catering in Dubai & the UAE | Messify',
+  'desc': 'Birthday party catering in Dubai and the UAE: kids\' parties, milestone birthdays and themed parties at home or a venue. Custom halal menus by headcount.',
+  'kicker': 'Birthday party catering', 'h1': 'Birthday party catering, sorted.',
+  'lede': "Kids' parties, a 30th, a 50th or a themed party: we cater birthdays at home or at your venue across the UAE, with custom 100% halal menus, food children actually eat, and a buffet setup if you want one.",
+  'facts': [('Kids', 'and grown-up menus'), ('100%', 'halal menus'), ('Buffet', 'setups at home or a venue')],
+  'offers': [
+    ('cake', 'Kids\' birthday parties', 'Simple, child-friendly food, plus something proper for the parents.'),
+    ('star', 'Milestone birthdays', 'A celebration menu for a 21st, 30th, 40th, 50th or 60th.'),
+    ('party', 'Themed and Halloween parties', 'Bites and buffets for themed parties, from Halloween to costume nights.'),
+    ('home', 'Parties at home', 'Buffets set up in villas, flats and gardens.'),
+    ('users', 'Surprise parties', 'Delivery timed so the surprise stays a surprise.'),
+    ('serve', 'Venue parties', 'Catering for parties at halls and event spaces that allow outside caterers.'),
+  ],
+  'plan_title': 'Feeding a party crowd.',
+  'plan': '''<p>For a kids' party, plan two menus: simple food for the children (pasta, mild chicken, finger food) and a proper meal for the adults who came with them. Children under 10 count as about half a guest. Serve food early in the party, before the games and cake.</p>
+<p>For an evening party, decide whether guests expect a full dinner or bites and drinks: the quantities are very different. Our <a href="/guides/how-much-food-per-person-catering/">food per person guide</a> has a calculator for both.</p>
+<p>Planning a party at home? Read our <a href="/guides/party-catering-at-home-dubai/">guide to party catering at home in Dubai</a>.</p>''',
+  'menu': [('For children', ['Mild pasta and chicken dishes', 'Mini sandwiches and finger food', 'Fruit']),
+           ('For adults', ['Biryani, curries and grills', 'Continental and Italian dishes', 'Salads', 'Vegetarian mains']),
+           ('Party extras', ['Savoury bites', 'Desserts and sweet bites', 'Juices and soft drinks'])],
+  'faqs': [
+    ('Do you cater kids\' birthday parties?', 'Yes. We plan simple, child-friendly food for the children and a proper menu for the adults.'),
+    ('Do you make birthday cakes?', 'Tell us in your enquiry if you need a cake and the team will confirm what we can provide. Many families order the cake separately.'),
+    ('Can you cater a Halloween or themed party?', 'Yes. Tell us the theme and headcount, and we will build a menu of bites or a buffet to fit.'),
+    ('How much food do I need for a birthday party?', 'For a full meal, plan about 150 g of rice, 175 g of meat, chicken or fish, 100 g of vegetable dishes, a salad and a dessert per adult, with children under 10 counted as half.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/party-catering-at-home-dubai/', '/guides/how-much-food-per-person-catering/', '/guides/uae-event-catering-calendar/'],
+ },
+ 'university-events': {
+  'kind': 'event', 'name': 'University event catering', 'short': 'University events', 'icon': 'cap', 'img': 0, 'form': 'University event',
+  'card': 'Orientation days, society events, career fairs, graduations and campus functions.',
+  'title': 'University & Student Event Catering in the UAE | Messify',
+  'desc': 'Catering for university events in Dubai and the UAE: orientation days, society events, career fairs, graduations and campus functions. Halal menus.',
+  'kicker': 'University event catering', 'h1': 'Catering for campus events.',
+  'lede': "Orientation days, society nights, career fairs, guest lectures and graduations. We cater university events across the UAE, including Dubai Academic City, where we deliver meal plans every day, with custom 100% halal menus that feed students properly.",
+  'facts': [('Students', 'fed properly'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
+  'offers': [
+    ('cap', 'Orientation and welcome days', 'Food for new students and families on their first day.'),
+    ('users', 'Society events', 'Cultural nights, socials and society iftars.'),
+    ('case', 'Career fairs', 'Food for exhibitors, recruiters and students.'),
+    ('mic', 'Guest lectures and conferences', 'Breaks and lunches for academic events.'),
+    ('star', 'Graduations', 'Celebration menus for graduates and their families.'),
+    ('box', 'Bulk student meals', 'Large volumes for residences and campus programmes.'),
+  ],
+  'plan_title': 'Feeding students well, on a student budget.',
+  'plan': '''<p>Student events usually mean big appetites and a fixed budget. Rice dishes, curries and grills feed a crowd better than lots of small bites, and a vegetarian main makes sure everyone eats. Plan for walk-ins: free food at a campus event draws more people than the sign-up list.</p>
+<p>Check your campus rules on outside catering and where food can be served, and book early for orientation weeks and graduation season, which are busy.</p>
+<p>Students living in Academic City or Silicon Oasis can also get daily meals delivered: see <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</p>''',
+  'menu': [('Crowd-pleasers', ['Biryani and rice dishes', 'Curries and grills', 'Pasta bakes', 'Vegetarian mains']),
+           ('Light events', ['Sandwiches and wraps', 'Savoury bites', 'Fruit']),
+           ('Extras', ['Desserts', 'Tea, coffee and juices'])],
+  'faqs': [
+    ('Do you cater university events in Dubai Academic City?', 'Yes. We cater orientation days, society events, career fairs and campus functions, including in Dubai Academic City and Silicon Oasis.'),
+    ('Can you cater a society iftar?', 'Yes. Tell us your headcount and the time of Maghrib at your campus, and we will plan delivery before iftar.'),
+    ('Do you cater graduation parties?', 'Yes. We cater graduation celebrations for graduates and their families, on campus where allowed or at home.'),
+    ('How should we plan for walk-ins?', 'Free food draws extra people, so add a buffer above your sign-up number. We can help you size it.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/how-much-food-per-person-catering/', '/guides/catering-cost-dubai/', '/guides/uae-event-catering-calendar/'],
+ },
+ # ------------------------------------------------ by occasion
+ 'iftar': {
+  'kind': 'occasion', 'name': 'Iftar catering', 'short': 'Iftar and Ramadan', 'icon': 'moon', 'img': 1, 'form': 'Iftar or Ramadan event',
+  'card': 'Corporate iftars, family iftars at home, majlis gatherings and bulk iftar meals.',
+  'title': 'Iftar Catering in Dubai & the UAE | Ramadan | Messify',
+  'desc': 'Ramadan iftar catering in Dubai and the UAE: corporate iftars, family iftars at home, majlis gatherings, ghabga and bulk iftar meals. 100% halal.',
+  'kicker': 'Iftar catering · Ramadan', 'h1': 'Iftar catering, on the table before Maghrib.',
+  'lede': "Corporate iftars, family iftars at home, majlis gatherings, ghabga nights and iftar meals for staff and communities. We cater Ramadan across the UAE with 100% halal menus, planned so everything is ready when it is time to break the fast.",
+  'facts': [('Before', 'Maghrib, every time'), ('100%', 'halal menus'), ('5,000+', 'meals a day of capacity')],
+  'offers': [
+    ('case', 'Corporate iftars', 'Iftar for your team, clients or partners, at the office or a venue.'),
+    ('home', 'Family iftars at home', 'A full iftar spread for family and friends, with a buffet setup if you want one.'),
+    ('serve', 'Majlis gatherings', 'Iftar and evening platters for guests at your majlis.'),
+    ('moon', 'Ghabga nights', 'Late-evening Ramadan gatherings for teams and families.'),
+    ('box', 'Staff and community iftars', 'Bulk iftar meals for staff, sites and community iftars.'),
+    ('cap', 'Society and campus iftars', 'Iftar for student societies and university events.'),
+  ],
+  'plan_title': 'Timing is everything at iftar.',
+  'plan': '''<p>Iftar has a fixed moment, and it moves a minute or two earlier or later every day through Ramadan. Tell us the date and the venue, and we plan delivery so food is set up and ready before Maghrib, never arriving as guests are breaking their fast. Remember that roads are busiest in the hour before iftar.</p>
+<p>Start light and build up: dates, water and laban to break the fast, then soup and savoury bites, then the main meal after Maghrib prayer, and sweets with tea and coffee to finish. For corporate iftars, many guests arrive straight from work, so plan for people coming in close to the time.</p>
+<p>Ramadan 2027 is expected to begin around 8 February 2027, subject to the moon sighting. The weeks fill up quickly, so book early. Our <a href="/guides/corporate-iftar-planning/">guide to planning a corporate iftar</a> covers the details.</p>''',
+  'menu': [('To break the fast', ['Dates, water and laban', 'Lentil soup or harees', 'Samosas, sambousek and savoury bites']),
+           ('Main meal', ['Biryani, mandi, ouzi and rice dishes', 'Curries, grills and roasts', 'Salads and fattoush', 'Vegetarian mains']),
+           ('To finish', ['Luqaimat, kunafa, umm ali and other sweets', 'Fruit', 'Arabic coffee, tea and juices'])],
+  'faqs': [
+    ('When should I book iftar catering?', 'As early as you can. Ramadan 2027 is expected to begin around 8 February 2027, subject to the moon sighting, and popular dates fill up quickly.'),
+    ('Will the food arrive before iftar?', 'Yes. We plan delivery and setup so food is ready before Maghrib at your venue, allowing for the heavy traffic before iftar.'),
+    ('Do you cater corporate iftars?', 'Yes. We cater iftars for teams, clients and partners, at your office or a venue, with buffet setups.'),
+    ('Can you provide iftar meals for staff or a community iftar?', 'Yes. Our kitchen can produce 5,000+ meals a day, so we can supply bulk iftar meals. Tell us the headcount, location and dates.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/corporate-iftar-planning/', '/guides/how-much-food-per-person-catering/', '/guides/uae-event-catering-calendar/'],
+ },
+ 'eid': {
+  'kind': 'occasion', 'name': 'Eid catering', 'short': 'Eid', 'icon': 'star', 'img': 0, 'form': 'Eid',
+  'card': 'Eid al-Fitr and Eid al-Adha family lunches, open houses and office celebrations.',
+  'title': 'Eid Catering in Dubai & the UAE | Messify',
+  'desc': 'Eid catering in Dubai and the UAE: Eid al-Fitr and Eid al-Adha family lunches, open houses and office Eid celebrations. 100% halal menus by headcount.',
+  'kicker': 'Eid catering', 'h1': 'Eid catering for family, friends and the office.',
+  'lede': "Eid al-Fitr or Eid al-Adha, a family lunch, an open house that runs all day, or an Eid celebration at the office. We cater Eid across the UAE with generous, 100% halal menus, so you can spend the day with your guests.",
+  'facts': [('Both', 'Eid al-Fitr and Eid al-Adha'), ('100%', 'halal menus'), ('Buffet', 'setups at home or a venue')],
+  'offers': [
+    ('users', 'Eid family lunches', 'A full spread for the family on the first day of Eid.'),
+    ('home', 'Eid open houses', 'Food that holds well while guests come and go all day.'),
+    ('case', 'Office Eid celebrations', 'Eid lunches and sweets for your team before or after the holiday.'),
+    ('serve', 'Majlis hospitality', 'Platters, sweets and coffee for visitors to your majlis.'),
+    ('box', 'Staff Eid meals', 'Bulk festive meals for staff and sites.'),
+    ('party', 'Eid parties', 'Evening celebrations for friends and extended family.'),
+  ],
+  'plan_title': 'Plan Eid early.',
+  'plan': '''<p>Eid dates depend on the moon sighting, so families and caterers plan around a likely date and confirm a day or two before. Eid al-Fitr 2027 is expected around 9 or 10 March 2027, and Eid al-Adha 2027 around 16 or 17 May 2027. Because everyone celebrates at the same time, book early and confirm your final numbers as soon as the date is announced.</p>
+<p>For an open house where guests come and go, choose dishes that hold well for hours, and plan the food to come out in batches rather than all at once. For a sit-down family lunch, tell us the time you want to eat.</p>
+<p>See every key date in our <a href="/guides/uae-event-catering-calendar/">UAE event catering calendar</a>.</p>''',
+  'menu': [('To start', ['Savoury bites and pastries', 'Salads, hummus and mezze']),
+           ('Mains', ['Mandi, ouzi, biryani and machboos-style rice dishes', 'Grills and roasts', 'Curries', 'Vegetarian mains']),
+           ('Sweets and drinks', ['Luqaimat, maamoul and Eid sweets', 'Fruit', 'Arabic coffee, tea and juices'])],
+  'faqs': [
+    ('When should I book Eid catering?', 'Early. Eid al-Fitr 2027 is expected around 9 or 10 March 2027 and Eid al-Adha 2027 around 16 or 17 May 2027, subject to the moon sighting, and everyone celebrates at once.'),
+    ('What if the Eid date changes?', 'Book for the likely date and confirm your final numbers once the date is announced. Talk to us about timing when you book.'),
+    ('Do you cater Eid open houses?', 'Yes. We plan dishes that hold well through the day, and can stagger the food so it comes out in batches.'),
+    ('Do you cater office Eid celebrations?', 'Yes. We cater Eid lunches and celebrations for teams before or after the holiday.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/uae-event-catering-calendar/', '/guides/party-catering-at-home-dubai/', '/guides/how-much-food-per-person-catering/'],
+ },
+ 'diwali': {
+  'kind': 'occasion', 'name': 'Diwali catering', 'short': 'Diwali', 'icon': 'lamp', 'img': 2, 'form': 'Diwali',
+  'card': 'Diwali parties at home, office Diwali celebrations and community gatherings.',
+  'title': 'Diwali Catering in Dubai & the UAE | Messify',
+  'desc': 'Diwali catering in Dubai and the UAE: Diwali parties at home, office celebrations and community gatherings, with vegetarian Indian menus and sweets.',
+  'kicker': 'Diwali catering', 'h1': 'Diwali catering, with vegetarian menus at the centre.',
+  'lede': "Diwali parties at home, office celebrations and community gatherings across the UAE. We build Diwali menus around vegetarian Indian dishes, with sweets and snacks to share, quoted by headcount and set up as a buffet if you want one.",
+  'facts': [('Veg', 'Indian menus at the centre'), ('Custom', 'menus, by headcount'), ('Buffet', 'setups at home or a venue')],
+  'offers': [
+    ('lamp', 'Diwali parties at home', 'A full vegetarian spread for family and friends.'),
+    ('case', 'Office Diwali celebrations', 'Diwali lunches and sweets for your team.'),
+    ('users', 'Community gatherings', 'Larger menus for community and association events.'),
+    ('serve', 'Buffet setups', 'Buffets laid out at your home or venue.'),
+    ('star', 'Snacks and sweets', 'Savoury snacks and desserts for guests who come and go.'),
+    ('party', 'Card parties and get-togethers', 'Evening bites and dinner for Diwali get-togethers.'),
+  ],
+  'plan_title': 'Planning food for Diwali.',
+  'plan': '''<p>Diwali 2026 falls on Sunday 8 November, with Dhanteras on 6 November and Bhai Dooj on 10 November in the UAE. Many families host on the weekend around Diwali, so book as early as you can.</p>
+<p>Most Diwali menus are vegetarian. <b>Please note:</b> our partner kitchen cooks both vegetarian and non-vegetarian food. If your guests need food cooked in a pure-vegetarian kitchen, or Jain food without onion and garlic, tell us in your enquiry and we will say upfront what we can and can't do.</p>
+<p>Our <a href="/guides/diwali-party-food-planning/">guide to planning food for a Diwali party</a> covers menus, quantities and timing.</p>''',
+  'menu': [('Snacks and starters', ['Samosas, pakoras and chaat-style bites', 'Paneer tikka', 'Dhokla and savoury snacks']),
+           ('Mains', ['Paneer makhani and dal makhani', 'Chole, mixed vegetable curries', 'Biryani and pulao', 'Puri, naan and roti']),
+           ('Sweets', ['Gulab jamun and Indian desserts', 'Kheer', 'Chai, juices and soft drinks'])],
+  'faqs': [
+    ('When is Diwali 2026 in the UAE?', 'Diwali (Lakshmi Puja) falls on Sunday 8 November 2026, with Dhanteras on 6 November and Bhai Dooj on 10 November in the UAE.'),
+    ('Do you cater vegetarian Diwali menus?', 'Yes. We build Diwali menus around vegetarian Indian dishes, snacks and sweets.'),
+    ('Is your kitchen pure vegetarian?', 'No. Our partner kitchen cooks both vegetarian and non-vegetarian food. If you need a pure-vegetarian kitchen or Jain food, tell us and we will tell you upfront what we can do.'),
+    ('Do you cater office Diwali celebrations?', 'Yes. We cater Diwali lunches and celebrations for teams, with sweets and snacks to share.'),
+    ('How much food do I need for a Diwali party?', 'For a full vegetarian meal, plan about 150 g of rice or biryani, 250 g of curries and dal, 2 breads, snacks and a dessert per adult. Our Diwali food guide has more detail.'),
+  ],
+  'guides': ['/guides/diwali-party-food-planning/', '/guides/how-much-food-per-person-catering/', '/guides/uae-event-catering-calendar/'],
+ },
+ 'christmas-year-end-parties': {
+  'kind': 'occasion', 'name': 'Christmas and year-end party catering', 'short': 'Christmas and year-end', 'icon': 'gift', 'img': 1, 'form': 'Christmas or year-end party',
+  'card': 'Office year-end parties, Christmas lunches, festive dinners and New Year gatherings.',
+  'title': 'Christmas & Year-End Party Catering in Dubai | Messify',
+  'desc': 'Christmas and year-end party catering in Dubai and the UAE: office parties, festive lunches, Thanksgiving-style dinners and New Year gatherings. Halal menus.',
+  'kicker': 'Christmas and year-end catering', 'h1': 'Year-end parties and festive menus.',
+  'lede': "Office year-end parties, Christmas lunches, Thanksgiving-style dinners with friends and New Year gatherings. We cater the festive season across the UAE with custom 100% halal menus and buffet setups, quoted by headcount.",
+  'facts': [('Nov–Jan', 'the festive season'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
+  'offers': [
+    ('gift', 'Office year-end parties', 'A festive buffet to thank your team for the year.'),
+    ('home', 'Christmas lunches and dinners', 'Festive menus for family and friends at home.'),
+    ('users', 'Thanksgiving and Friendsgiving', 'Roast-style dinners for expat friends and families in late November.'),
+    ('star', 'New Year gatherings', 'Bites and buffets for New Year\'s Eve and New Year parties.'),
+    ('case', 'Client appreciation events', 'End-of-year events for clients and partners.'),
+    ('serve', 'Buffet setups', 'Festive buffets laid out at your office, home or venue.'),
+  ],
+  'plan_title': 'Book the festive season early.',
+  'plan': '''<p>The festive season is the busiest time of year for events in the UAE: the cooler weather, year-end parties, National Day on 2 and 3 December, Christmas and New Year all fall within a few weeks. Office parties tend to cluster in the first three weeks of December, so book as soon as your date is set.</p>
+<p>Our menus are 100% halal. For a festive feel, think roasts, Continental and Italian dishes alongside the Indian and Arabic favourites your team already loves, and finish with desserts. If you want a specific dish, such as a roast turkey for a Thanksgiving or Christmas dinner, ask in your enquiry and we will confirm what we can do.</p>
+<p>Planning the office party? See our <a href="/guides/office-year-end-party-catering/">guide to catering an office year-end party</a>.</p>''',
+  'menu': [('To start', ['Canapés and savoury bites', 'Soups and salads']),
+           ('Festive mains', ['Roast chicken and roasts', 'Continental and Italian mains', 'Biryani, grills and curries', 'Vegetarian mains']),
+           ('To finish', ['Festive desserts and sweet bites', 'Hot chocolate, tea, coffee and juices'])],
+  'faqs': [
+    ('When should we book a year-end office party?', 'As soon as your date is set. December is the busiest month for events in the UAE, and the first three weeks fill up first.'),
+    ('Is your Christmas menu halal?', 'Yes. All our catering menus are 100% halal.'),
+    ('Can you cater a Thanksgiving dinner?', 'Yes, we cater Thanksgiving-style dinners. If you want a specific dish such as roast turkey, ask in your enquiry and we will confirm.'),
+    ('Do you cater New Year parties?', 'Yes. We cater New Year gatherings at homes and venues. Tell us your timing early, because the night is in high demand.'),
+    ('How much food do we need for an office party?', 'For a full buffet, plan about 150 g of rice, 175 g of mains, 100 g of vegetable dishes, a salad and a dessert per guest. For a drinks-and-bites party, around 10 to 12 bites per guest.'),
+  ],
+  'guides': ['/guides/office-year-end-party-catering/', '/guides/uae-event-catering-calendar/', '/guides/how-much-food-per-person-catering/'],
+ },
+ 'national-day': {
+  'kind': 'occasion', 'name': 'UAE National Day catering', 'short': 'National Day', 'icon': 'flag', 'img': 0, 'form': 'National Day',
+  'card': 'Eid Al Etihad celebrations for offices, schools, communities and families.',
+  'title': 'UAE National Day Catering (Eid Al Etihad) | Messify',
+  'desc': 'UAE National Day (Eid Al Etihad) catering for office celebrations, community events and family gatherings, with Emirati-inspired, 100% halal menus.',
+  'kicker': 'UAE National Day catering', 'h1': 'Catering for Eid Al Etihad celebrations.',
+  'lede': "Office celebrations, community events and family gatherings for UAE National Day. We cater Eid Al Etihad across the UAE with Arabic and Emirati-inspired menus, 100% halal, quoted by headcount.",
+  'facts': [('2–3 Dec', 'Eid Al Etihad 2026 holiday'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
+  'offers': [
+    ('flag', 'Office celebrations', 'National Day lunches for teams, usually in the days before the holiday.'),
+    ('users', 'Community events', 'Food for community and residents\' celebrations.'),
+    ('home', 'Family gatherings', 'National Day lunches and dinners at home.'),
+    ('cap', 'Campus celebrations', 'Food for university National Day events.'),
+    ('serve', 'Majlis hospitality', 'Arabic coffee, dates and platters for guests.'),
+    ('box', 'Staff meals', 'Bulk festive meals for staff and sites.'),
+  ],
+  'plan_title': 'National Day falls in the busiest weeks.',
+  'plan': '''<p>The Eid Al Etihad public holiday in 2026 is on 2 and 3 December. Offices usually celebrate in the last working days before the holiday, which overlaps with the start of year-end party season, so book early.</p>
+<p>Arabic coffee and dates for guests, a generous rice dish at the centre, grills and salads, and luqaimat to finish make a classic National Day spread. Tell us whether you want an Emirati-inspired menu, a mix of cuisines that reflects your team, or both.</p>
+<p>See every key date in our <a href="/guides/uae-event-catering-calendar/">UAE event catering calendar</a>.</p>''',
+  'menu': [('Welcome', ['Arabic coffee and dates', 'Savoury bites and sambousek']),
+           ('Mains', ['Machboos, mandi and rice dishes', 'Grills and roasts', 'Salads and mezze', 'Vegetarian mains']),
+           ('To finish', ['Luqaimat and Arabic sweets', 'Fruit', 'Karak tea, juices and soft drinks'])],
+  'faqs': [
+    ('When is UAE National Day 2026?', 'The Eid Al Etihad public holiday in 2026 is on 2 and 3 December.'),
+    ('When do offices hold National Day celebrations?', 'Usually in the last working days before the holiday. Book early, because those days overlap with year-end party season.'),
+    ('Can you cater an Emirati-inspired menu?', 'Yes. We build Arabic and Emirati-inspired menus, and can mix in other cuisines to suit your guests.'),
+    ('Do you cater community and school events?', 'We cater community and campus events where outside catering is allowed. Tell us the venue and headcount.'),
+    ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+  'guides': ['/guides/uae-event-catering-calendar/', '/guides/corporate-event-catering-checklist/', '/guides/how-much-food-per-person-catering/'],
+ },
+}
+
+def type_cards(kind=None, exclude=None):
+    def label(n):
+        return n if n.split()[0] in ('Christmas', 'Eid', 'Diwali', 'UAE') else n[0].lower() + n[1:]
+    out = ''.join(f'<a class="emirate" href="/catering/{slug}/"><span class="emirate__ico">{I[t["icon"]]}</span><h3 class="h3">{t["name"]}</h3><p>{t["card"]}</p><span class="link-arrow">See {label(t["name"])} {I["arrow"]}</span></a>'
+                  for slug, t in CATER_TYPES.items() if (kind is None or t['kind'] == kind) and slug != exclude)
+    if kind == 'occasion' and exclude is None:
+        out += f'<a class="emirate" href="/guides/uae-event-catering-calendar/"><span class="emirate__ico">{I["clock"]}</span><h3 class="h3">UAE catering calendar</h3><p>Every key date for 2026–27, from Diwali to Eid al-Adha, and how early to book.</p><span class="link-arrow">See the calendar {I["arrow"]}</span></a>'
+    return f'<div class="emirates">{out}</div>'
+
+def page_cater_type(slug):
+    t = CATER_TYPES[slug]
+    path = f'/catering/{slug}/'
+    cr, crs = crumbs([('Home', '/'), ('Catering', '/catering/'), (t['name'], path)])
+    service = {'@type': 'Service', '@id': BASE + path + '#service', 'name': f'Messify {t["name"].lower()}', 'serviceType': t['name'],
+               'description': t['desc'], 'provider': {'@id': BASE + '/#business'},
+               'areaServed': [{'@type': 'AdministrativeArea', 'name': c} for c in CATER_EMIRATES]}
+    page = {'path': path, 'mode': 'catering', 'nav': 'catering', 'title': t['title'], 'desc': t['desc'],
+            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
+            'schema': [ORG, BUSINESS, service, faq_schema(t['faqs']), crs]}
+    small, big, w, h, alt = CATER_IMGS[t['img']]
+    srcset = f' srcset="/assets/img/{small} 640w, /assets/img/{big} {w}w" sizes="(min-width: 900px) 45vw, 100vw"' if small != big else ''
+    facts = ''.join(f'<div><b>{b}</b><span>{s}</span></div>' for b, s in t['facts'])
+    offers = ''.join(f'<div class="event">{I[i]}<h3 class="h3">{a}</h3><p>{d}</p></div>' for i, a, d in t['offers'])
+    menu = ''.join(f'<div class="place-group"><h3>{g}</h3><ul>' + ''.join(f'<li>{I["tick"]}<span>{x}</span></li>' for x in items) + '</ul></div>' for g, items in t['menu'])
+    guides = [g for g in CATERING_GUIDES if g[0] in t['guides']]
+    wa = f'{WA}?text=' + quote(f"Hi Messify, I'd like a quote for {t['name'].lower()}.")
+    other_kind = 'occasion' if t['kind'] == 'event' else 'event'
+    body = f'''<section class="sec sec--first">
+  <div class="wrap split">
+    <div>
+      {cr}
+      <h1 class="h2 rise"><span class="kicker">{t['kicker']}</span> {t['h1']}</h1>
+      <p class="lede rise">{t['lede']}</p>
+      <div class="actions">
+        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+      {rating_badge()}
+      <div class="facts">{facts}</div>
+    </div>
+    <div class="photo photo--tall"><img src="/assets/img/{small}"{srcset} alt="{alt}" width="{w}" height="{h}" fetchpriority="high"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" aria-labelledby="offers-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">What we cater</p><h2 class="h2" id="offers-title">{t['short']}, covered.</h2></div>
+    <div class="events">{offers}</div>
+  </div>
+</section>
+
+<section class="sec sec--tint" aria-labelledby="plan-title">
+  <div class="wrap split split--top">
+    <div class="sec-head"><p class="eyebrow">Good to plan</p><h2 class="h2" id="plan-title">{t['plan_title']}</h2></div>
+    <div class="prose">{t['plan']}</div>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="menu-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Menu ideas</p><h2 class="h2" id="menu-title">Built around your guests.</h2>
+      <p class="lede">Every menu is custom and 100% halal. These are starting points: tell us what you'd like and we'll confirm the menu in your quote.</p></div>
+    <div class="places">{menu}</div>
+  </div>
+</section>
+
+<section class="sec sec--tint" aria-labelledby="faq-title">
+  <div class="wrap split split--top">
+    <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Good to know.</h2></div>
+    {faq_html(t['faqs'])}
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="cguides-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Planning help</p><h2 class="h2" id="cguides-title">Before you book.</h2></div>
+    {guide_cards(guides)}
+  </div>
+</section>
+
+{catering_form(title="Tell us about your event.", event=t['form'])}
+
+<section class="sec sec--tight" aria-labelledby="more-title">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">More catering</p><h2 class="h3" id="more-title" style="font-size:1.4rem">{'Seasonal and festive catering' if other_kind == 'occasion' else 'Catering by event'}</h2></div>
+    {type_cards(other_kind)}
+    <div class="sec-head" style="margin:48px 0 28px"><p class="eyebrow">Across the UAE</p><h2 class="h3" style="font-size:1.4rem">Where we cater</h2></div>
+    {emirate_cards()}
+  </div>
+</section>'''
+    render(page, body)
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
             ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2'),
-            ('/guides/affordable-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
+            ('/guides/affordable-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
@@ -2533,6 +3243,7 @@ Sitemap: {BASE}/sitemap.xml
 '''
     open(os.path.join(DIST, 'robots.txt'), 'w').write(robots)
     cater_lines = '\n'.join(f'- [Catering in {c["name"]}]({BASE}/catering/{slug}/): {c["desc"]}' for slug, c in CATER_AREAS.items())
+    type_lines = '\n'.join(f'- [{t["name"]}]({BASE}/catering/{slug}/): {t["desc"]}' for slug, t in CATER_TYPES.items())
     cguide_lines = '\n'.join(f'- [{t}]({BASE}{p}): {d}' for p, t, d in CATERING_GUIDES)
     plan_lines = '\n'.join(f'- {mlabel(m)}, {ln}: {aed(p)} ({t} meals, AED {per(p, t)} per meal)' for m, ln, t, p in PLANS)
     llms = f'''# Messify
@@ -2559,6 +3270,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Office lunch delivery in Dubai Silicon Oasis]({BASE}/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
 - [Affordable meal plans in Dubai]({BASE}/guides/affordable-meal-plans-dubai/): price per meal, the lowest-cost plans and how to avoid waste
 {cater_lines}
+{type_lines}
 {cguide_lines}
 - [About Messify]({BASE}/about/): key facts in one table
 
@@ -2612,4 +3324,6 @@ if __name__ == '__main__':
     page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable()
     page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
     for s in CATER_AREAS: page_cater_area(s)
+    page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end()
+    for s in CATER_TYPES: page_cater_type(s)
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()

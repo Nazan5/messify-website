@@ -696,3 +696,14 @@ a.emirate .link-arrow{margin-top:6px;color:var(--accent-ink)}
 .qcalc__out li b{font-variant-numeric:tabular-nums;white-space:nowrap}
 .calc .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}
 @media (min-width:1000px){.places:has(> :nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* Prose blocks on service pages */
+.prose{max-width:640px}
+.prose p,.prose li{color:var(--muted);line-height:1.75;margin:0 0 16px}
+.prose b{color:var(--fg);font-weight:600}
+.prose a{color:var(--accent-ink);text-underline-offset:3px}
+.prose > :last-child{margin-bottom:0}
+/* Linked tiles */
+a.event{text-decoration:none;color:inherit;transition:background-color .2s}
+a.event:hover{background:var(--surface-2)}
+a.event:hover h3{color:var(--accent-ink)}
+.emirate__ico .ico{width:26px;height:26px;color:var(--accent)}

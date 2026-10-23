@@ -118,7 +118,7 @@ const TOPICS = {
     title: "Your event, <em>fed properly.</em>",
     facts: [["5,000+","meals a day capacity"],["6","emirates covered"],["100%","custom menus"]],
     greeting: { reply: "Welcome to Messify Catering. We cater corporate events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with a menu built around you. What's the occasion?",
-      quick_replies: ["Corporate / office", "University event", "Wedding", "Bulk catering"] },
+      quick_replies: ["Corporate / office", "Wedding", "Party / family", "Iftar / Ramadan"] },
     stripLabel: "From our events",
     photos: [
       { src:IMG + "cat-chef.webp", thumb:IMG + "cat-chef-640.webp", name:"Live carving station", alt:"A chef carving at a buffet station while guests serve themselves at an evening event" },
@@ -316,12 +316,17 @@ const SCRIPTS = {
   catering: {
     steps: [
       { key: "event_type", label: "Occasion",
-        ask: () => "What's the occasion?", chips: () => ["Corporate / office", "University event", "Wedding", "Bulk catering"],
-        grab: t => / corporate | office | company | conference | meeting | seminar /.test(t) ? "Corporate / office"
+        ask: () => "What's the occasion?", chips: () => ["Corporate / office", "Wedding", "Party / family", "Iftar / Ramadan", "University event", "Bulk catering"],
+        grab: t => / iftar | ramadan | ghabga | suhoor /.test(t) ? "Iftar / Ramadan"
+          : / diwali | deepavali /.test(t) ? "Diwali"
+          : / christmas | xmas | year end | year-end | new year | thanksgiving /.test(t) ? "Christmas / year-end"
+          : / national day | eid al etihad /.test(t) ? "National Day"
+          : / corporate | office | company | conference | meeting | seminar | workshop | training /.test(t) ? "Corporate / office"
           : / university | campus | college | uni | society | orientation | graduation /.test(t) ? "University event"
           : / wedding | nikah | engagement | mehendi | reception /.test(t) ? "Wedding"
           : / bulk | labour | labor | site | institution | daily supply /.test(t) ? "Bulk catering"
-          : / birthday | party | family | private | eid | iftar | ramadan | gathering /.test(t) ? "Private event" : undefined,
+          : / eid /.test(t) ? "Eid"
+          : / birthday | party | family | private | gathering | baby shower | housewarming | halloween /.test(t) ? "Party / family" : undefined,
         free: raw => { lead.event_type = raw; return true; }, set: v => { lead.event_type = v; },
         ack: () => lead.event_type === "Wedding" ? "Congratulations!" : "Lovely." },
       { key: "guests", label: "Guest count",

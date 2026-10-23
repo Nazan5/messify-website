@@ -12,6 +12,8 @@ dist/                    the finished website (this is what Netlify publishes)
     international-city/  Meal plans in International City
   catering/              Catering (includes party, buffet and home events)
     dubai/ sharjah/ ajman/ abu-dhabi/ ras-al-khaimah/ umm-al-quwain/   Catering by emirate
+    corporate-events/ business-meetings/ weddings/ family-gatherings/ birthday-parties/ university-events/   Catering by event (CATER_TYPES in build.py)
+    iftar/ eid/ diwali/ christmas-year-end-parties/ national-day/   Seasonal catering (dates live in the page text: update them each year)
   guides/                Meal plan guides and catering guides (food per person, prices, checklists)
   guides/                Guides: meal plan cost (with calculator), student meal plans, weekly vs monthly
   start/                 Start page: app or WhatsApp (hidden from Google)
