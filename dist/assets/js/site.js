@@ -325,5 +325,29 @@
     box.addEventListener('input', run); box.addEventListener('change', run); run();
   });
 
+  /* Catering quantities calculator (numbers mirror FOOD_MEAL / FOOD_RECEPTION in build.py) */
+  var QC = {
+    meal: [['Rice or biryani (cooked)', 150, 'g'], ['Meat, chicken or fish mains', 175, 'g'], ['Vegetable and lentil dishes', 100, 'g'],
+           ['Salads', 75, 'g'], ['Bread', 1.5, 'pieces'], ['Appetisers', 3, 'pieces'], ['Desserts', 1, 'portions'], ['Water', 750, 'ml']],
+    reception: [['Savoury bites', 10, 'pieces'], ['Sweet bites', 3, 'pieces'], ['Drinks', 3, 'servings']]
+  };
+  $$('[data-qcalc]').forEach(function (box) {
+    var out = $('[data-qcalc-out]', box);
+    var num = function (id) { return Math.max(0, Math.min(5000, parseFloat(($(id, box) || {}).value) || 0)); };
+    var q = function (v, u, g) {
+      var t = v * g;
+      if (u === 'g') return t >= 1000 ? (Math.round(t / 100) / 10).toLocaleString('en-US') + ' kg' : Math.round(t) + ' g';
+      if (u === 'ml') return t >= 1000 ? (Math.round(t / 100) / 10).toLocaleString('en-US') + ' litres' : Math.round(t) + ' ml';
+      var n = Math.ceil(t - 1e-9);
+      return n.toLocaleString('en-US') + ' ' + (n === 1 ? u.replace(/s$/, '') : u);
+    };
+    var run = function () {
+      var g = num('#qc-adults') + num('#qc-kids') / 2;
+      var style = (($('input[name="qc-style"]:checked', box) || {}).value) || 'meal';
+      out.innerHTML = QC[style].map(function (r) { return '<li><span>' + r[0] + '</span><b>' + q(r[1], r[2], g) + '</b></li>'; }).join('');
+    };
+    box.addEventListener('input', run); box.addEventListener('change', run); run();
+  });
+
   onScroll();
 })();

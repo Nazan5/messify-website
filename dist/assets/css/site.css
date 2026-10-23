@@ -675,3 +675,24 @@ input[type="range"]{flex:1;min-width:0;accent-color:var(--accent);height:30px}
   .start-top .stores--tight .store small{font-size:.64rem}
   .start-top .start-way .wa-btn{width:100%;justify-content:center}
 }
+
+/* Google rating badge */
+.gbadge{display:inline-flex;align-items:center;gap:8px;margin-top:22px;padding:8px 14px;border:1px solid var(--line-strong);border-radius:var(--r-pill);background:var(--surface);color:var(--fg);text-decoration:none;font-size:.88rem;line-height:1.2;transition:border-color .2s}
+.gbadge:hover{border-color:var(--accent)}
+.gbadge b{font-weight:700;font-variant-numeric:tabular-nums}
+.gbadge span:last-child{color:var(--muted)}
+.gbadge__stars{color:#E8A317;letter-spacing:1px;font-size:.92rem}
+.quotes-head .gbadge{margin-top:16px}
+/* Linked emirate cards */
+a.emirate{text-decoration:none;color:inherit;transition:background-color .2s}
+a.emirate:hover{background:var(--surface-2)}
+a.emirate:hover h3{color:var(--accent-ink)}
+a.emirate .link-arrow{margin-top:6px;color:var(--accent-ink)}
+@media (min-width:1000px){.emirates{grid-template-columns:repeat(3,minmax(0,1fr))}}
+/* Catering quantities calculator */
+.qcalc__out{list-style:none;margin:0;padding:16px 0 0;border-top:1px solid var(--line);display:grid;gap:0}
+.qcalc__out li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.95rem}
+.qcalc__out li span{color:var(--muted)}
+.qcalc__out li b{font-variant-numeric:tabular-nums;white-space:nowrap}
+.calc .row{display:grid;gap:14px;grid-template-columns:1fr 1fr}
+@media (min-width:1000px){.places:has(> :nth-child(3):last-child){grid-template-columns:repeat(3,minmax(0,1fr))}}

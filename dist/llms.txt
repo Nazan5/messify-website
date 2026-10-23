@@ -1,6 +1,6 @@
 # Messify
 
-> Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.
+> Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.
 
 Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily, all meals are 100% halal, and there is a vegetarian option every day, for every meal. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Meal plan delivery covers Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC) only.
 
@@ -18,13 +18,26 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis](https://www.messify.me/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City](https://www.messify.me/meal-plans/international-city/): where Messify meals are cooked
 - [Meal plans in Dubai Festival City (DFC)](https://www.messify.me/meal-plans/festival-city/): delivery to homes in Al Badia and offices across DFC
-- [Catering](https://www.messify.me/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [Catering](https://www.messify.me/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain
 - [The best meal plans in Dubai, compared](https://www.messify.me/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?](https://www.messify.me/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai](https://www.messify.me/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans](https://www.messify.me/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
 - [Daily meal delivery in Dubai Festival City](https://www.messify.me/guides/meal-delivery-dubai-festival-city/): meal plans for Al Badia homes and offices in DFC
 - [Office lunch delivery in Dubai Silicon Oasis](https://www.messify.me/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
+- [Affordable meal plans in Dubai](https://www.messify.me/guides/affordable-meal-plans-dubai/): price per meal, the lowest-cost plans and how to avoid waste
+- [Catering in Dubai](https://www.messify.me/catering/dubai/): Catering in Dubai for office lunches, corporate events, parties at home and weddings. Buffet setups and custom halal menus, quoted by headcount.
+- [Catering in Sharjah](https://www.messify.me/catering/sharjah/): Catering in Sharjah for corporate events, family gatherings, parties at home, university events and weddings. Custom halal menus and buffet setups.
+- [Catering in Ajman](https://www.messify.me/catering/ajman/): Party and event catering in Ajman: family gatherings at home, office events, weddings and bulk orders. Custom halal menus, quoted by headcount.
+- [Catering in Abu Dhabi](https://www.messify.me/catering/abu-dhabi/): Catering in Abu Dhabi for corporate events, weddings, university events and large gatherings. Custom halal menus and buffet setups, quoted by headcount.
+- [Catering in Ras Al Khaimah](https://www.messify.me/catering/ras-al-khaimah/): Catering in Ras Al Khaimah (RAK) for corporate events, weddings, family gatherings and group events. Custom halal menus and buffet setups.
+- [Catering in Umm Al Quwain](https://www.messify.me/catering/umm-al-quwain/): Catering in Umm Al Quwain (UAQ) for family gatherings, parties, outdoor events, company functions and bulk orders. Custom halal menus by headcount.
+- [How much food per person for catering?](https://www.messify.me/guides/how-much-food-per-person-catering/): Quantities per guest for rice, mains, sides, bread, desserts and drinks, with a calculator for your headcount.
+- [How catering is priced in Dubai](https://www.messify.me/guides/catering-cost-dubai/): What goes into a per-person catering price, what pushes it up, and how to compare quotes fairly.
+- [Corporate event catering checklist](https://www.messify.me/guides/corporate-event-catering-checklist/): Headcount, dietary needs, building access, timings and invoices: what to sort before an office event.
+- [Party catering at home in Dubai](https://www.messify.me/guides/party-catering-at-home-dubai/): Birthdays and family gatherings at home: how much to order, space for a buffet, timings and food safety.
+- [Buffet, delivered or plated catering?](https://www.messify.me/guides/buffet-vs-plated-catering/): The main catering styles compared, and which one suits your event, venue and headcount.
+- [Wedding catering checklist for the UAE](https://www.messify.me/guides/wedding-catering-checklist-uae/): Guest numbers, venue rules, separate halls, timings and the questions to ask before you book.
 - [About Messify](https://www.messify.me/about/): key facts in one table
 
 ## Contact
@@ -32,5 +45,6 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - Email: info@messify.me
 - Instagram: @messify.me
 - Opening hours: every day, 8 AM to 11 PM (Gulf Standard Time)
+- Google rating: 4.9 out of 5 on Google reviews (https://maps.google.com/maps?cid=12829665698799731370)
 - App Store: https://apps.apple.com/ae/app/my-messify/id6749799177
 - Google Play: https://play.google.com/store/apps/details?id=com.messifyfzc.messify

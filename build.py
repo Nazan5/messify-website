@@ -7,7 +7,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-10-13'
+TODAY = '2026-10-23'
 UPDATED_LABEL = 'October 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
@@ -26,7 +26,7 @@ LOGO = BASE + '/assets/img/messify-logo.png'
 ONE_LINER = ('Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City '
              'and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, '
              'International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events '
-             'and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.')
+             'and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.')
 
 PLANS = [  # meals a day, length, tokens, price
     (1, 'weekly', 7, 215), (2, 'weekly', 14, 415), (3, 'weekly', 21, 610),
@@ -42,6 +42,10 @@ PLACES = {
     'international-city': 'International City, Dubai',
     'festival-city': 'Dubai Festival City',
 }
+CATER_EMIRATES = ['Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi', 'Ras Al Khaimah', 'Umm Al Quwain']
+CATER_TXT = 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain'
+GMAPS = 'https://maps.google.com/maps?cid=12829665698799731370'  # Messify on Google Maps (reviews)
+RATING = '4.9'  # Google rating. Never show the number of reviews.
 
 esc = html.escape
 
@@ -86,7 +90,7 @@ BUSINESS = {
     'image': OG_IMAGE, 'logo': LOGO, 'telephone': PHONE_TEL, 'email': EMAIL,
     'description': ONE_LINER, 'priceRange': 'AED 25.63–30.71 per meal',
     'address': {'@type': 'PostalAddress', 'addressLocality': 'International City', 'addressRegion': 'Dubai', 'addressCountry': 'AE'},
-    'areaServed': [{'@type': 'Place', 'name': n} for n in PLACES.values()] + [{'@type': 'City', 'name': c} for c in ('Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi')],
+    'areaServed': [{'@type': 'Place', 'name': n} for n in PLACES.values()] + [{'@type': 'AdministrativeArea', 'name': c} for c in CATER_EMIRATES],
     'openingHoursSpecification': HOURS_SPEC,
     'sameAs': [IG, APP_STORE, GOOGLE_PLAY],
 }
@@ -124,6 +128,10 @@ def contact_lines():
   <div><span class="ci">{I["mail"]}</span><small>Email</small><a href="mailto:{EMAIL}">{EMAIL}</a></div>
   <div><span class="ci">{I["clock"]}</span><small>Open</small><b>{HOURS_LABEL}</b></div>
 </div>'''
+
+def rating_badge():
+    return (f'<a class="gbadge" href="{GMAPS}" target="_blank" rel="noopener" aria-label="Rated {RATING} out of 5 on Google reviews">'
+            f'<span class="gbadge__stars" aria-hidden="true">★★★★★</span><b>{RATING}</b><span>on Google reviews</span></a>')
 
 def ver(rel):
     """Short content hash so browsers fetch a changed stylesheet or script straight away."""
@@ -206,12 +214,15 @@ FOOTER = f'''<footer class="foot">
       </ul></div>
       <div><h2>Catering</h2><ul>
         <li><a href="/catering/">Catering services</a></li>
-        <li><a href="/catering/#menu-builder">Build your menu</a></li>
+        <li><a href="/catering/dubai/">Catering in Dubai</a></li>
+        <li><a href="/catering/sharjah/">Catering in Sharjah</a></li>
+        <li><a href="/catering/abu-dhabi/">Catering in Abu Dhabi</a></li>
+        <li><a href="/guides/#catering-guides">Catering guides</a></li>
         <li><a href="/catering/#quote">Get a quote</a></li>
       </ul></div>
       <div><h2>Company</h2><ul>
         <li><a href="/about/">About Messify</a></li>
-        <li><a href="/guides/">Meal plan guides</a></li>
+        <li><a href="/guides/">Guides</a></li>
         <li><a href="/meal-plans/#contact">Contact us</a></li>
         <li><a href="/terms/">Terms &amp; conditions</a></li>
         <li><a href="/privacy/">Privacy</a></li>
@@ -353,7 +364,7 @@ QUOTES = [
 ]
 def quotes_block(heading_tag='h2', title='Straight from our WhatsApp chats.'):
     items = ''.join(f'<figure class="quote"><blockquote><p>{esc(q)}</p></blockquote><figcaption><b>{who}</b><span>Meal plan customer · via WhatsApp</span></figcaption></figure>' for q, who in QUOTES)
-    return f'''<div class="quotes-head"><p class="eyebrow">From our customers</p><{heading_tag} class="h2" id="quotes-title">{title}</{heading_tag}></div>
+    return f'''<div class="quotes-head"><p class="eyebrow">From our customers</p><{heading_tag} class="h2" id="quotes-title">{title}</{heading_tag}>{rating_badge()}</div>
     <div class="quotes">{items}</div>'''
 
 def band(title='You planned it right.', text='Tomorrow\'s meals are one tap away. Plans from AED 25 a meal.'):
@@ -391,7 +402,7 @@ FAQ_SKIP = ('Can I skip a day?', 'Yes. Skip a day in the app and use that token 
 # ================================================================= PAGES
 def page_home():
     faqs = [FAQ_PRICE, FAQ_AREAS,
-            ('Do you cater parties and events?', 'Yes. We cater corporate events, office lunches, parties and home events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman and Abu Dhabi. Every menu is custom and priced by headcount.'),
+            ('Do you cater parties and events?', 'Yes. We cater corporate events, office lunches, parties and home events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is custom and priced by headcount.'),
             FAQ_START]
     page = {
         'path': '/', 'mode': 'meals', 'nav': None, 'body_class': 'has-gate',
@@ -419,7 +430,7 @@ def page_home():
       <div class="door__copy">
         <div class="door__tag">For events</div>
         <p class="door__title">Catering</p>
-        <p class="door__text">Corporate, party, university and wedding catering across Dubai, Sharjah, Ajman and Abu Dhabi.</p>
+        <p class="door__text">Corporate, party, university and wedding catering across six emirates, from Dubai and Sharjah to Abu Dhabi.</p>
         <span class="door__cta">Explore catering {I["arrow"]}</span>
       </div>
     </a>
@@ -433,7 +444,7 @@ def page_home():
     <div class="sec-head" style="max-width:820px">
       <p class="eyebrow">Messify · Dubai</p>
       <h1 class="h2">Meal plans and catering in Dubai.</h1>
-      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. With daily meal delivery, subscribers get breakfast, lunch and dinner together each morning across Dubai Academic City, Silicon Oasis, International City and Dubai Festival City. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman and Abu Dhabi.</p>
+      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. With daily meal delivery, subscribers get breakfast, lunch and dinner together each morning across Dubai Academic City, Silicon Oasis, International City and Dubai Festival City. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.</p>
     </div>
     <div class="duo">
       <a class="card-link" href="/meal-plans/">
@@ -450,7 +461,7 @@ def page_home():
         <div class="card-link__body">
           <p class="eyebrow" style="margin:0;color:#D8B48A">Catering</p>
           <h3 class="h3">Your event, fed properly.</h3>
-          {ticklist(['Corporate, parties, weddings and buffet setups', 'Fully customisable menus, quoted by headcount', 'Dubai, Sharjah, Ajman and Abu Dhabi'], 'x')}
+          {ticklist(['Corporate, parties, weddings and buffet setups', 'Fully customisable menus, quoted by headcount', 'Six emirates, including Dubai, Sharjah and Abu Dhabi'], 'x')}
           <span class="link-arrow">Explore catering {I["arrow"]}</span>
         </div>
       </a>
@@ -484,7 +495,8 @@ def page_home():
         <tr><th scope="row">Vegetarian</th><td>A vegetarian option every day, for every meal</td></tr>
         <tr><th scope="row">Flexibility</th><td>1 meal = 1 token. Skip a day and use the token later in your plan.</td></tr>
         <tr><th scope="row">Meal plan areas</th><td>Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC)</td></tr>
-        <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman and Abu Dhabi</td></tr>
+        <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain</td></tr>
+        <tr><th scope="row">Google rating</th><td><a href="{GMAPS}" target="_blank" rel="noopener">{RATING} out of 5 on Google reviews</a></td></tr>
       </table>
       <a class="link-arrow" href="/about/">More about Messify {I["arrow"]}</a>
     </div>
@@ -536,6 +548,7 @@ def page_meal_plans():
         <a class="btn" href="#plans">See plans &amp; prices</a>
         <a class="btn btn--ghost" href="#how">How it works</a>
       </div>
+      {rating_badge()}
       <div class="facts">
         <div><b>From AED 25</b><span>per meal</span></div>
         <div><b>Every morning</b><span>all your meals in one bag</span></div>
@@ -793,6 +806,7 @@ def page_area(slug):
         <a class="btn" href="#plans">See plans &amp; prices</a>
         <a class="btn btn--ghost" href="{WA}?text={quote(f"Hi Messify, I'm in {a['name']} and I'd like to know more about your meal plans.")}" target="_blank" rel="noopener">WhatsApp us</a>
       </div>
+      {rating_badge()}
       <div class="facts">{facts}</div>
     </div>
     <div class="photo photo--tall"><img src="/assets/img/{small}"{srcset} alt="{alt}" width="{w}" height="{h}" fetchpriority="high" style="object-position:{pos}"></div>
@@ -952,7 +966,7 @@ def page_catering():
     faqs = [
         ('What events do you cater?', 'Corporate events and office lunches, parties and home events, university events, weddings, buffet setups and bulk orders.'),
         ('Do you cater small parties at home?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and we'll build a menu to fit."),
-        ('Which areas do you cater in?', 'We cater across Dubai, Sharjah, Ajman and Abu Dhabi.'),
+        ('Which areas do you cater in?', 'We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Events further from Dubai need a little more notice, so share your date early.'),
         ('How is catering priced?', 'Every quote is custom, based on your headcount and the menu you choose.'),
         ('Do you do buffet setups?', 'Yes. We set up full buffets at your venue, from office lunches and house parties to weddings, with the menu built around your headcount.'),
         ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
@@ -963,13 +977,13 @@ def page_catering():
     service = {'@type': 'Service', '@id': BASE + '/catering/#service', 'name': 'Messify Catering', 'serviceType': 'Catering',
                'description': 'Custom catering and buffet setups for corporate events, office lunches, parties and home events, university events, weddings and bulk orders. Quoted by headcount.',
                'provider': {'@id': BASE + '/#business'},
-               'areaServed': [{'@type': 'City', 'name': c} for c in ('Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi')],
+               'areaServed': [{'@type': 'AdministrativeArea', 'name': c} for c in CATER_EMIRATES],
                'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Catering services', 'itemListElement': [
                    {'@type': 'Offer', 'itemOffered': {'@type': 'Service', 'name': n}} for n in
                    ('Corporate and office catering', 'Party and home event catering', 'University event catering', 'Wedding catering', 'Buffet catering', 'Bulk catering')]}}
     page = {'path': '/catering/', 'mode': 'catering', 'nav': 'catering', 'exact': True,
-            'title': 'Catering Services Dubai, Sharjah & Abu Dhabi | Messify',
-            'desc': 'Custom catering and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi.',
+            'title': 'Catering Services in Dubai & the UAE | Messify',
+            'desc': 'Custom halal catering and buffet setups for corporate events, parties, university events and weddings in Dubai, Sharjah, Abu Dhabi and across the UAE.',
             'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
             'preload': '<link rel="preload" as="image" href="/assets/img/cat-serving-640.webp" imagesrcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
             'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs]}
@@ -989,15 +1003,16 @@ def page_catering():
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">Catering in Dubai, Sharjah &amp; Abu Dhabi</span> Your event, <em class="it">fed properly.</em></h1>
-      <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman and Abu Dhabi. Every menu is built around your event and quoted by headcount.</p>
+      <h1 class="h2 rise"><span class="kicker">Catering in Dubai &amp; across the UAE</span> Your event, <em class="it">fed properly.</em></h1>
+      <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
         <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
         <a class="btn btn--ghost" href="{WA}?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener">WhatsApp us</a>
       </div>
+      {rating_badge()}
       <div class="facts">
         <div><b>5,000+</b><span>meals a day of kitchen capacity</span></div>
-        <div><b>4</b><span>emirates covered</span></div>
+        <div><b>6</b><span>emirates covered</span></div>
         <div><b>100%</b><span>customisable menus</span></div>
       </div>
     </div>
@@ -1022,7 +1037,7 @@ def page_catering():
         <fieldset class="opt"><legend>Courses <span>(pick any)</span></legend>{chips('course', ['Appetisers', 'Main course', 'Salads', 'Desserts', 'Beverages'], ['Main course', 'Desserts'])}</fieldset>
         <fieldset class="opt"><legend>Flavours <span>(pick any)</span></legend>{chips('flavour', ['Indian', 'Arabic', 'Continental', 'Italian', 'Chinese', 'Other'], ['Indian', 'Arabic'])}</fieldset>
         <div class="opt"><label for="b-guests">Guests</label><div class="guests"><input id="b-guests" type="range" min="20" max="2000" step="10" value="150"><output for="b-guests" id="b-guests-out">150</output></div></div>
-        <fieldset class="opt"><legend>Where</legend>{chips('emirate', ['Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi'], ['Dubai'], multi=False)}</fieldset>
+        <fieldset class="opt"><legend>Where</legend>{chips('emirate', CATER_EMIRATES, ['Dubai'], multi=False)}</fieldset>
         <div class="brief">
           <small>Your brief</small>
           <p id="briefText">Main course and desserts in <em>Indian and Arabic flavours</em>, for <em>150 guests</em> in Dubai.</p>
@@ -1044,7 +1059,7 @@ def page_catering():
       <li><b>Scalable production</b><span>Up to <em>5,000+ meals per day</em> from our partner kitchen operation.</span></li>
       <li><b>Centralised kitchen</b><span>Standardised quality control on every batch.</span></li>
       <li><b>Transparent pricing</b><span>Custom quotes based on your headcount.</span></li>
-      <li><b>Reliable logistics</b><span>On-time bulk delivery across the four emirates.</span></li>
+      <li><b>Reliable logistics</b><span>On-time bulk delivery across six emirates.</span></li>
       <li><b>Your menu, your way</b><span>From a single main course to a full spread, built around your guests.</span></li>
     </ul>
   </div>
@@ -1053,12 +1068,7 @@ def page_catering():
 <section class="sec sec--tint" aria-labelledby="uae-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Where we cater</p><h2 class="h2" id="uae-title">Catering across the UAE.</h2></div>
-    <div class="emirates">
-      <div class="emirate"><h3 class="h3">Catering in Dubai</h3><p>Our meals are cooked in International City, so Dubai events get the shortest journey: office lunches, parties at home and large events across the city.</p></div>
-      <div class="emirate"><h3 class="h3">Catering in Sharjah</h3><p>Catering services in Sharjah for corporate events, family occasions and parties, delivered on time from Dubai.</p></div>
-      <div class="emirate"><h3 class="h3">Catering in Abu Dhabi</h3><p>Catering in Abu Dhabi for corporate events, weddings and large gatherings. Share your date early and we'll plan delivery around your event.</p></div>
-      <div class="emirate"><h3 class="h3">Catering in Ajman</h3><p>Party and event catering in Ajman, from family gatherings to bulk orders.</p></div>
-    </div>
+    {emirate_cards()}
   </div>
 </section>
 
@@ -1081,11 +1091,23 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec" id="quote" aria-labelledby="quote-title">
+<section class="sec" aria-labelledby="cguides-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Planning help</p><h2 class="h2" id="cguides-title">Catering guides.</h2><p class="lede">How much food to order, how catering is priced and what to sort before the day.</p></div>
+    {guide_cards(CATERING_GUIDES)}
+  </div>
+</section>
+
+{catering_form()}'''
+    render(page, body)
+
+def catering_form(emirate='Dubai', title="Let's build your next event.", tint=True):
+    opts = ''.join(f'<option{" selected" if e == emirate else ""}>{e}</option>' for e in CATER_EMIRATES)
+    return f'''<section class="sec{' sec--tint' if tint else ''}" id="quote" aria-labelledby="quote-title">
   <div class="wrap form-grid">
     <div>
       <p class="eyebrow">Get a quote</p>
-      <h2 class="h2" id="quote-title">Let's build your next event.</h2>
+      <h2 class="h2" id="quote-title">{title}</h2>
       <p class="lede">Send the details and we'll come back with a menu and price for your headcount.</p>
       {contact_lines()}
     </div>
@@ -1098,7 +1120,7 @@ def page_catering():
         </div>
         <div class="row">
           <div class="field"><label for="q-type">Event type</label><select id="q-type" name="type" data-label="Event type"><option>Corporate &amp; office</option><option>Party or home event</option><option>University event</option><option>Wedding</option><option>Buffet setup</option><option>Bulk catering</option><option>Other</option></select></div>
-          <div class="field"><label for="q-emirate">Emirate</label><select id="q-emirate" name="emirate" data-label="Emirate"><option>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Abu Dhabi</option></select></div>
+          <div class="field"><label for="q-emirate">Emirate</label><select id="q-emirate" name="emirate" data-label="Emirate">{opts}</select></div>
         </div>
         <div class="row">
           <div class="field"><label for="q-date">Event date</label><input id="q-date" name="date" data-label="Event date" type="date"></div>
@@ -1119,7 +1141,11 @@ def page_catering():
     </div>
   </div>
 </section>'''
-    render(page, body)
+
+def emirate_cards(exclude=None):
+    out = ''.join(f'<a class="emirate" href="/catering/{slug}/"><h3 class="h3">Catering in {c["name"]}</h3><p>{c["card"]}</p><span class="link-arrow">See catering in {c["short"]} {I["arrow"]}</span></a>'
+                  for slug, c in CATER_AREAS.items() if slug != exclude)
+    return f'<div class="emirates">{out}</div>'
 
 # ---------------------------------------------------------------- about, privacy, 404
 def page_about():
@@ -1140,7 +1166,8 @@ def page_about():
         ('Vegetarian', 'A vegetarian option every day, for every meal'),
         ('Food safety', 'Prepared with gloved hands, blast-chilled after cooking, sealed in kraft bowls, packed cold.'),
         ('Catering', 'Corporate and office, parties and home events, university events, weddings, buffet setups and bulk catering. Fully customisable menus, quoted by headcount.'),
-        ('Catering areas', 'Dubai, Sharjah, Ajman and Abu Dhabi'),
+        ('Catering areas', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain'),
+        ('Google rating', f'{RATING} out of 5 on Google reviews'),
         ('How to order', 'Messify app (App Store and Google Play) or WhatsApp'),
         ('Opening hours', 'Every day, 8 AM to 11 PM'),
         ('Contact', f'{PHONE_DISPLAY} (phone and WhatsApp), {EMAIL}'),
@@ -1305,6 +1332,8 @@ def page_404():
 GUIDES = [
     ('/guides/best-meal-plans-dubai/', 'The best meal plans in Dubai, compared',
      'Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me side by side, with published prices and who each one suits.'),
+    ('/guides/affordable-meal-plans-dubai/', 'Affordable meal plans in Dubai',
+     'How to keep a meal plan affordable: price per meal, which plan costs least, using every meal, and a comparison with ordering in.'),
     ('/guides/meal-plan-cost-dubai/', 'How much does a meal plan cost in Dubai?',
      'What you actually pay per meal, what pushes the price up, and a calculator to compare a meal plan with ordering in.'),
     ('/guides/student-meal-plans-dubai/', 'Student meal plans in Dubai',
@@ -1323,25 +1352,49 @@ def article_schema(path, headline, desc, published='2026-10-13'):
             'datePublished': published, 'dateModified': TODAY,
             'author': {'@id': BASE + '/#organization'}, 'publisher': {'@id': BASE + '/#organization'}}
 
-def guide_more(exclude):
-    items = ''.join(f'<a class="reason guide-card" href="{p}"><h3>{t}</h3><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>'
-                    for p, t, d in GUIDES if p != exclude)
+def guide_cards(guides, exclude=None, tag='h3'):
+    items = ''.join(f'<a class="reason guide-card" href="{p}"><{tag}>{t}</{tag}><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>'
+                    for p, t, d in guides if p != exclude)
+    return f'<div class="reasons">{items}</div>'
+
+def guide_more(exclude, guides=None):
     return f'''<section class="sec sec--tint sec--tight" aria-labelledby="more-guides">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Guides</p><h2 class="h3" id="more-guides" style="font-size:1.4rem">Keep reading</h2></div>
-    <div class="reasons">{items}</div>
+    {guide_cards(guides or GUIDES, exclude)}
   </div>
 </section>'''
 
-def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after=''):
+def band_catering(title='Planning an event?', text="Send your date, location and headcount, and we'll come back with a menu and a price."):
+    return f'''<section class="sec">
+  <div class="wrap">
+    <div class="band band--walnut">
+      <div><h2 class="h2">{title}</h2><p class="lede">{text}</p></div>
+      <div class="actions" style="margin-top:0">
+        <a class="btn" href="/catering/#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn btn--ghost" href="{WA}?text={quote("Hi Messify, I'd like a catering quote.")}" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+    </div>
+  </div>
+</section>'''
+
+def read_time(htmltext):
+    import re
+    words = len(re.sub(r'<[^>]+>', ' ', htmltext).split())
+    return max(3, round(words / 200))
+
+def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after='', kind='meals', published='2026-10-13'):
     cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/'), (crumb, path)])
-    page = {'path': path, 'mode': 'meals', 'nav': 'meals', 'title': title, 'desc': desc,
-            'schema': [ORG, BUSINESS, article_schema(path, h1, desc), faq_schema(faqs), crs]}
+    page = {'path': path, 'mode': kind, 'nav': kind, 'title': title, 'desc': desc,
+            'schema': [ORG, BUSINESS, article_schema(path, h1, desc, published), faq_schema(faqs), crs]}
+    if kind == 'catering':
+        page.update({'cta': ('/catering/#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering'})
+    mins = read_time(quick + sections + ''.join(q + a for q, a in faqs))
     body = f'''<section class="sec sec--first">
   <div class="wrap article">
     {cr}
     <h1 class="h2"><span class="kicker">{kicker}</span> {h1}</h1>
-    <p class="byline">By the Messify team · Updated {UPDATED_LABEL} · 5 min read</p>
+    <p class="byline">By the Messify team · Updated {UPDATED_LABEL} · {mins} min read</p>
     <div class="answer">
       <p class="answer__label">Quick answer</p>
       <p class="answer__lead">{quick}</p>
@@ -1352,8 +1405,8 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
   </div>
 </section>
 {extra_after}
-{guide_more(path)}
-{band()}'''
+{guide_more(path, CATERING_GUIDES if kind == 'catering' else GUIDES)}
+{band_catering() if kind == 'catering' else band()}'''
     render(page, body)
 
 def calculator():
@@ -1380,19 +1433,26 @@ def calculator():
 
 def page_guides():
     cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/')])
-    page = {'path': '/guides/', 'mode': 'meals', 'nav': 'meals', 'title': 'Meal Plan Guides for Dubai | Messify',
-            'desc': 'Straight answers about meal plans in Dubai: costs, student plans, weekly vs monthly, office lunch in Silicon Oasis and meal delivery in DFC.',
-            'schema': [ORG, {'@type': 'CollectionPage', '@id': BASE + '/guides/#page', 'url': BASE + '/guides/', 'name': 'Messify meal plan guides',
-                             'hasPart': [{'@id': BASE + p + '#article'} for p, _, _ in GUIDES]}, crs]}
-    items = ''.join(f'<a class="reason guide-card" href="{p}"><h2 class="h3">{t}</h2><p>{d}</p><span class="link-arrow">Read the guide {I["arrow"]}</span></a>' for p, t, d in GUIDES)
+    page = {'path': '/guides/', 'mode': 'meals', 'nav': 'meals', 'title': 'Meal Plan & Catering Guides for Dubai | Messify',
+            'desc': 'Straight answers about meal plans and catering in Dubai: costs, student plans, food per guest, catering prices and event checklists.',
+            'schema': [ORG, {'@type': 'CollectionPage', '@id': BASE + '/guides/#page', 'url': BASE + '/guides/', 'name': 'Messify guides',
+                             'hasPart': [{'@id': BASE + p + '#article'} for p, _, _ in GUIDES + CATERING_GUIDES]}, crs]}
     body = f'''<section class="sec sec--first">
   <div class="wrap">
     {cr}
     <div class="sec-head" style="max-width:760px">
-      <h1 class="h2"><span class="kicker">Guides</span> Meal plans in Dubai, explained.</h1>
+      <h1 class="h2"><span class="kicker">Guides</span> Meal plans and catering in Dubai, explained.</h1>
       <p class="lede">Straight answers to the questions we get every day on WhatsApp, with real prices.</p>
     </div>
-    <div class="reasons">{items}</div>
+    <h2 class="h3" id="meal-plan-guides" style="margin:0 0 20px">Meal plan guides</h2>
+    {guide_cards(GUIDES, tag='h3')}
+  </div>
+</section>
+<section class="sec sec--tint" aria-labelledby="catering-guides">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Planning an event</p><h2 class="h2" id="catering-guides">Catering guides.</h2>
+      <p class="lede">How much food to order, how catering is priced and what to sort before the day. See <a href="/catering/">our catering</a>.</p></div>
+    {guide_cards(CATERING_GUIDES, tag='h3')}
   </div>
 </section>
 {band()}'''
@@ -1717,10 +1777,734 @@ def page_guide_dfc():
                  "Messify delivers daily meal plans in Dubai Festival City (DFC), to homes in Al Badia and offices across DFC. All of the day's meals arrive together every morning in one chilled bag, from AED 25 a meal (AED 215 for a 1-meal weekly plan). Start in the Messify app or on WhatsApp.",
                  sections, faqs)
 
+# ---------------------------------------------------------------- catering guides
+CATERING_GUIDES = [
+    ('/guides/how-much-food-per-person-catering/', 'How much food per person for catering?',
+     'Quantities per guest for rice, mains, sides, bread, desserts and drinks, with a calculator for your headcount.'),
+    ('/guides/catering-cost-dubai/', 'How catering is priced in Dubai',
+     'What goes into a per-person catering price, what pushes it up, and how to compare quotes fairly.'),
+    ('/guides/corporate-event-catering-checklist/', 'Corporate event catering checklist',
+     'Headcount, dietary needs, building access, timings and invoices: what to sort before an office event.'),
+    ('/guides/party-catering-at-home-dubai/', 'Party catering at home in Dubai',
+     'Birthdays and family gatherings at home: how much to order, space for a buffet, timings and food safety.'),
+    ('/guides/buffet-vs-plated-catering/', 'Buffet, delivered or plated catering?',
+     'The main catering styles compared, and which one suits your event, venue and headcount.'),
+    ('/guides/wedding-catering-checklist-uae/', 'Wedding catering checklist for the UAE',
+     'Guest numbers, venue rules, separate halls, timings and the questions to ask before you book.'),
+]
+CG_DATE = '2026-10-23'
+
+# Planning rules of thumb, per adult guest. Used by the table and the calculator (site.js mirrors these numbers).
+FOOD_MEAL = [  # item, amount per guest, unit
+    ('Rice or biryani (cooked, served with other mains)', 150, 'g'),
+    ('Meat, chicken or fish mains (cooked, all dishes together)', 175, 'g'),
+    ('Vegetable and lentil dishes', 100, 'g'),
+    ('Salads', 75, 'g'),
+    ('Bread (naan, roti or rolls)', 1.5, 'pieces'),
+    ('Appetisers, alongside a meal', 3, 'pieces'),
+    ('Dessert', 1, 'portion'),
+    ('Water', 750, 'ml'),
+]
+FOOD_RECEPTION = [
+    ('Savoury bites and canapés', 10, 'pieces'),
+    ('Sweet bites', 3, 'pieces'),
+    ('Drinks (water, juice, tea or coffee)', 3, 'servings'),
+]
+
+UNITS = {'pieces': ('piece', 'pieces'), 'portion': ('portion', 'portions'), 'servings': ('serving', 'servings')}
+
+def fmt_qty(v, unit, guests=1):
+    import math
+    t = v * guests
+    if unit == 'g': return f'{t / 1000:,.2f}'.rstrip('0').rstrip('.') + ' kg' if t >= 1000 else f'{t:,.0f} g'
+    if unit == 'ml': return f'{t / 1000:,.2f}'.rstrip('0').rstrip('.') + ' litres' if t >= 1000 else f'{t:,.0f} ml'
+    n = t if guests == 1 else math.ceil(t - 1e-9)
+    return f'{n:,g} {UNITS[unit][0] if n == 1 else UNITS[unit][1]}'
+
+def food_table(rows, caption):
+    trs = ''.join(f'<tr><th scope="row">{n}</th><td data-label="Per guest">{fmt_qty(v, u)}</td><td data-label="50 guests">{fmt_qty(v, u, 50)}</td><td data-label="100 guests">{fmt_qty(v, u, 100)}</td></tr>' for n, v, u in rows)
+    return f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>{caption}</caption>
+  <thead><tr><th scope="col">Item</th><th scope="col">Per guest</th><th scope="col">50 guests</th><th scope="col">100 guests</th></tr></thead>
+  <tbody>{trs}</tbody></table></div>'''
+
+def food_calculator():
+    return f'''<div class="calc" data-qcalc id="calculator">
+      <p class="answer__label">Calculator</p>
+      <h3 class="calc__title">Catering quantities for your headcount</h3>
+      <div class="row">
+        <div class="field"><label for="qc-adults">Adults</label><input id="qc-adults" type="number" inputmode="numeric" min="0" max="5000" step="1" value="50"></div>
+        <div class="field"><label for="qc-kids">Children under 10</label><input id="qc-kids" type="number" inputmode="numeric" min="0" max="5000" step="1" value="0"></div>
+      </div>
+      <fieldset class="field">
+        <legend>Type of event</legend>
+        <div class="seg">
+          <label><input type="radio" name="qc-style" value="meal" checked><span>Full meal</span></label>
+          <label><input type="radio" name="qc-style" value="reception"><span>Light bites</span></label>
+        </div>
+      </fieldset>
+      <ul class="qcalc__out" aria-live="polite" data-qcalc-out></ul>
+      <p class="fine">Rules of thumb for a buffet, with children under 10 counted as half a guest. They don't include a buffer: most hosts add a little extra for a buffet. Your caterer should adjust them to your menu, your guests and the length of your event.</p>
+    </div>'''
+
+def page_guide_food_per_person():
+    sections = f'''
+    <h2>Start with the type of event</h2>
+    <p>How much food you need depends first on what your guests expect. A <b>full meal</b> (lunch or dinner, usually served as a buffet) needs a main course with sides, bread, salad and dessert. A <b>light event</b>, such as a networking evening, an open house or a two-hour reception, runs on bites and drinks instead. Mixing the two up is the most common reason for running out, or for throwing half the food away.</p>
+
+    <h2>Full meal: how much food per guest</h2>
+    <p>For a buffet lunch or dinner, these are widely used planning amounts per adult guest. The weights are for cooked food, as it is served.</p>
+    {food_table(FOOD_MEAL, 'Full meal: food per adult guest, with totals for 50 and 100 guests')}
+    <p>Two things that surprise people. First, the meat figure is for <b>all main dishes together</b>: with chicken curry and lamb on the menu, guests take some of each, so 175 g covers both, not each. Second, when <b>biryani is the main dish</b> rather than a side, plan around 300 to 350 g of biryani per guest instead of the rice and meat lines above.</p>
+
+    <h2>Light events: bites and drinks</h2>
+    <p>For a two-hour reception, launch or open house with no main meal, plan by pieces instead of weight:</p>
+    {food_table(FOOD_RECEPTION, 'Light event of about two hours: per adult guest')}
+    <p>If the event runs longer than two hours, or overlaps with lunch or dinner time, guests will treat it as a meal. Either add a main course or plan nearer 14 to 16 bites per guest.</p>
+
+    <h2>Work out your own quantities</h2>
+    {food_calculator()}
+
+    <h2>When to order more, and when to order less</h2>
+    <ul>
+      <li><b>Order more</b> for dinner rather than lunch, for events that run longer than three hours, for buffets where guests serve themselves, and for younger crowds such as university events.</li>
+      <li><b>Order less</b> for a short daytime meeting, for an event straight after another meal, or when most of the menu is heavy (biryani, rich curries, grills).</li>
+      <li><b>Children:</b> count children under 10 as half a guest. Babies and toddlers rarely need their own portion.</li>
+      <li><b>Number of dishes:</b> more dishes doesn't mean more food in total. Guests take smaller servings of each, so split the same total across the dishes.</li>
+      <li><b>Buffer:</b> for a buffet, a small buffer covers guests who arrive without an RSVP and second helpings. A plated meal needs much less spare.</li>
+    </ul>
+
+    <h2>Headcount: the number that drives everything</h2>
+    <p>Quantities are only as good as the guest count behind them. For office events, use confirmed sign-ups. For weddings and family events in the UAE, where extra guests often arrive, ask the host family for their realistic number, not the invitation list. Give your caterer a final number a few days before the event, and tell them if it changes.</p>
+
+    <h2>Don't forget dietary needs</h2>
+    <p>Ask about vegetarian, vegan and allergy needs when you collect RSVPs. For a mixed crowd, make sure at least one main dish and one side are vegetarian, so no one is left with only rice and salad. Every Messify catering menu is 100% halal, and vegetarian dishes can be included in any menu.</p>
+
+    <h2>Let the caterer do the maths</h2>
+    <p>When you ask for a quote, give the caterer your headcount, the time you want to serve, how long the event runs and whether it is a full meal or a light event. A good caterer will turn that into quantities for your menu. Send us your details for a <a href="/catering/#quote">catering quote</a>, or see <a href="/catering/">catering in Dubai and across the UAE</a>.</p>'''
+    faqs = [
+        ('How much food do I need per person for a buffet?', 'For a full buffet meal, a widely used rule of thumb is about 150 g of rice, 175 g of meat, chicken or fish across all main dishes, 100 g of vegetable dishes, 75 g of salad, 1 to 2 pieces of bread and one dessert per adult guest.'),
+        ('How much biryani per person should I order?', 'If biryani is the main dish, plan around 300 to 350 g of cooked biryani per adult. If it is served alongside other mains, around 150 g is usually enough.'),
+        ('How much food for 100 guests?', 'For a full buffet meal for 100 adults: around 15 kg of cooked rice, 17.5 kg of meat, chicken or fish mains, 10 kg of vegetable dishes, 7.5 kg of salad, 150 pieces of bread, 100 desserts and 75 litres of water.'),
+        ('How many appetisers per person?', 'About 3 pieces per guest when appetisers come before a meal, and around 10 savoury and 3 sweet pieces per guest for a two-hour event with no main meal.'),
+        ('How do I count children for catering?', 'Count children under 10 as half a guest. Babies and toddlers rarely need their own portion.'),
+    ]
+    article_page('/guides/how-much-food-per-person-catering/', 'Food per person', 'How Much Food Per Person for Catering? | Messify',
+                 'How much food to order per guest: rice, biryani, mains, sides, bread, desserts and drinks, with totals for 50 and 100 guests and a calculator.',
+                 'How much food per person for catering?', 'Catering guide · 2026',
+                 'For a buffet meal, plan about 150 g of cooked rice, 175 g of meat, chicken or fish across all main dishes, 100 g of vegetable dishes, 75 g of salad, 1 to 2 pieces of bread and one dessert per adult guest. For a two-hour event with only bites, plan about 10 savoury and 3 sweet pieces per guest. Count children under 10 as half.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_catering_cost():
+    sections = '''
+    <h2>Most catering is priced per person</h2>
+    <p>Caterers in the UAE usually quote a <b>price per person</b> (per head) for the food, then add anything that isn't food: staff, equipment, delivery and setup. Some include these in the per-person price; others list them separately. That is why two quotes for the same event can look very different until you put them side by side.</p>
+    <p>We don't publish a fixed price list, because every Messify menu is built around the event. What we can do is explain what moves the price, so you can brief a caterer well and compare quotes fairly.</p>
+
+    <h2>What changes the price per person</h2>
+    <ol>
+      <li><b>The menu.</b> The number of courses and the dishes themselves matter most. Lamb and seafood cost more than chicken; a single main course with sides costs less than a spread with appetisers, two mains, salads and desserts.</li>
+      <li><b>Headcount.</b> Larger events usually cost less per person, because cooking, transport and setup are shared across more guests. Very small events often have a minimum order.</li>
+      <li><b>Service style.</b> Food delivered ready to serve costs least. A buffet set up at your venue adds equipment and setup time. Served or plated meals need the most staff. See <a href="/guides/buffet-vs-plated-catering/">catering styles compared</a>.</li>
+      <li><b>Staff.</b> Servers, buffet attendants and clean-up are usually priced per staff member and per hour.</li>
+      <li><b>Equipment.</b> Chafing dishes, serving ware, tables, linen, plates and cutlery. Disposable or reusable makes a difference too.</li>
+      <li><b>Location and timing.</b> Events further away cost more to reach. Early morning, late night and peak dates, such as weekends in the cooler months and the days around Eid, can be in higher demand.</li>
+      <li><b>Notice.</b> Short-notice orders can limit the menu, and sometimes cost more.</li>
+    </ol>
+
+    <h2>What a good catering quote should show</h2>
+    <p>Ask for a written quote that lists:</p>
+    <ul>
+      <li>The full menu, dish by dish, with the quantity or number of portions.</li>
+      <li>The price per person and the total, and whether VAT is included.</li>
+      <li>What is included: delivery, setup, equipment, serving staff, clean-up and taking equipment back.</li>
+      <li>Arrival time, serving time and how long food will be on the buffet.</li>
+      <li>The deadline for final numbers, and the cost of adding guests after it.</li>
+      <li>Payment terms: deposit, balance and cancellation.</li>
+    </ul>
+    <p>Companies in the UAE usually need a tax invoice for their accounts, so mention it when you ask for the quote.</p>
+
+    <h2>How to compare two quotes fairly</h2>
+    <ol>
+      <li><b>Line up the menus.</b> Same number of courses, similar dishes, similar portions.</li>
+      <li><b>Add the extras</b> to each per-person price: delivery, setup, staff and equipment.</li>
+      <li><b>Check the quantities.</b> A low price with small portions is not cheaper if you run out. Our guide to <a href="/guides/how-much-food-per-person-catering/">how much food per person</a> gives you a benchmark.</li>
+      <li><b>Compare the total,</b> including VAT, for your real headcount.</li>
+    </ol>
+
+    <h2>How to keep catering costs down</h2>
+    <ul>
+      <li><b>Get your headcount right.</b> Over-ordering is the most expensive mistake.</li>
+      <li><b>Pick fewer dishes, done well.</b> One or two mains with good sides feed people as well as five mains.</li>
+      <li><b>Choose delivered catering</b> when you don't need a full setup, for example a team lunch in the office.</li>
+      <li><b>Book early,</b> especially for weekends, Eid and the cooler months.</li>
+      <li><b>Be clear about timing,</b> so you pay for staff only when you need them.</li>
+    </ul>
+
+    <h2>Getting a Messify catering quote</h2>
+    <p>Send your date, location, headcount, the time you want to serve and any menu ideas, and we'll come back with a menu and a price for your headcount. Every menu is 100% halal and fully customisable, in Indian, Arabic, Continental, Italian, Chinese or other flavours. <a href="/catering/#quote">Request a catering quote</a>.</p>'''
+    faqs = [
+        ('How is catering priced in Dubai?', 'Most caterers quote a price per person for the food, then add or include staff, equipment, delivery and setup. The menu, headcount, service style and location move the price the most.'),
+        ('Why do catering quotes vary so much?', 'Quotes differ in menu, portion sizes and what is included. Compare them with the same menu, the same headcount and all extras such as staff, setup and delivery added in.'),
+        ('Is catering cheaper for more guests?', 'Usually, per person. Cooking, transport and setup are shared across more guests. Very small events often have a minimum order.'),
+        ('Does a catering quote include VAT?', 'It depends on the caterer, so ask. Check whether the quote shows prices with or without VAT, and ask for a tax invoice if your company needs one.'),
+        ('How much does Messify catering cost?', 'Every Messify catering quote is custom, based on your headcount, the menu you choose and the service style. Send your date, location and headcount for a price.'),
+    ]
+    article_page('/guides/catering-cost-dubai/', 'Catering prices', 'How Catering Is Priced in Dubai (Per Person) | Messify',
+                 'What goes into a catering price per person in Dubai, what pushes it up, what a quote should include and how to compare catering quotes fairly.',
+                 'How catering is priced in Dubai', 'Catering guide · 2026',
+                 'Most catering in Dubai is priced per person, based on the menu, the headcount and the service style, with staff, equipment, delivery and setup either included or added on. To compare quotes fairly, line up the menus and portions, add every extra and compare the total for your real headcount, including VAT.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_corporate_checklist():
+    sections = '''
+    <h2>The short version</h2>
+    <p>Most office catering problems come from four things: a wrong headcount, a missed dietary need, food arriving at the wrong time, and a delivery stuck at the building's loading bay. Sort those four and the rest is easy. Use the checklist below, from a few weeks out to the day itself.</p>
+
+    <h2>As soon as the event is confirmed</h2>
+    <ul>
+      <li><b>Date, start time and serving time.</b> The serving time matters more than the start time: a 10 AM workshop might need coffee at 9:45 and lunch at 1 PM.</li>
+      <li><b>Estimated headcount</b>, including speakers, guests and staff working the event.</li>
+      <li><b>Type of meal:</b> breakfast, working lunch, full buffet, afternoon break or evening reception.</li>
+      <li><b>Budget</b> per person or in total, so the caterer can suggest a menu that fits.</li>
+      <li><b>Venue:</b> office, meeting room, hotel, campus or outdoor. Check whether the venue allows outside catering.</li>
+    </ul>
+
+    <h2>Two to three weeks before</h2>
+    <ul>
+      <li><b>Collect dietary needs</b> with RSVPs: vegetarian, vegan, allergies and any medical diets. Make sure at least one main dish is vegetarian.</li>
+      <li><b>Choose the service style:</b> delivered and ready to serve, a buffet setup, or served. See <a href="/guides/buffet-vs-plated-catering/">catering styles compared</a>.</li>
+      <li><b>Agree the menu</b> and quantities. Our guide to <a href="/guides/how-much-food-per-person-catering/">how much food per person</a> helps you sense-check them.</li>
+      <li><b>Get a written quote</b> showing what is included, VAT, payment terms and the deadline for final numbers. Ask for a tax invoice if your finance team needs one.</li>
+    </ul>
+
+    <h2>One week before</h2>
+    <ul>
+      <li><b>Building access.</b> Many Dubai office towers need a delivery pass, a service lift booking or a set loading-bay time slot. Ask your building management what they need and send it to the caterer.</li>
+      <li><b>Space and power.</b> Where will the buffet go? Is there a table, enough space for a queue, and a socket nearby if food needs to be kept warm?</li>
+      <li><b>Point of contact</b> on the day, with a phone number, who can meet the delivery and sign it off.</li>
+      <li><b>Clean-up:</b> who clears the buffet, what happens to equipment, and where rubbish goes.</li>
+    </ul>
+
+    <h2>Two to three days before</h2>
+    <ul>
+      <li><b>Confirm the final headcount</b>, with dietary needs by number (for example, 60 guests including 8 vegetarian and 1 nut allergy).</li>
+      <li><b>Reconfirm times:</b> delivery, setup and serving.</li>
+      <li><b>Share the agenda</b> if timings could move, so food isn't sitting out while a session overruns.</li>
+    </ul>
+
+    <h2>On the day</h2>
+    <ul>
+      <li>Meet the delivery and check it against the order.</li>
+      <li>Label dishes, especially vegetarian and allergen information.</li>
+      <li>Keep an eye on timing: hot food is best eaten within two hours of being served.</li>
+      <li>Plan for leftovers. Agree with the caterer and venue whether they can be kept, and store them cold straight away.</li>
+    </ul>
+
+    <h2>Timing around the UAE calendar</h2>
+    <p>During Ramadan, many companies move events to iftar time, and daytime catering in the office needs care. The cooler months from October to April are busy for corporate events, so book early. Around public holidays, confirm your caterer's availability before you announce the date.</p>
+
+    <h2>Office lunch every day, not just for events</h2>
+    <p>If your team needs lunch sorted every day rather than for one event, a meal plan is simpler than catering. Messify delivers all of the day's meals every morning in Silicon Oasis, Academic City, International City and Dubai Festival City. See <a href="/guides/office-lunch-delivery-silicon-oasis/">office lunch delivery in Silicon Oasis</a>.</p>
+    <p>Planning a one-off event? Send us your date, venue, headcount and serving time for a <a href="/catering/#quote">corporate catering quote</a>.</p>'''
+    faqs = [
+        ('How far in advance should I book corporate catering?', 'Two to three weeks is comfortable for most office events, and earlier for large events, weekends and the busy months from October to April. Confirm the final headcount two to three days before.'),
+        ('What should I ask a corporate caterer?', 'Ask what the quote includes (delivery, setup, staff, equipment and clean-up), whether VAT is included, the deadline for final numbers, payment terms, and whether they can provide a tax invoice.'),
+        ('How do I handle dietary requirements at an office event?', 'Collect them with RSVPs, give the caterer numbers for each need, make sure at least one main dish is vegetarian, and label dishes on the day.'),
+        ('Do caterers need access passes for Dubai office buildings?', 'Often, yes. Many towers need a delivery pass, a service lift booking or a loading-bay slot. Ask building management early and share the details with your caterer.'),
+        ('Does Messify cater corporate events?', 'Yes. We cater team lunches, meetings, launches and company events across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus quoted by headcount.'),
+    ]
+    article_page('/guides/corporate-event-catering-checklist/', 'Corporate catering checklist', 'Corporate Event Catering Checklist (UAE) | Messify',
+                 'A step-by-step corporate catering checklist for office events in Dubai and the UAE: headcount, dietary needs, building access, timings and invoices.',
+                 'Corporate event catering checklist', 'Catering guide · 2026',
+                 'Book corporate catering two to three weeks ahead. Agree the serving time, headcount and dietary needs first, then the menu and service style. A week before, sort building access, space and power for the buffet, and confirm the final numbers two to three days before the event.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_home_party():
+    sections = '''
+    <h2>Why cater a party at home</h2>
+    <p>Cooking for 30 people at home means two days in the kitchen and no time with your guests. Catering hands over the cooking, and the serving too if you want a buffet setup. This guide covers how to plan it in a Dubai home, from a villa garden to a flat with a lift.</p>
+
+    <h2>1. Get the headcount right</h2>
+    <p>Count adults and children separately. For quantities, children under 10 count as about half a guest. For family gatherings, plan for the number you expect to arrive, which is often higher than the number who replied. Our <a href="/guides/how-much-food-per-person-catering/">food per person guide</a> has a calculator for this.</p>
+
+    <h2>2. Pick a menu that suits a home party</h2>
+    <ul>
+      <li><b>Dishes that hold well:</b> curries, biryani, grills, pasta bakes and rice dishes stay good on a buffet. Fried snacks and delicate dishes lose quality fast.</li>
+      <li><b>One or two mains</b> plus rice, bread, a salad and a dessert is enough for most parties.</li>
+      <li><b>Something for everyone:</b> a vegetarian main, a milder dish for children and older guests, and clear labels for anything with nuts.</li>
+    </ul>
+
+    <h2>3. Plan the space</h2>
+    <ul>
+      <li><b>Buffet table:</b> a long table against a wall works for smaller parties. For more than about 60 guests, a table guests can reach from both sides keeps the queue moving.</li>
+      <li><b>Power:</b> if food is kept warm in electric chafing dishes, you need sockets close to the table. Ask your caterer what they bring.</li>
+      <li><b>Plates, cutlery and serving spoons:</b> check whether they are included.</li>
+      <li><b>Bins and clean-up:</b> decide who clears the buffet and takes equipment away.</li>
+    </ul>
+
+    <h2>4. If you live in a building</h2>
+    <p>Tell your building's security or reception about the delivery, and book the service lift if your building requires it. Give the caterer the building name, tower, parking or drop-off point and a phone number for whoever will meet them.</p>
+
+    <h2>5. Timing</h2>
+    <p>Tell the caterer when you want to <b>eat</b>, not when guests arrive. Food should arrive shortly before serving, not hours early. For evening parties, many families in the UAE eat late, so be realistic about when dinner will actually be served.</p>
+
+    <h2>6. Outdoor parties in the heat</h2>
+    <p>From May to September, garden and rooftop parties need extra care. Keep the buffet in the shade or indoors, keep cold dishes chilled, and serve food in smaller batches instead of putting everything out at once.</p>
+
+    <h2>7. Food safety and leftovers</h2>
+    <p>As a general food safety rule, don't leave hot or cold food at room temperature for more than two hours, and no more than one hour on a hot day outdoors. Put leftovers in the fridge promptly, in shallow containers, and reheat them until piping hot.</p>
+
+    <h2>Quick checklist</h2>
+    <ol>
+      <li>Headcount: adults and children.</li>
+      <li>Menu: one or two mains, sides, salad, dessert, a vegetarian option.</li>
+      <li>Serving time, not arrival time.</li>
+      <li>Buffet table, power and serving ware.</li>
+      <li>Building access and a contact number.</li>
+      <li>Clean-up and leftovers plan.</li>
+    </ol>
+    <p>We cater birthdays, family gatherings and house parties at home across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with buffet setups if you want one. <a href="/catering/#quote">Get a party catering quote</a>.</p>'''
+    faqs = [
+        ('How much food do I need for a party at home?', 'For a buffet meal, plan about 150 g of rice, 175 g of meat, chicken or fish across all main dishes, 100 g of vegetable dishes, a salad, 1 to 2 pieces of bread and a dessert per adult, with children under 10 counted as half.'),
+        ('Can caterers set up a buffet in a flat?', 'Yes, if there is space for a table and, for heated dishes, power nearby. Tell your building security about the delivery and book the service lift if needed.'),
+        ('How long can buffet food sit out?', 'As a general food safety rule, no more than two hours at room temperature, and no more than one hour on a hot day outdoors.'),
+        ('When should I book party catering?', 'A week or two ahead is comfortable for most home parties. Book earlier for weekends, Eid and large family gatherings.'),
+        ('Does Messify cater parties at home?', 'Yes. We cater birthdays, family gatherings and house parties at home, with custom 100% halal menus quoted by headcount and buffet setups if you want one.'),
+    ]
+    article_page('/guides/party-catering-at-home-dubai/', 'Party catering at home', 'Party Catering at Home in Dubai: A Guide | Messify',
+                 'How to plan party catering at home in Dubai: headcount, menu, space for a buffet, building access, timing, outdoor heat and food safety.',
+                 'Party catering at home in Dubai', 'Catering guide · 2026',
+                 'For a party at home, give the caterer your headcount (children under 10 count as half), the time you want to eat and the space you have for a buffet table and power. Pick one or two mains that hold well, add a vegetarian dish, tell your building security about the delivery, and keep food out for no more than two hours.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_styles():
+    rows = [
+        ('Delivered, ready to serve', 'Lowest', 'Office lunches, meetings, small parties', 'You or your team set out and serve the food'),
+        ('Buffet setup', 'Medium', 'Parties, corporate events, weddings', 'Needs space for a table and a queue'),
+        ('Served or plated', 'Highest', 'Formal dinners, award nights, VIP events', 'Needs the most staff and a fixed seating plan'),
+        ('Family style (shared platters)', 'Medium', 'Family gatherings, team dinners', 'Needs space on each table for platters'),
+        ('Live stations', 'Medium to high', 'Weddings, receptions, larger parties', 'Needs chefs on site, space and often power or gas'),
+    ]
+    trs = ''.join(f'<tr><th scope="row">{a}</th><td data-label="Staff needed">{b}</td><td data-label="Best for">{c}</td><td data-label="Watch out for">{d}</td></tr>' for a, b, c, d in rows)
+    table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>Catering styles compared</caption>
+  <thead><tr><th scope="col">Style</th><th scope="col">Staff needed</th><th scope="col">Best for</th><th scope="col">Watch out for</th></tr></thead>
+  <tbody>{trs}</tbody></table></div>'''
+    sections = f'''
+    <h2>The main catering styles</h2>
+    <p>The service style shapes your budget, the space you need and how the event feels. Here is how the main options compare.</p>
+    {table}
+
+    <h2>Delivered catering</h2>
+    <p>The food arrives ready to serve, in trays or containers, and you set it out. It is the simplest and usually the lowest-cost option, and it suits office lunches, meetings and small gatherings where someone on your side can manage the table.</p>
+
+    <h2>Buffet setup</h2>
+    <p>The caterer sets up a full buffet at your venue, with dishes kept warm and the table arranged for guests to serve themselves. Buffets handle large numbers well, offer variety, and let guests choose what and how much they eat. Plan enough space for a queue: for more than about 60 guests, a table guests can reach from both sides keeps it moving.</p>
+
+    <h2>Served or plated</h2>
+    <p>Each guest is served at their seat, course by course. It is the most formal option and gives you full control over timing, but it needs the most staff, a fixed headcount and a seating plan, and it usually costs the most per person.</p>
+
+    <h2>Family style</h2>
+    <p>Shared platters go on each table and guests pass them around. It feels generous and social, and suits family gatherings and team dinners, but each table needs room for the platters.</p>
+
+    <h2>Live stations</h2>
+    <p>A chef cooks or carves in front of guests: grills, shawarma, pasta or desserts. Stations add a sense of occasion to weddings and receptions, but they need space, time and often power or gas at the venue, so check the venue rules first.</p>
+
+    <h2>Which style suits your event?</h2>
+    <ul>
+      <li><b>Team lunch or meeting:</b> delivered, or a simple buffet setup for bigger groups.</li>
+      <li><b>Birthday or family gathering at home:</b> a buffet setup, or family style for a sit-down meal.</li>
+      <li><b>Corporate event or launch:</b> a buffet setup, with live stations if you want a centrepiece.</li>
+      <li><b>Wedding:</b> usually a buffet, sometimes with live stations; plated for smaller, formal weddings.</li>
+      <li><b>Formal dinner or awards night:</b> served or plated.</li>
+    </ul>
+
+    <h2>What Messify offers</h2>
+    <p>Messify delivers catering ready to serve and sets up full buffets at your venue, from office lunches and house parties to weddings. Every menu is custom and 100% halal. If you need served or plated service or live stations, mention it in your enquiry and the team will confirm what's possible for your event. <a href="/catering/#quote">Get a catering quote</a>.</p>
+    <p>Not sure how much to order? Read <a href="/guides/how-much-food-per-person-catering/">how much food per person for catering</a>.</p>'''
+    faqs = [
+        ('Is a buffet cheaper than a plated meal?', 'Usually, yes. A buffet needs fewer staff than serving each guest at their seat, so it tends to cost less per person for the same menu.'),
+        ('What is the difference between delivered catering and a buffet setup?', 'Delivered catering arrives ready to serve and you set it out. With a buffet setup, the caterer arranges the full buffet at your venue and keeps the food warm.'),
+        ('Which catering style is best for a large event?', 'A buffet handles large numbers well and offers variety. For several hundred guests, plan multiple serving points so queues stay short.'),
+        ('What are live stations?', 'Stations where a chef cooks or carves in front of guests, such as grills, shawarma, pasta or desserts. They need space, staff and often power or gas at the venue.'),
+        ('Does Messify do buffet setups?', 'Yes. We deliver catering ready to serve and set up full buffets at your venue. Ask in your enquiry about other service styles.'),
+    ]
+    article_page('/guides/buffet-vs-plated-catering/', 'Catering styles', 'Buffet vs Plated vs Delivered Catering | Messify',
+                 'Buffet, plated, family style, live stations or delivered catering: how each style works, what it needs and which one suits your event.',
+                 'Buffet, delivered or plated catering?', 'Catering guide · 2026',
+                 'Delivered catering is the simplest and usually lowest-cost option, best for office lunches and small groups. A buffet setup suits parties, corporate events and weddings and handles large numbers well. Served or plated meals are the most formal and need the most staff. Family style and live stations sit in between.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_wedding():
+    sections = '''
+    <h2>Start with the venue's rules</h2>
+    <p>Before you talk to any caterer, ask your venue whether outside catering is allowed. Many hotels in the UAE only allow their own kitchens, and some venues charge a fee for outside caterers or require them to use the venue's equipment. Halls, community venues, gardens and family homes usually give you more freedom.</p>
+
+    <h2>Guest numbers, realistically</h2>
+    <p>Weddings in the UAE are often large, and the number who arrive can be very different from the invitation list. Ask both families for their realistic number, plan for children separately (under 10s count as about half for food), and agree with the caterer how late you can change the final number.</p>
+
+    <h2>Separate halls, separate plans</h2>
+    <p>If your celebration has separate men's and women's halls, or separate family and guest areas, give the caterer a headcount for each, and decide whether each hall gets its own buffet, its own serving time and its own staff. Food quantities and timings are planned per hall, not just for the total.</p>
+
+    <h2>More than one event?</h2>
+    <p>Many weddings in the UAE run over several days: a henna or mehndi night, a nikah, a reception, a family lunch. List every event, with its date, venue, headcount and style, so the caterer can quote them together and plan the menus so they don't repeat.</p>
+
+    <h2>The menu</h2>
+    <ul>
+      <li><b>Choose dishes that hold well</b> on a buffet for the length of your dinner service.</li>
+      <li><b>Plan a vegetarian main</b>, a milder option for children and older guests, and clear labels for allergens.</li>
+      <li><b>Think about the timeline:</b> welcome drinks and bites while guests arrive, the main meal, then dessert and tea or coffee.</li>
+      <li><b>Ask about a tasting</b> and whether it is included in the price.</li>
+    </ul>
+    <p>Our guide to <a href="/guides/how-much-food-per-person-catering/">how much food per person</a> gives you a benchmark for quantities.</p>
+
+    <h2>Service style</h2>
+    <p>Most UAE weddings serve a buffet, sometimes with live stations as a centrepiece. Plated service suits smaller, formal weddings. For several hundred guests, plan more than one buffet line or serving point so no one waits long. See <a href="/guides/buffet-vs-plated-catering/">catering styles compared</a>.</p>
+
+    <h2>Timing on the night</h2>
+    <p>Weddings rarely run to schedule. Agree a serving window rather than a fixed minute, tell the caterer who decides when dinner starts, and make sure food can be held safely if the programme runs late.</p>
+
+    <h2>Questions to ask before you book</h2>
+    <ol>
+      <li>Is the price per person, and what does it include: food, staff, equipment, setup, clean-up, delivery?</li>
+      <li>Is VAT included?</li>
+      <li>How many serving staff, and for how many hours?</li>
+      <li>When is the deadline for final numbers, and what does it cost to add guests after it?</li>
+      <li>How will food be kept hot or cold, and for how long?</li>
+      <li>What happens to leftovers?</li>
+      <li>What are the deposit, payment and cancellation terms?</li>
+    </ol>
+
+    <h2>When to book</h2>
+    <p>Book the caterer once the venue and date are confirmed, ideally a few months ahead for large weddings, and earlier still for the cooler months from October to April, which are the busiest wedding season. Confirm final numbers about a week before.</p>
+    <p>We cater weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus built around your guest list and full buffet setups. <a href="/catering/#quote">Get a wedding catering quote</a>.</p>'''
+    faqs = [
+        ('Can I bring an outside caterer to a hotel wedding in the UAE?', 'Many hotels only allow their own catering, and some charge a fee for outside caterers. Ask your venue before you book a caterer.'),
+        ('How far in advance should I book wedding catering?', 'Once your venue and date are confirmed, ideally a few months ahead for a large wedding, and earlier for the busy season from October to April. Confirm final numbers about a week before.'),
+        ('How much food per guest for a wedding?', 'For a buffet dinner, plan about 150 g of rice, 175 g of meat, chicken or fish across all main dishes, 100 g of vegetable dishes, a salad, bread and a dessert per adult guest, plus welcome bites if guests arrive well before dinner.'),
+        ('How do I plan catering for separate halls?', 'Give the caterer a headcount for each hall and decide whether each gets its own buffet, serving time and staff. Quantities and timings are planned per hall.'),
+        ('Does Messify cater weddings?', 'Yes. We cater weddings with custom 100% halal menus built around your guest list, including full buffet setups.'),
+    ]
+    article_page('/guides/wedding-catering-checklist-uae/', 'Wedding catering checklist', 'Wedding Catering Checklist for the UAE | Messify',
+                 'Plan wedding catering in the UAE: venue rules, realistic guest numbers, separate halls, multi-day events, menus, timing and questions to ask.',
+                 'Wedding catering checklist for the UAE', 'Catering guide · 2026',
+                 'Check first whether your venue allows outside catering. Then agree a realistic guest number (per hall if you have separate halls), list every event if the wedding runs over several days, choose dishes that hold well on a buffet, and get a written quote that shows staff, setup, VAT and the deadline for final numbers.',
+                 sections, faqs, kind='catering', published=CG_DATE)
+
+def page_guide_affordable():
+    p = {(m, ln): (t, pr) for m, ln, t, pr in PLANS}
+    by_per = sorted(PLANS, key=lambda x: x[3] / x[2])
+    rows = ''.join(f'<tr><th scope="row">{mlabel(m)}, {ln}</th><td class="num">AED {per(pr, t)}</td><td class="num">{aed(pr)}</td><td class="num">{t}</td></tr>' for m, ln, t, pr in by_per)
+    table = f'''<div class="table-wrap"><table class="ptable">
+  <caption>Messify meal plans, from the lowest price per meal (AED)</caption>
+  <thead><tr><th scope="col">Plan</th><th scope="col" class="num">Per meal</th><th scope="col" class="num">Plan price</th><th scope="col" class="num">Meals</th></tr></thead>
+  <tbody>{rows}</tbody></table></div>'''
+    t3, pr3 = p[(3, 'monthly')]
+    sections = f'''
+    <h2>What makes a meal plan affordable</h2>
+    <p>An affordable meal plan is not just the one with the lowest headline price. It is the one with a fair <b>price per meal</b>, a total you can fit into your monthly budget, and meals you actually eat. A plan you only use half of costs twice as much per meal as it says on the page.</p>
+    <p>So check three things: the price per meal (plan price ÷ number of meals), what that price includes, and how much time you get to use your meals.</p>
+
+    <h2>Messify prices, ranked by price per meal</h2>
+    {table}
+    <ul>
+      <li><b>Lowest price per meal:</b> 3 meals a day, monthly, at AED {per(pr3, t3)} a meal. That is breakfast, lunch and dinner for about AED {pr3 / 26:.2f} a day.</li>
+      <li><b>Lowest upfront cost:</b> 1 meal a day, weekly, at AED {p[(1, 'weekly')][1]}. The easiest way to try it.</li>
+      <li><b>Most common middle ground:</b> 2 meals a day, monthly, at AED {p[(2, 'monthly')][1]:,}, lunch and dinner for AED {per(p[(2, 'monthly')][1], p[(2, 'monthly')][0])} a meal.</li>
+    </ul>
+    <p>Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Prices include VAT unless stated otherwise.</p>
+
+    <h2>Compare it with what you spend now</h2>
+    <p>Most people looking for an affordable meal plan are ordering in. Put in what you usually spend on one delivery order, including fees, and see the difference over a month.</p>
+    {calculator()}
+
+    <h2>Six ways to keep your meal plan affordable</h2>
+    <ol>
+      <li><b>Try a week, then go monthly.</b> Monthly plans cost less per meal on every plan size, so switch once you know you like the food.</li>
+      <li><b>Only buy the meals you'll eat.</b> If you eat breakfast at home, a 2-meal plan beats a 3-meal plan you don't finish.</li>
+      <li><b>Use every meal.</b> With Messify, skip a busy day in the app and use that meal later in your plan, instead of letting it go to waste.</li>
+      <li><b>Compare per meal, including fees.</b> Delivery, service fees and VAT change the real price of ordering in and of some plans.</li>
+      <li><b>Skip extras you don't need.</b> Diet and fitness plans with snacks, juices and calorie tracking cost more per meal. If you just want everyday meals sorted, an everyday meal plan costs less.</li>
+      <li><b>Check delivery to your building first.</b> Messify delivers in Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City.</li>
+    </ol>
+
+    <h2>Affordable, not the cheapest</h2>
+    <p>We'd rather be straight with you. Cooking for yourself is cheaper on ingredients, if you have the time and a kitchen. And some companies publish lower starting prices on certain plans: when we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Our <a href="/guides/best-meal-plans-dubai/">comparison of Dubai meal plans</a> shows published prices side by side.</p>
+    <p>Where Messify fits is everyday meals at a predictable price: breakfast, lunch and dinner delivered together every morning, a new menu every day, 100% halal, with a vegetarian option every day, for every meal.</p>
+
+    <h2>Who an affordable meal plan suits</h2>
+    <ul>
+      <li><b>Students</b> in shared residences with small kitchens. See <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</li>
+      <li><b>Young professionals</b> who order in most days and want one predictable food bill.</li>
+      <li><b>Office workers</b> who want lunch sorted before the workday starts.</li>
+    </ul>
+    <p>See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page, or read <a href="/guides/meal-plan-cost-dubai/">how much a meal plan costs in Dubai</a>.</p>'''
+    faqs = [
+        ('What is the most affordable meal plan in Dubai?', f"Compare the price per meal, not the plan price. Messify's lowest price per meal is the 3-meal monthly plan at AED {per(pr3, t3)}. When we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Check what each price includes and where each company delivers."),
+        ('Is a meal plan cheaper than ordering food in Dubai?', 'If you order in most days, a meal plan usually costs less per meal once delivery and service fees are counted. Use the calculator on this page with what you really spend.'),
+        ('How much is a monthly meal plan in Dubai?', 'Messify monthly plans cost AED 715, 1,400 or 1,999 for 1, 2 or 3 meals a day, which is AED 25.63 to 27.50 a meal.'),
+        ('What is the cheapest way to try a meal plan?', 'Start with a weekly plan. Messify\'s 1-meal weekly plan costs AED 215 for 7 meals.'),
+        ('Do I lose meals if I skip a day?', 'With Messify, no. Skip a day in the app and use that meal later in your plan. Monthly plans give you 30 days to use 26 days of meals, and weekly plans give you 9 days to use 7.'),
+    ]
+    article_page('/guides/affordable-meal-plans-dubai/', 'Affordable meal plans', 'Affordable Meal Plans in Dubai: Real Prices | Messify',
+                 'How to find an affordable meal plan in Dubai: price per meal, which plan costs least, how to avoid waste, and a calculator to compare with ordering in.',
+                 'Affordable meal plans in Dubai', 'Meal plans on a budget · 2026',
+                 f"An affordable meal plan is one with a fair price per meal that you actually use. Messify meal plans in Dubai cost AED 25.63 to 30.71 a meal: from AED 215 a week or AED 715 a month. The 3-meal monthly plan has the lowest price per meal (AED {per(pr3, t3)}), and the 1-meal weekly plan has the lowest upfront cost.",
+                 sections, faqs, published=CG_DATE)
+
+# ---------------------------------------------------------------- catering by emirate
+CATER_EVENTS = [
+    ('case', 'Corporate &amp; office', 'Team lunches, meetings, launches and company events, delivered on time.'),
+    ('party', 'Parties &amp; home events', 'Birthdays, family gatherings and house parties, catered at home.'),
+    ('cap', 'University events', 'Orientation days, society nights and campus functions.'),
+    ('rings', 'Weddings', 'Generous menus built around your guest list.'),
+    ('serve', 'Buffet setups', 'Full buffets set up at your venue, from office lunches to weddings.'),
+    ('box', 'Bulk catering', 'Large volumes for sites, institutions and events.'),
+]
+
+def catering_catalog():
+    return {'@type': 'OfferCatalog', 'name': 'Catering services', 'itemListElement': [
+        {'@type': 'Offer', 'itemOffered': {'@type': 'Service', 'name': n}} for n in
+        ('Corporate and office catering', 'Party and home event catering', 'University event catering', 'Wedding catering', 'Buffet catering', 'Bulk catering')]}
+
+CATER_AREAS = {
+ 'dubai': {
+  'name': 'Dubai', 'short': 'Dubai',
+  'card': 'Our meals are cooked in International City, so Dubai events get the shortest journey: office lunches, parties at home and large events.',
+  'title': 'Catering in Dubai: Corporate, Party & Buffet | Messify',
+  'desc': 'Catering in Dubai for office lunches, corporate events, parties at home and weddings. Buffet setups and custom halal menus, quoted by headcount.',
+  'h1': 'Event catering in Dubai, cooked across town.',
+  'lede': "Our meals are cooked in our partner kitchen in International City, so Dubai events get the shortest journey of all. Office lunches in Business Bay, a birthday at home in Mirdif, an orientation day in Academic City: every menu is custom, 100% halal and quoted by headcount.",
+  'img': ('cat-serving-640.webp', 'cat-serving.webp', 1100, 1375, 'A gloved server lifting the lid of a chafing dish at a catered buffet'),
+  'where_title': 'Across Dubai, from offices to homes.',
+  'groups': [
+    ('office', 'Offices and business districts', ['Business Bay and Downtown Dubai', 'DIFC', 'Dubai Silicon Oasis', 'JLT, Dubai Internet City and Media City', 'Al Barsha and Al Quoz']),
+    ('home', 'Homes and communities', ['Mirdif and Dubai Festival City', 'Arabian Ranches and Dubai Hills', 'Jumeirah and Al Barsha', 'Al Warqa and International City', 'Dubai Marina and JBR']),
+    ('cap', 'Campuses and venues', ['Dubai Academic City and Knowledge Park', 'Hotels and event halls', 'Community halls and majlis', 'Outdoor and garden events']),
+  ],
+  'logistics': "Most of Dubai is a short drive from International City, which keeps hot food hot and cold food cold. For office lunches, tell us the time you want to eat rather than the meeting start time, and check whether your building needs a delivery pass or a service lift booking. For weddings and large events, share your date as early as you can so the menu, staff and setup can be planned.",
+  'faqs': [
+    ('Do you cater office lunches in Dubai?', 'Yes. We cater team lunches, meetings and company events across Dubai, with menus built around your headcount and delivered for the time you want to eat.'),
+    ('Can you cater a party at home in Dubai?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and the space you have, and we'll build a menu and setup to fit."),
+    ('Do you set up buffets in Dubai?', 'Yes. We set up full buffets at your venue, from office lunches and house parties to weddings.'),
+    ('How much does catering cost in Dubai?', 'Every quote is custom, based on your headcount, the courses you choose and the service style. Send your date, location and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal, and vegetarian dishes can be included in any menu.'),
+  ],
+ },
+ 'sharjah': {
+  'name': 'Sharjah', 'short': 'Sharjah',
+  'card': 'Corporate events, family occasions and parties across Sharjah, a short drive from our kitchen in International City.',
+  'title': 'Catering in Sharjah: Corporate, Party & Buffet | Messify',
+  'desc': 'Catering in Sharjah for corporate events, family gatherings, parties at home, university events and weddings. Custom halal menus and buffet setups.',
+  'h1': 'Event catering in Sharjah.',
+  'lede': 'Sharjah is a short drive from our partner kitchen in International City. We cater corporate events, family gatherings, parties at home, university events and weddings across Sharjah, with custom 100% halal menus quoted by headcount.',
+  'img': ('cat-chef-640.webp', 'cat-chef.webp', 1024, 1024, 'A chef carving at a buffet station while guests serve themselves at an evening event'),
+  'where_title': 'Across Sharjah, from Al Majaz to Aljada.',
+  'groups': [
+    ('office', 'Offices and business areas', ['Al Majaz and Al Taawun', 'Al Khan and Al Nahda', 'Sharjah Industrial Area', 'SAIF Zone and Hamriyah Free Zone']),
+    ('home', 'Homes and communities', ['Al Nahda and Al Qasimia', 'Muwaileh', 'Aljada and Al Zahia', 'Al Rahmaniya']),
+    ('cap', 'Campuses and venues', ['University City Sharjah', 'Hotels and wedding halls', 'Community halls and majlis', 'Outdoor and garden events']),
+  ],
+  'logistics': "The roads between Dubai and Sharjah get heavy at rush hour, so we plan departure times around the traffic and your serving time, not the other way round. When you enquire, tell us when you want food served, how long the event runs and whether there is a kitchen or power at the venue for keeping food warm.",
+  'faqs': [
+    ('Do you deliver catering to Sharjah?', 'Yes. We cater across Sharjah, from offices in Al Majaz and Al Taawun to homes in Al Nahda, Muwaileh and Aljada.'),
+    ('Can you cater a family gathering at home in Sharjah?', "Yes. Family gatherings, birthdays and house parties are welcome. Tell us your headcount and we'll build a menu to fit, with a buffet setup if you want one."),
+    ('Do you cater university events in Sharjah?', 'Yes. We cater orientation days, society events and campus functions, including in University City Sharjah.'),
+    ('How is catering in Sharjah priced?', 'Every quote is custom, based on your headcount, menu and service style. Send your date, location and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+ },
+ 'ajman': {
+  'name': 'Ajman', 'short': 'Ajman',
+  'card': 'Party and event catering in Ajman, from family gatherings at home to office events and bulk orders.',
+  'title': 'Catering in Ajman: Parties, Events & Buffets | Messify',
+  'desc': 'Party and event catering in Ajman: family gatherings at home, office events, weddings and bulk orders. Custom halal menus, quoted by headcount.',
+  'h1': 'Party and event catering in Ajman.',
+  'lede': 'From a family gathering at home in Al Nuaimiya to an office event in Ajman Free Zone, we cater events across Ajman with custom 100% halal menus quoted by headcount, and full buffet setups if you want them.',
+  'img': ('cat-canapes.webp', 'cat-canapes.webp', 900, 1200, 'Trays of canapés on slate boards at a catered event'),
+  'where_title': 'Across Ajman, from the Corniche to Al Jurf.',
+  'groups': [
+    ('home', 'Homes and communities', ['Al Nuaimiya and Al Rashidiya', 'Al Rawda and Al Mowaihat', 'Al Yasmeen and Al Helio', 'Al Zorah and the Corniche']),
+    ('office', 'Offices and business areas', ['Ajman Free Zone', 'Al Jurf and Al Jurf Industrial Area', 'Ajman city centre']),
+    ('party', 'Venues', ['Hotels along Ajman Corniche', 'Wedding and event halls', 'Community halls and majlis', 'Outdoor and garden events']),
+  ],
+  'logistics': "Ajman is reached through Sharjah, so we allow for traffic on the way and time the delivery to when you want to serve. If your event is at home, tell us the space you have for a buffet table and whether there is power nearby for keeping food warm.",
+  'faqs': [
+    ('Do you cater in Ajman?', 'Yes. We cater parties, family gatherings, office events, weddings and bulk orders across Ajman.'),
+    ('Can you cater a party at home in Ajman?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and we'll build the menu and setup around your space."),
+    ('Do you do buffet setups in Ajman?', 'Yes. We can set up a full buffet at your home or venue in Ajman.'),
+    ('How is catering in Ajman priced?', 'Every quote is custom, based on your headcount, menu and service style. Send your date, location and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+ },
+ 'abu-dhabi': {
+  'name': 'Abu Dhabi', 'short': 'Abu Dhabi',
+  'card': 'Corporate events, weddings and large gatherings in Abu Dhabi. Share your date early and we plan delivery around your event.',
+  'title': 'Catering in Abu Dhabi: Corporate & Events | Messify',
+  'desc': 'Catering in Abu Dhabi for corporate events, weddings, university events and large gatherings. Custom halal menus and buffet setups, quoted by headcount.',
+  'h1': 'Event catering in Abu Dhabi.',
+  'lede': 'We cater corporate events, weddings, university events and large gatherings in Abu Dhabi. It is the longest journey from our kitchen in International City, so we plan every Abu Dhabi event around the drive. Share your date early.',
+  'img': ('cat-chef-640.webp', 'cat-chef.webp', 1024, 1024, 'A chef carving at a buffet station while guests serve themselves at an evening event'),
+  'where_title': 'Across Abu Dhabi, city and islands.',
+  'groups': [
+    ('office', 'Offices and business areas', ['Abu Dhabi city centre', 'Al Maryah Island and Al Reem Island', 'Mussafah and ICAD', 'KIZAD']),
+    ('home', 'Homes and communities', ['Khalifa City', 'Mohammed Bin Zayed City', 'Al Raha and Yas Island', 'Al Reef and Al Shamkha']),
+    ('rings', 'Venues', ['Hotels and wedding halls', 'Event venues on Yas and Saadiyat', 'Community halls and majlis', 'Outdoor and garden events']),
+  ],
+  'logistics': "Abu Dhabi city is around an hour and a half's drive from International City, and longer at peak times. We plan cooking, chilling and transport so food arrives on time and is held at a safe temperature until it is served. The earlier you share your date, headcount and serving time, the easier this is to plan, especially for weddings and events with several hundred guests.",
+  'faqs': [
+    ('Do you cater in Abu Dhabi?', 'Yes. We cater corporate events, weddings, university events and large gatherings across Abu Dhabi, including Khalifa City, Mussafah, Al Reem and Yas Island.'),
+    ('Can you cater a wedding in Abu Dhabi?', "Yes. Share your date, venue and guest numbers early and we'll build a menu and delivery plan around your event. Check first whether your venue allows outside catering."),
+    ('How early should I book catering in Abu Dhabi?', 'As early as you can. Abu Dhabi is the longest journey from our kitchen, so earlier notice makes it easier to plan the menu, transport and setup.'),
+    ('How is catering in Abu Dhabi priced?', 'Every quote is custom, based on your headcount, menu, service style and location. Send your date, venue and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+ },
+ 'ras-al-khaimah': {
+  'name': 'Ras Al Khaimah', 'short': 'RAK',
+  'card': 'Corporate events, weddings and family gatherings in Ras Al Khaimah, planned around the drive from Dubai.',
+  'title': 'Catering in Ras Al Khaimah: Events & Buffets | Messify',
+  'desc': 'Catering in Ras Al Khaimah (RAK) for corporate events, weddings, family gatherings and group events. Custom halal menus and buffet setups.',
+  'h1': 'Event catering in Ras Al Khaimah.',
+  'lede': "We cater corporate events, weddings, family gatherings and group events in Ras Al Khaimah, with custom 100% halal menus quoted by headcount. RAK is a longer drive from our kitchen in Dubai, so share your date early and we'll plan delivery around your event.",
+  'img': ('cat-serving-640.webp', 'cat-serving.webp', 1100, 1375, 'A gloved server lifting the lid of a chafing dish at a catered buffet'),
+  'where_title': 'Across Ras Al Khaimah, from Al Hamra to the city.',
+  'groups': [
+    ('home', 'Homes and communities', ['Al Hamra Village', 'Mina Al Arab', 'Al Nakheel and Al Dhait', 'Khuzam and Al Mamourah']),
+    ('office', 'Offices and business areas', ['RAK city centre', 'RAKEZ business parks', 'Al Hamra and Al Ghail industrial zones']),
+    ('rings', 'Venues', ['Resorts on Al Marjan Island', 'Hotels and wedding halls', 'Community halls and majlis', 'Outdoor and desert events']),
+  ],
+  'logistics': "Ras Al Khaimah is roughly an hour to an hour and a half's drive from International City, depending on where your event is and the traffic. We plan cooking and transport so food arrives on time and is held safely until it is served. Many resorts and hotels use their own kitchens, so check whether your venue allows outside catering before you book.",
+  'faqs': [
+    ('Do you cater in Ras Al Khaimah?', 'Yes. We cater corporate events, weddings, family gatherings and group events across Ras Al Khaimah.'),
+    ('How early should I book catering in RAK?', 'As early as you can. RAK is a longer drive from our kitchen in Dubai, so earlier notice makes it easier to plan the menu, transport and setup.'),
+    ('Can you cater at a resort or hotel in Ras Al Khaimah?', 'Many resorts and hotels only allow their own catering, so check with your venue first. If outside catering is allowed, send us the venue details with your enquiry.'),
+    ('How is catering in Ras Al Khaimah priced?', 'Every quote is custom, based on your headcount, menu, service style and location. Send your date, venue and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+ },
+ 'umm-al-quwain': {
+  'name': 'Umm Al Quwain', 'short': 'UAQ',
+  'card': 'Family gatherings, outdoor events and company functions in Umm Al Quwain, with custom halal menus.',
+  'title': 'Catering in Umm Al Quwain: Parties & Events | Messify',
+  'desc': 'Catering in Umm Al Quwain (UAQ) for family gatherings, parties, outdoor events, company functions and bulk orders. Custom halal menus by headcount.',
+  'h1': 'Party and event catering in Umm Al Quwain.',
+  'lede': "We cater family gatherings, parties, outdoor events, company functions and bulk orders in Umm Al Quwain, with custom 100% halal menus quoted by headcount. UAQ is about an hour's drive from our kitchen in Dubai, so share your date early.",
+  'img': ('cat-canapes.webp', 'cat-canapes.webp', 900, 1200, 'Trays of canapés on slate boards at a catered event'),
+  'where_title': 'Across Umm Al Quwain.',
+  'groups': [
+    ('home', 'Homes and communities', ['Al Salamah and Al Raas', 'Al Ramlah and Al Humrah', 'Al Salam City', 'The Old Town and the Corniche']),
+    ('office', 'Offices and business areas', ['Umm Al Quwain Free Trade Zone', 'Industrial areas along Emirates Road']),
+    ('party', 'Venues', ['Beach and waterfront venues', 'Hotels and event halls', 'Community halls and majlis', 'Outdoor and farm events']),
+  ],
+  'logistics': "Umm Al Quwain is about an hour's drive from International City, longer at peak times. For outdoor and beach events, tell us whether there is shade, power and a table for the buffet, because heat changes how long food can safely sit out. We plan delivery so food arrives close to your serving time.",
+  'faqs': [
+    ('Do you cater in Umm Al Quwain?', 'Yes. We cater family gatherings, parties, outdoor events, company functions and bulk orders across Umm Al Quwain.'),
+    ('Can you cater an outdoor or beach event in UAQ?', 'Yes. Tell us about shade, power and space for a buffet table, and we will plan the menu and delivery time around the heat and your serving time.'),
+    ('How early should I book catering in Umm Al Quwain?', 'As early as you can. UAQ is about an hour from our kitchen in Dubai, so earlier notice makes planning easier.'),
+    ('How is catering in Umm Al Quwain priced?', 'Every quote is custom, based on your headcount, menu, service style and location. Send your date, location and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
+ },
+}
+
+def page_cater_area(slug):
+    c = CATER_AREAS[slug]
+    path = f'/catering/{slug}/'
+    cr, crs = crumbs([('Home', '/'), ('Catering', '/catering/'), (f'Catering in {c["name"]}', path)])
+    service = {'@type': 'Service', '@id': BASE + path + '#service', 'name': f'Messify catering in {c["name"]}', 'serviceType': 'Catering',
+               'description': c['desc'], 'provider': {'@id': BASE + '/#business'},
+               'areaServed': {'@type': 'AdministrativeArea', 'name': c['name'], 'containedInPlace': {'@type': 'Country', 'name': 'United Arab Emirates'}},
+               'hasOfferCatalog': catering_catalog()}
+    page = {'path': path, 'mode': 'catering', 'nav': 'catering', 'title': c['title'], 'desc': c['desc'],
+            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
+            'schema': [ORG, BUSINESS, service, faq_schema(c['faqs']), crs]}
+    small, big, w, h, alt = c['img']
+    srcset = f' srcset="/assets/img/{small} 640w, /assets/img/{big} {w}w" sizes="(min-width: 900px) 45vw, 100vw"' if small != big else ''
+    ev = ''.join(f'<div class="event">{I[i]}<h3 class="h3">{t}</h3><p>{d}</p></div>' for i, t, d in CATER_EVENTS)
+    groups = ''.join(f'<div class="place-group"><h3>{I[ico]}{title}</h3><ul>' + ''.join(f'<li>{I["tick"]}<span>{x}</span></li>' for x in items) + '</ul></div>'
+                     for ico, title, items in c['groups'])
+    wa = f'{WA}?text=' + quote(f"Hi Messify, I'd like a catering quote for an event in {c['name']}.")
+    body = f'''<section class="sec sec--first">
+  <div class="wrap split">
+    <div>
+      {cr}
+      <h1 class="h2 rise"><span class="kicker">Catering in {c['name']}</span> {c['h1']}</h1>
+      <p class="lede rise">{c['lede']}</p>
+      <div class="actions">
+        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener">WhatsApp us</a>
+      </div>
+      {rating_badge()}
+      <div class="facts">
+        <div><b>100%</b><span>halal menus</span></div>
+        <div><b>Custom</b><span>menus, priced by headcount</span></div>
+        <div><b>Buffet</b><span>setups at your venue</span></div>
+      </div>
+    </div>
+    <div class="photo photo--tall"><img src="/assets/img/{small}"{srcset} alt="{alt}" width="{w}" height="{h}" fetchpriority="high"></div>
+  </div>
+</section>
+
+<section class="sec" style="padding-top:0" aria-labelledby="events-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">What we cater in {c['name']}</p><h2 class="h2" id="events-title">From house parties to wedding halls.</h2></div>
+    <div class="events">{ev}</div>
+  </div>
+</section>
+
+<section class="sec sec--tint" aria-labelledby="where-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Where we cater</p><h2 class="h2" id="where-title">{c['where_title']}</h2>
+      <p class="lede">{c['logistics']}</p></div>
+    <div class="places">{groups}</div>
+    <p class="disclaim">Areas and venue types are listed to show where we cater. Send us your exact venue and we'll confirm.</p>
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="steps-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">How it works</p><h2 class="h2" id="steps-title">From enquiry to served, in four steps.</h2></div>
+    <ol class="steps" style="max-width:820px">
+      <li><div><h3>Tell us about your event</h3><p>Date, venue in {c['name']}, headcount and the time you want to serve.</p></div></li>
+      <li><div><h3>Get a custom quote</h3><p>Priced by headcount, the menu you choose and the service style.</p></div></li>
+      <li><div><h3>Finalise the menu</h3><p>Pick appetisers, mains, salads, desserts and drinks in the flavours you want.</p></div></li>
+      <li><div><h3>Delivered on time</h3><p>Our team brings everything to your venue, with a buffet setup if you want one.</p></div></li>
+    </ol>
+  </div>
+</section>
+
+<section class="sec sec--tint" aria-labelledby="faq-title">
+  <div class="wrap split split--top">
+    <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Catering in {c['name']}: good to know.</h2></div>
+    {faq_html(c['faqs'])}
+  </div>
+</section>
+
+<section class="sec" aria-labelledby="cguides-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Planning help</p><h2 class="h2" id="cguides-title">Before you book.</h2></div>
+    {guide_cards(CATERING_GUIDES[:3])}
+    <a class="link-arrow" style="margin-top:28px" href="/guides/#catering-guides">All catering guides {I["arrow"]}</a>
+  </div>
+</section>
+
+{catering_form(emirate=c['name'], title=f"Plan your event in {c['name']}.")}
+
+<section class="sec sec--tight" aria-labelledby="other-title">
+  <div class="wrap">
+    <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Across the UAE</p><h2 class="h3" id="other-title" style="font-size:1.4rem">We also cater in</h2></div>
+    {emirate_cards(exclude=slug)}
+  </div>
+</section>'''
+    render(page, body)
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
-            ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2')]
+            ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2'),
+            ('/guides/affordable-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
@@ -1748,6 +2532,8 @@ Allow: /
 Sitemap: {BASE}/sitemap.xml
 '''
     open(os.path.join(DIST, 'robots.txt'), 'w').write(robots)
+    cater_lines = '\n'.join(f'- [Catering in {c["name"]}]({BASE}/catering/{slug}/): {c["desc"]}' for slug, c in CATER_AREAS.items())
+    cguide_lines = '\n'.join(f'- [{t}]({BASE}{p}): {d}' for p, t, d in CATERING_GUIDES)
     plan_lines = '\n'.join(f'- {mlabel(m)}, {ln}: {aed(p)} ({t} meals, AED {per(p, t)} per meal)' for m, ln, t, p in PLANS)
     llms = f'''# Messify
 
@@ -1764,13 +2550,16 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis]({BASE}/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City]({BASE}/meal-plans/international-city/): where Messify meals are cooked
 - [Meal plans in Dubai Festival City (DFC)]({BASE}/meal-plans/festival-city/): delivery to homes in Al Badia and offices across DFC
-- [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman and Abu Dhabi
+- [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain
 - [The best meal plans in Dubai, compared]({BASE}/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans]({BASE}/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
 - [Daily meal delivery in Dubai Festival City]({BASE}/guides/meal-delivery-dubai-festival-city/): meal plans for Al Badia homes and offices in DFC
 - [Office lunch delivery in Dubai Silicon Oasis]({BASE}/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
+- [Affordable meal plans in Dubai]({BASE}/guides/affordable-meal-plans-dubai/): price per meal, the lowest-cost plans and how to avoid waste
+{cater_lines}
+{cguide_lines}
 - [About Messify]({BASE}/about/): key facts in one table
 
 ## Contact
@@ -1778,6 +2567,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - Email: {EMAIL}
 - Instagram: @messify.me
 - Opening hours: every day, 8 AM to 11 PM (Gulf Standard Time)
+- Google rating: {RATING} out of 5 on Google reviews ({GMAPS})
 - App Store: {APP_STORE}
 - Google Play: {GOOGLE_PLAY}
 '''
@@ -1819,5 +2609,7 @@ if __name__ == '__main__':
     sync_js_prices()
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
-    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc()
+    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable()
+    page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
+    for s in CATER_AREAS: page_cater_area(s)
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()

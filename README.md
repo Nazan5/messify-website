@@ -1,6 +1,6 @@
 # Messify website
 
-The Messify website (www.messify.me): 10 pages, hosted on Netlify, published automatically from this GitHub repository.
+The Messify website (www.messify.me): hosted on Netlify, published automatically from this GitHub repository.
 
 ```
 build.py                 the generator that writes every page
@@ -11,6 +11,8 @@ dist/                    the finished website (this is what Netlify publishes)
     silicon-oasis/       Meal plans in Dubai Silicon Oasis
     international-city/  Meal plans in International City
   catering/              Catering (includes party, buffet and home events)
+    dubai/ sharjah/ ajman/ abu-dhabi/ ras-al-khaimah/ umm-al-quwain/   Catering by emirate
+  guides/                Meal plan guides and catering guides (food per person, prices, checklists)
   guides/                Guides: meal plan cost (with calculator), student meal plans, weekly vs monthly
   start/                 Start page: app or WhatsApp (hidden from Google)
   about/                 Messify at a glance (key facts for Google and AI assistants)
@@ -73,3 +75,7 @@ The domain is registered at GoDaddy and email runs on Google Workspace. In GoDad
 
 1. **Replace the catering photos** (cat-chef, cat-serving, cat-canapes, cat-buffet in `dist/assets/img/`) with photos from your own events. They currently look like other caterers' images.
 2. **Replace the two AI-made images** (`bag-sofa.webp`, `fresh-chill.webp`) with real shoots.
+
+## Google rating
+
+The "4.9 on Google reviews" badge is set by `RATING` at the top of `build.py` and links to the Google Maps listing (`GMAPS`). It never shows the number of reviews. Update `RATING` if the Google average changes.
