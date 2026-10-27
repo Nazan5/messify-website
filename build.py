@@ -305,7 +305,7 @@ def plans_section(title='Pick a plan in ten seconds.', with_table=True):
       <button type="button" data-dur="monthly" aria-pressed="true">Monthly <span class="save">Best value</span></button>
     </div>
     {plan_cards()}
-    <p class="fine">Prices in AED. Monthly plans are 26 days of meals to use within 30 days. Weekly plans are 7 days of meals to use within 9 days. Price per meal = plan price ÷ tokens. <a href="/guides/meal-plan-cost-dubai/#calculator">Compare with ordering in</a>.</p>
+    <p class="fine">Prices in AED. Monthly plans are 26 days of meals to use within 30 days. Weekly plans are 7 days of meals to use within 9 days. Price per meal = plan price ÷ tokens. See <a href="/guides/meal-plan-cost-dubai/">what a meal costs in Dubai</a>, or <a href="/guides/meal-plan-cost-dubai/#calculator">compare with ordering in</a>.</p>
     {table}
   </div>
 </section>'''
@@ -1339,7 +1339,7 @@ GUIDES = [
     ('/guides/affordable-meal-plans-dubai/', 'Affordable meal plans in Dubai',
      'How to keep a meal plan affordable: price per meal, which plan costs least, using every meal, and a comparison with ordering in.'),
     ('/guides/meal-plan-cost-dubai/', 'How much does a meal plan cost in Dubai?',
-     'What you actually pay per meal, what pushes the price up, and a calculator to compare a meal plan with ordering in.'),
+     'What a meal really costs in Dubai, meal plan prices per meal and per day, and a calculator to compare a meal plan with ordering in.'),
     ('/guides/student-meal-plans-dubai/', 'Student meal plans in Dubai',
      'Budgets, exam weeks, residences in Academic City and Silicon Oasis, and how to pick a plan that fits a semester.'),
     ('/guides/weekly-vs-monthly-meal-plan/', 'Weekly or monthly meal plan: which is better?',
@@ -1464,10 +1464,31 @@ def page_guides():
 
 def page_guide_cost():
     p = {m: {ln: (t, pr) for mm, ln, t, pr in PLANS if mm == m} for m in (1, 2, 3)}
+    days = {'weekly': 7, 'monthly': 26}
+    cb_rows = ''.join(f'<tr><th scope="row">{mlabel(m)}, {ln}</th><td class="num">AED {per(pr, t)}</td><td class="num">AED {per(pr, days[ln])}</td></tr>' for m, ln, t, pr in PLANS)
+    cost_breakdown = f'''<div class="table-wrap"><table class="ptable">
+  <caption>Messify meal plan cost per meal and per day (AED)</caption>
+  <thead><tr><th scope="col">Plan</th><th scope="col" class="num">Per meal</th><th scope="col" class="num">Per day</th></tr></thead>
+  <tbody>{cb_rows}</tbody></table></div>'''
     sections = f'''
     <h2>The number that matters: price per meal</h2>
     <p>Meal plans in Dubai are sold in very different ways: by the week, by the month, by calories or by number of meals. The only fair way to compare them is the price of one meal: <b>plan price ÷ number of meals</b>. Then check what that price includes, because delivery fees, VAT and how many days you get to use your meals change the real cost.</p>
     <p>Broadly, Dubai meal plans fall into two groups. <b>Diet and fitness plans</b> (calorie-counted, macro-tracked, often with snacks and juices) cost the most per meal. <b>Everyday meal plans</b>, which replace ordering in or cooking, cost less and are built around normal home-style meals. Messify is an everyday meal plan. See how Dubai's meal plans <a href="/guides/best-meal-plans-dubai/">compare side by side</a>.</p>
+
+    <h2>How much does a meal cost in Dubai?</h2>
+    <p>The cost of one meal in Dubai depends less on the food and more on how you get it. The price on the menu is rarely the price you pay, so compare the total at the bottom of the receipt:</p>
+    <ul>
+      <li><b>Cooking at home:</b> the lowest cost on ingredients, but you pay in time for shopping, cooking and washing up, and in food that goes off before you use it. Hard to do in a residence with a small or shared kitchen.</li>
+      <li><b>Ordering in:</b> the menu price plus delivery fees, service fees and, on small orders, a small-order fee. Tips and the occasional extra drink add more. Check what your last few orders really came to.</li>
+      <li><b>Eating out:</b> the menu price plus the time and travel to get there, every day.</li>
+      <li><b>An everyday meal plan:</b> one fixed price per meal, decided once a week or once a month. With Messify that is <b>AED 25.63 to 30.71 a meal</b>, depending on the plan.</li>
+    </ul>
+    <p>That is why the calculator further down asks what you usually spend per order <i>including</i> fees: it is the honest number to compare against.</p>
+
+    <h2>Cost per meal, per day and per month</h2>
+    <p>Here is what Messify costs for each plan, broken down by meal and by day of meals. Monthly plans give you 26 days of meals; weekly plans give you 7.</p>
+    {cost_breakdown}
+    <p>So 2 meals a day on a monthly plan, lunch and dinner, comes to <b>AED {per(p[2]['monthly'][1], 26)} a day</b>. Breakfast, lunch and dinner on the 3-meal monthly plan comes to <b>AED {per(p[3]['monthly'][1], 26)} a day</b>.</p>
 
     <h2>What a Messify meal plan costs</h2>
     <p>Every price below is for the whole plan. Each meal is one token you can use for breakfast, lunch or dinner.</p>
@@ -1481,7 +1502,7 @@ def page_guide_cost():
     <h2>Five things that change the real price</h2>
     <ol>
       <li><b>Meals you actually eat.</b> A cheap plan you can't fully use is expensive. Check how long you have to use your meals and whether you can skip days. With Messify you skip a day in the app and use that meal later in your plan.</li>
-      <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers all of the day's meals together every morning in one chilled bag.</li>
+      <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers all of the day's meals together every morning in one chilled bag. Meals are blast-chilled after cooking, so they are heat and eat: a few minutes to reheat when you're ready.</li>
       <li><b>Menu variety.</b> If you get bored by week two, you'll go back to ordering in. Messify's menu changes every day and you pick tomorrow's meals in the app by 6 PM.</li>
       <li><b>Dietary fit.</b> Every Messify meal is 100% halal and there's a vegetarian option every day, for every meal.</li>
       <li><b>Where you live.</b> Plans only help if they deliver to you. Messify meal plans deliver to Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City.</li>
@@ -1491,16 +1512,19 @@ def page_guide_cost():
     <p>If you mostly order in, a meal plan usually costs less per meal and removes the daily decision of what to eat. If you cook most of your meals and enjoy it, cooking is cheaper on ingredients. Many students and professionals in Dubai sit in between: no time or kitchen to cook properly, and tired of delivery apps. That's who an everyday meal plan is for.</p>
     <p>See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page, or check delivery in <a href="/meal-plans/academic-city/">Academic City</a>, <a href="/meal-plans/silicon-oasis/">Silicon Oasis</a>, <a href="/meal-plans/international-city/">International City</a> and <a href="/meal-plans/festival-city/">Dubai Festival City</a>.</p>'''
     faqs = [
+        ('How much does a meal cost in Dubai?', 'It depends on how you get it. Cooking costs least on ingredients but takes time. Ordering in costs the menu price plus delivery and service fees, so check the total on your receipt. A Messify meal costs AED 25.63 to 30.71, depending on the plan.'),
         ('How much is a meal plan in Dubai per month?', f"It depends on the type of plan. Messify monthly plans cost AED {p[1]['monthly'][1]:,} for 1 meal a day, AED {p[2]['monthly'][1]:,} for 2 and AED {p[3]['monthly'][1]:,} for 3, which works out to AED 25.63 to 27.50 per meal. Diet and fitness plans with calorie tracking usually cost more per meal."),
         ('What is the cheapest way to get a meal plan in Dubai?', 'Compare the price per meal, not the plan price. With Messify, the 3-meal monthly plan has the lowest price per meal, at AED 25.63. The 1-meal weekly plan, at AED 215, is the cheapest way to try it.'),
         ('Is a weekly meal plan more expensive than a monthly one?', f"Per meal, yes. A Messify weekly plan costs AED {per(p[1]['weekly'][1], p[1]['weekly'][0])} to {per(p[3]['weekly'][1], p[3]['weekly'][0])} per meal, while monthly plans cost AED 25.63 to 27.50. Weekly plans are the easy way to try us first."),
+        ('How much does a meal plan cost per day in Dubai?', "With Messify, a day of meals on a monthly plan costs AED 27.50 for 1 meal, AED 53.85 for 2 meals and AED 76.88 for all 3 meals. Weekly plans cost a little more per day."),
         ('Do Messify prices include VAT?', 'Yes. Prices include VAT unless stated otherwise.'),
+        ('Are Messify meals heat and eat?', 'Yes. Meals are cooked fresh daily, blast-chilled and delivered every morning in one chilled bag. Keep them cold and reheat for a few minutes when you are ready to eat.'),
         ('Can I skip days on a meal plan?', 'With Messify, yes. Skip a day in the app and use that meal on another day of your plan. Monthly plans give you 30 days to use 26 days of meals; weekly plans give you 9 days to use 7.'),
     ]
-    article_page('/guides/meal-plan-cost-dubai/', 'Meal plan cost', 'How Much Does a Meal Plan Cost in Dubai? (2026) | Messify',
-                 'What meal plans in Dubai really cost per meal, what changes the price, and a calculator to compare a meal plan with ordering in.',
+    article_page('/guides/meal-plan-cost-dubai/', 'Meal plan cost', 'Cost of a Meal in Dubai & Meal Plan Prices (2026) | Messify',
+                 'Meal plan prices in Dubai per meal, per day and per month, what a delivered meal really costs, and a calculator to compare a meal plan with ordering in.',
                  'How much does a meal plan cost in Dubai?', 'Meal plan prices · 2026',
-                 f"Compare meal plans by price per meal. Messify meal plans in Dubai cost AED 25.63 to 30.71 per meal: AED 215–610 a week or AED 715–1,999 a month for 1 to 3 meals a day. Diet and fitness plans with calorie tracking usually cost more per meal.",
+                 f"The real cost of a meal in Dubai is the total you pay, including delivery and service fees, not the menu price. A Messify meal costs AED 25.63 to 30.71: meal plans are AED 215–610 a week or AED 715–1,999 a month for 1 to 3 meals a day, from AED 27.50 a day. Diet and fitness plans with calorie tracking usually cost more per meal.",
                  sections, faqs)
 
 def page_guide_students():
@@ -1515,7 +1539,7 @@ def page_guide_students():
       <li><b>2 meals a day, monthly: AED 1,400.</b> Lunch and dinner, AED 26.92 a meal.</li>
       <li><b>1 meal a day, weekly: AED 215.</b> The easiest way to try it before committing to a month.</li>
     </ul>
-    <p>Monthly plans are 26 days of meals to use within 30 days, and weekly plans are 7 days of meals to use within 9 days. Compare it with your delivery spending in our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a>.</p>
+    <p>Monthly plans are 26 days of meals to use within 30 days, and weekly plans are 7 days of meals to use within 9 days. Compare it with your delivery spending in our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a>, or see <a href="/guides/meal-plan-cost-dubai/">the real cost of a meal in Dubai</a>, per meal and per day.</p>
 
     <h2>Where we deliver for students</h2>
     <p>Messify meals are cooked daily in our partner kitchen in International City and delivered every morning to:</p>
@@ -2228,7 +2252,7 @@ def page_guide_affordable():
       <li><b>Try a week, then go monthly.</b> Monthly plans cost less per meal on every plan size, so switch once you know you like the food.</li>
       <li><b>Only buy the meals you'll eat.</b> If you eat breakfast at home, a 2-meal plan beats a 3-meal plan you don't finish.</li>
       <li><b>Use every meal.</b> With Messify, skip a busy day in the app and use that meal later in your plan, instead of letting it go to waste.</li>
-      <li><b>Compare per meal, including fees.</b> Delivery, service fees and VAT change the real price of ordering in and of some plans.</li>
+      <li><b>Compare per meal, including fees.</b> Delivery, service fees and VAT change the real price of ordering in and of some plans. Here is <a href="/guides/meal-plan-cost-dubai/">what a meal really costs in Dubai</a>.</li>
       <li><b>Skip extras you don't need.</b> Diet and fitness plans with snacks, juices and calorie tracking cost more per meal. If you just want everyday meals sorted, an everyday meal plan costs less.</li>
       <li><b>Check delivery to your building first.</b> Messify delivers in Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City.</li>
     </ol>
@@ -3263,7 +3287,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Festival City (DFC)]({BASE}/meal-plans/festival-city/): delivery to homes in Al Badia and offices across DFC
 - [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain
 - [The best meal plans in Dubai, compared]({BASE}/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
-- [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): price per meal explained, with a meal plan vs ordering-in calculator
+- [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): what a meal costs in Dubai, meal plan prices per meal and per day, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
 - [Weekly vs monthly meal plans]({BASE}/guides/weekly-vs-monthly-meal-plan/): price per meal and flexibility compared
 - [Daily meal delivery in Dubai Festival City]({BASE}/guides/meal-delivery-dubai-festival-city/): meal plans for Al Badia homes and offices in DFC
