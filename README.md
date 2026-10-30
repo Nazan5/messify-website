@@ -81,3 +81,8 @@ The domain is registered at GoDaddy and email runs on Google Workspace. In GoDad
 ## Google rating
 
 The "4.9 on Google reviews" badge is set by `RATING` at the top of `build.py` and links to the Google Maps listing (`GMAPS`). It never shows the number of reviews. Update `RATING` if the Google average changes.
+
+## Search engine housekeeping
+
+- `lastmod.json` records when each page's content last changed; `build.py` uses it for the sitemap dates. Commit it with every build.
+- After a change is live, run `python3 indexnow.py` to tell Bing (which also feeds ChatGPT search and Copilot) about every page. The key file is the `.txt` file named after the key in `dist/`.

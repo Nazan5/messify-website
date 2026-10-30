@@ -7,7 +7,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-10-23'
+TODAY = '2026-10-30'
 UPDATED_LABEL = 'October 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
@@ -408,9 +408,9 @@ def page_home():
             FAQ_START]
     page = {
         'path': '/', 'mode': 'meals', 'nav': None, 'body_class': 'has-gate',
-        'title': 'Messify | Meal Plans & Catering in Dubai',
+        'title': 'Meal Plans in Dubai from AED 25 a Meal | Messify',
         'og_title': 'Messify | Daily meal plans and catering in Dubai',
-        'desc': 'Daily meal plans in Dubai from AED 25 a meal, delivered every morning in one chilled bag. Plus custom catering across Dubai, Sharjah and Abu Dhabi.',
+        'desc': 'Affordable daily meal plans in Dubai from AED 25 a meal, delivered every morning in one chilled bag. Plus custom catering across the UAE.',
         'preload': '<link rel="preload" as="image" href="/assets/img/bag-bowls-640.webp" imagesrcset="/assets/img/bag-bowls-640.webp 640w, /assets/img/bag-bowls.webp 1100w" imagesizes="(min-width: 900px) 50vw, 100vw">\n',
         'schema': [ORG, WEBSITE, BUSINESS, faq_schema(faqs)],
     }
@@ -505,6 +505,37 @@ def page_home():
   </div>
 </section>
 
+<section class="sec" aria-labelledby="popular-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Popular</p><h2 class="h2" id="popular-title">Find what you need.</h2></div>
+    <div class="popular">
+      <div><h3>Meal plans</h3><ul>
+        <li><a href="/meal-plans/">Meal plans in Dubai</a></li>
+        <li><a href="/guides/best-meal-plans-dubai/">Best meal plans in Dubai, compared</a></li>
+        <li><a href="/guides/affordable-meal-plans-dubai/">Affordable meal plans in Dubai</a></li>
+        <li><a href="/guides/meal-plan-cost-dubai/">How much a meal plan costs in Dubai</a></li>
+        <li><a href="/guides/student-meal-plans-dubai/">Student meal plans in Dubai</a></li>
+        <li><a href="/guides/weekly-vs-monthly-meal-plan/">Weekly vs monthly meal plans</a></li>
+      </ul></div>
+      <div><h3>Delivery areas</h3><ul>
+        <li><a href="/meal-plans/academic-city/">Meal plans in Dubai Academic City</a></li>
+        <li><a href="/meal-plans/silicon-oasis/">Meal plans in Dubai Silicon Oasis</a></li>
+        <li><a href="/meal-plans/international-city/">Meal plans in International City</a></li>
+        <li><a href="/meal-plans/festival-city/">Meal plans in Dubai Festival City</a></li>
+        <li><a href="/guides/office-lunch-delivery-silicon-oasis/">Office lunch delivery in Silicon Oasis</a></li>
+      </ul></div>
+      <div><h3>Catering</h3><ul>
+        <li><a href="/catering/dubai/">Catering in Dubai</a></li>
+        <li><a href="/catering/sharjah/">Catering services in Sharjah</a></li>
+        <li><a href="/catering/corporate-events/">Corporate event catering</a></li>
+        <li><a href="/catering/business-meetings/">Meeting and office lunch catering</a></li>
+        <li><a href="/guides/party-catering-at-home-dubai/">Home and party catering in Dubai</a></li>
+        <li><a href="/catering/weddings/">Wedding catering</a></li>
+      </ul></div>
+    </div>
+  </div>
+</section>
+
 <section class="sec sec--tint" aria-labelledby="quotes-title">
   <div class="wrap">{quotes_block()}</div>
 </section>
@@ -535,7 +566,7 @@ def page_meal_plans():
                'hasOfferCatalog': offer_catalog()}
     page = {
         'path': '/meal-plans/', 'mode': 'meals', 'nav': 'meals', 'exact': True,
-        'title': 'Meal Plans in Dubai, Weekly & Monthly | Messify',
+        'title': 'Meal Plans in Dubai: Weekly & Monthly from AED 25 | Messify',
         'desc': 'Affordable weekly and monthly meal plans in Dubai from AED 25 a meal. 1, 2 or 3 fresh, 100% halal meals a day, delivered together every morning.',
         'preload': '<link rel="preload" as="image" href="/assets/img/bag-sofa-640.webp" imagesrcset="/assets/img/bag-sofa-640.webp 640w, /assets/img/bag-sofa.webp 900w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
         'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs],
@@ -544,7 +575,8 @@ def page_meal_plans():
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">Meal plans in Dubai</span> Your meals, handled.</h1>
+      <p class="kicker rise">Weekly &amp; monthly meal plans</p>
+      <h1 class="h2 rise">Meal plans in Dubai. Your meals, handled.</h1>
       <p class="lede rise">Fresh, balanced, 100% halal meals cooked daily in our partner kitchen in International City and delivered together each morning in one chilled Messify bag. Skip a day and have it later in your plan.</p>
       <div class="actions">
         <a class="btn" href="#plans">See plans &amp; prices</a>
@@ -662,6 +694,7 @@ def page_meal_plans():
 </section>
 
 {meal_form(tint=False)}
+{guide_more('/meal-plans/')}
 {band()}'''
     render(page, body)
 
@@ -727,7 +760,7 @@ AREAS = {
   'name': 'International City', 'place': 'International City, Dubai', 'kicker': 'International City, Dubai',
   'title': 'Meal Plans in International City, Dubai | Messify',
   'desc': 'Cooked in our partner kitchen in International City. Fresh daily meal plans delivered every morning across the clusters, from AED 25 a meal.',
-  'h1': 'Cooked right here in International City.',
+  'h1': 'Meal plans in International City, cooked right here.',
   'lede': "Messify meals are cooked in our partner kitchen in International City, so they travel the shortest distance of all. Fresh, balanced meals delivered every morning across the clusters.",
   'facts': [('From AED 25', 'per meal'), ('Every morning', 'to every cluster'), ('Cooked here', 'in International City')],
   'img': ('biryani.webp', 'biryani.webp', 1600, 1181, 'Paneer makhani with saffron rice', '50% 50%'),
@@ -802,7 +835,8 @@ def page_area(slug):
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">{a['kicker']}</span> {a['h1']}</h1>
+      <p class="kicker rise">{a['kicker']}</p>
+      <h1 class="h2 rise">{a['h1']}</h1>
       <p class="lede rise">{a['lede']}</p>
       <div class="actions">
         <a class="btn" href="#plans">See plans &amp; prices</a>
@@ -829,6 +863,7 @@ def page_area(slug):
     <div class="sec-head"><p class="eyebrow">Why Messify</p><h2 class="h2" id="why-title">{a['why_title']}</h2></div>
     <div class="reasons">{reasons}</div>
     <a class="link-arrow" style="margin-top:28px" href="{a.get('guide', GUIDES[1])[0]}">{a.get('guide', GUIDES[1])[1]} {I["arrow"]}</a>
+    <p class="more-links">Compare before you choose: <a href="/guides/best-meal-plans-dubai/">best meal plans in Dubai, compared</a> · <a href="/guides/affordable-meal-plans-dubai/">affordable meal plans in Dubai</a> · <a href="/guides/meal-plan-cost-dubai/">how much a meal plan costs</a> · <a href="/meal-plans/">all meal plans in Dubai</a></p>
   </div>
 </section>
 
@@ -967,7 +1002,7 @@ def page_start():
 def page_catering():
     faqs = [
         ('What events do you cater?', 'Corporate events and office lunches, parties and home events, university events, weddings, buffet setups and bulk orders.'),
-        ('Do you cater small parties at home?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and we'll build a menu to fit."),
+        ('Do you cater parties at home?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and we'll build a menu to fit."),
         ('Which areas do you cater in?', 'We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Events further from Dubai need a little more notice, so share your date early.'),
         ('How is catering priced?', 'Every quote is custom, based on your headcount and the menu you choose.'),
         ('Do you do buffet setups?', 'Yes. We set up full buffets at your venue, from office lunches and house parties to weddings, with the menu built around your headcount.'),
@@ -997,7 +1032,8 @@ def page_catering():
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">Catering in Dubai &amp; across the UAE</span> Your event, <em class="it">fed properly.</em></h1>
+      <p class="kicker rise">Corporate, party &amp; wedding catering</p>
+      <h1 class="h2 rise">Catering in Dubai &amp; the UAE. <em class="it">Your event, fed properly.</em></h1>
       <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
         <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
@@ -1186,7 +1222,8 @@ def page_about():
   <div class="wrap">
     {cr}
     <div class="sec-head" style="max-width:820px">
-      <h1 class="h2"><span class="kicker">About us</span> Messify at a glance.</h1>
+      <p class="kicker">About us</p>
+      <h1 class="h2">Messify at a glance.</h1>
       <p class="lede">{ONE_LINER}</p>
     </div>
     <div class="answer">
@@ -1284,7 +1321,8 @@ def page_terms():
     {cr}
     <div class="terms">
       <header class="terms-head">
-        <h1 class="h2"><span class="kicker">Messify FZC</span> Terms &amp; conditions</h1>
+        <p class="kicker">Messify FZC</p>
+      <h1 class="h2">Terms &amp; conditions</h1>
         <p class="lede">Last updated 11 October 2026. Effective until the next software update.</p>
       </header>
       <nav class="toc" aria-label="Contents"><p class="answer__label">Contents</p><ol>{toc}</ol></nav>
@@ -1365,9 +1403,22 @@ def guide_more(exclude, guides=None):
     return f'''<section class="sec sec--tint sec--tight" aria-labelledby="more-guides">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Guides</p><h2 class="h3" id="more-guides" style="font-size:1.4rem">Keep reading</h2></div>
-    {guide_cards([g for g in (guides or GUIDES) if g[0] != exclude][:6])}
+    {guide_cards(_rotate(guides or GUIDES, exclude)[:6])}
+    {_more_links(guides or GUIDES, exclude)}
   </div>
 </section>'''
+
+def _rotate(guides, exclude):
+    # Show the guides that come after this one (wrapping round), so every guide gets linked from several others.
+    paths = [g[0] for g in guides]
+    i = paths.index(exclude) + 1 if exclude in paths else 0
+    return [g for g in guides[i:] + guides[:i] if g[0] != exclude]
+
+def _more_links(guides, exclude):
+    rest = _rotate(guides, exclude)[6:]
+    if not rest:
+        return ''
+    return '<p class="more-links">More guides: ' + ' · '.join(f'<a href="{p}">{t}</a>' for p, t, _ in rest) + '</p>'
 
 def band_catering(title='Planning an event?', text="Send your date, location and headcount, and we'll come back with a menu and a price."):
     return f'''<section class="sec">
@@ -1397,7 +1448,8 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
     body = f'''<section class="sec sec--first">
   <div class="wrap article">
     {cr}
-    <h1 class="h2"><span class="kicker">{kicker}</span> {h1}</h1>
+    <p class="kicker">{kicker}</p>
+      <h1 class="h2">{h1}</h1>
     <p class="byline">By the Messify team · Updated {UPDATED_LABEL} · {mins} min read</p>
     <div class="answer">
       <p class="answer__label">Quick answer</p>
@@ -1445,7 +1497,8 @@ def page_guides():
   <div class="wrap">
     {cr}
     <div class="sec-head" style="max-width:760px">
-      <h1 class="h2"><span class="kicker">Guides</span> Meal plans and catering in Dubai, explained.</h1>
+      <p class="kicker">Guides</p>
+      <h1 class="h2">Meal plans and catering in Dubai, explained.</h1>
       <p class="lede">Straight answers to the questions we get every day on WhatsApp, with real prices.</p>
     </div>
     <h2 class="h3" id="meal-plan-guides" style="margin:0 0 20px">Meal plan guides</h2>
@@ -1493,7 +1546,7 @@ def page_guide_cost():
     <h2>What a Messify meal plan costs</h2>
     <p>Every price below is for the whole plan. Each meal is one token you can use for breakfast, lunch or dinner.</p>
     {plans_table('Messify meal plan prices in Dubai (AED)')}
-    <p>The cheapest price per meal is the 3-meal monthly plan at <b>AED {per(p[3]['monthly'][1], p[3]['monthly'][0])}</b>. The lowest total price is the 1-meal weekly plan at <b>AED {p[1]['weekly'][1]}</b>, which is the easiest way to try us. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Prices include VAT unless stated otherwise.</p>
+    <p>The lowest price per meal is the 3-meal monthly plan at <b>AED {per(p[3]['monthly'][1], p[3]['monthly'][0])}</b>. The lowest total price is the 1-meal weekly plan at <b>AED {p[1]['weekly'][1]}</b>, which is the easiest way to try us. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Prices include VAT unless stated otherwise.</p>
 
     <h2>Meal plan vs ordering in: run your own numbers</h2>
     <p>Most people who start a meal plan were ordering in before. Put in what you usually spend on one delivery order, including delivery and service fees, and compare it with a month of Messify.</p>
@@ -1501,7 +1554,7 @@ def page_guide_cost():
 
     <h2>Five things that change the real price</h2>
     <ol>
-      <li><b>Meals you actually eat.</b> A cheap plan you can't fully use is expensive. Check how long you have to use your meals and whether you can skip days. With Messify you skip a day in the app and use that meal later in your plan.</li>
+      <li><b>Meals you actually eat.</b> A low-priced plan you can't fully use is expensive. Check how long you have to use your meals and whether you can skip days. With Messify you skip a day in the app and use that meal later in your plan.</li>
       <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers all of the day's meals together every morning in one chilled bag. Meals are blast-chilled after cooking, so they are heat and eat: a few minutes to reheat when you're ready.</li>
       <li><b>Menu variety.</b> If you get bored by week two, you'll go back to ordering in. Messify's menu changes every day and you pick tomorrow's meals in the app by 6 PM.</li>
       <li><b>Dietary fit.</b> Every Messify meal is 100% halal and there's a vegetarian option every day, for every meal.</li>
@@ -1509,12 +1562,12 @@ def page_guide_cost():
     </ol>
 
     <h2>Is a meal plan worth it?</h2>
-    <p>If you mostly order in, a meal plan usually costs less per meal and removes the daily decision of what to eat. If you cook most of your meals and enjoy it, cooking is cheaper on ingredients. Many students and professionals in Dubai sit in between: no time or kitchen to cook properly, and tired of delivery apps. That's who an everyday meal plan is for.</p>
+    <p>If you mostly order in, a meal plan usually costs less per meal and removes the daily decision of what to eat. If you cook most of your meals and enjoy it, cooking costs less on ingredients. Many students and professionals in Dubai sit in between: no time or kitchen to cook properly, and tired of delivery apps. That's who an everyday meal plan is for.</p>
     <p>See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page, or check delivery in <a href="/meal-plans/academic-city/">Academic City</a>, <a href="/meal-plans/silicon-oasis/">Silicon Oasis</a>, <a href="/meal-plans/international-city/">International City</a> and <a href="/meal-plans/festival-city/">Dubai Festival City</a>.</p>'''
     faqs = [
         ('How much does a meal cost in Dubai?', 'It depends on how you get it. Cooking costs least on ingredients but takes time. Ordering in costs the menu price plus delivery and service fees, so check the total on your receipt. A Messify meal costs AED 25.63 to 30.71, depending on the plan.'),
         ('How much is a meal plan in Dubai per month?', f"It depends on the type of plan. Messify monthly plans cost AED {p[1]['monthly'][1]:,} for 1 meal a day, AED {p[2]['monthly'][1]:,} for 2 and AED {p[3]['monthly'][1]:,} for 3, which works out to AED 25.63 to 27.50 per meal. Diet and fitness plans with calorie tracking usually cost more per meal."),
-        ('What is the cheapest way to get a meal plan in Dubai?', 'Compare the price per meal, not the plan price. With Messify, the 3-meal monthly plan has the lowest price per meal, at AED 25.63. The 1-meal weekly plan, at AED 215, is the cheapest way to try it.'),
+        ('What is the most affordable way to get a meal plan in Dubai?', 'Compare the price per meal, not the plan price. With Messify, the 3-meal monthly plan has the lowest price per meal, at AED 25.63. The 1-meal weekly plan, at AED 215, is the most affordable way to try it.'),
         ('Is a weekly meal plan more expensive than a monthly one?', f"Per meal, yes. A Messify weekly plan costs AED {per(p[1]['weekly'][1], p[1]['weekly'][0])} to {per(p[3]['weekly'][1], p[3]['weekly'][0])} per meal, while monthly plans cost AED 25.63 to 27.50. Weekly plans are the easy way to try us first."),
         ('How much does a meal plan cost per day in Dubai?', "With Messify, a day of meals on a monthly plan costs AED 27.50 for 1 meal, AED 53.85 for 2 meals and AED 76.88 for all 3 meals. Weekly plans cost a little more per day."),
         ('Do Messify prices include VAT?', 'Yes. Prices include VAT unless stated otherwise.'),
@@ -1562,7 +1615,7 @@ def page_guide_students():
       <li><b>Compare price per meal</b>, not the plan price.</li>
       <li><b>Check how long you have to use your meals</b> and whether you can skip days.</li>
       <li><b>Look at the menu</b>: does it change often enough that you'll keep eating it?</li>
-      <li><b>Start small.</b> A weekly plan is a cheap way to test the food and the delivery.</li>
+      <li><b>Start with a week.</b> A weekly plan is an affordable way to test the food and the delivery.</li>
     </ol>
     <p>Ready? See all <a href="/meal-plans/">meal plans in Dubai</a> or <a href="/start/">start your plan</a> in the Messify app.</p>'''
     faqs = [
@@ -1611,7 +1664,7 @@ def page_guide_weekly_monthly():
     </ul>
     <p>See every option on our <a href="/meal-plans/">meal plans in Dubai</a> page, or read <a href="/guides/meal-plan-cost-dubai/">how much a meal plan costs in Dubai</a>.</p>'''
     faqs = [
-        ('Is a monthly meal plan cheaper than a weekly one?', 'Per meal, yes. Messify monthly plans cost AED 25.63 to 27.50 a meal; weekly plans cost AED 29.05 to 30.71 a meal.'),
+        ('Is a monthly meal plan more affordable than a weekly one?', 'Per meal, yes. Messify monthly plans cost AED 25.63 to 27.50 a meal; weekly plans cost AED 29.05 to 30.71 a meal.'),
         ('How long do I have to use a weekly or monthly plan?', 'Weekly plans are 7 days of meals to use within 9 days. Monthly plans are 26 days of meals to use within 30 days.'),
         ('Can I switch from weekly to monthly?', 'Yes. Most people start with a week to try the food, then choose a monthly plan in the app.'),
         ('Which plan is best for students?', 'Monthly during term for the best price per meal; weekly around exams, trips home or if you are trying Messify for the first time.'),
@@ -1681,13 +1734,13 @@ def page_guide_best():
     </ol>'''
     faqs = [
         ('What is the best meal plan in Dubai?', 'It depends on your goal. For weight loss or calorie targets, diet plans such as Calo, Right Bite, Kcal and VMeals are built for that. For everyday meals at a predictable price in Academic City, Silicon Oasis, International City or Dubai Festival City, Messify starts from AED 25 a meal.'),
-        ('What is the cheapest meal plan in Dubai?', f'Of the published prices we checked on {checked}, Right Bite listed its Essentials plan from AED 22 a meal, and Messify\'s 3-meal monthly plan is AED 25.63 a meal. Compare what each price includes, delivery coverage and how long you have to use your meals.'),
+        ('What is the most affordable meal plan in Dubai?', f'Of the published prices we checked on {checked}, Right Bite listed its Essentials plan from AED 22 a meal, and Messify\'s 3-meal monthly plan is AED 25.63 a meal. Compare what each price includes, delivery coverage and how long you have to use your meals.'),
         ('Are Dubai meal plans halal?', 'Every Messify meal is 100% halal. Check each company\'s website for its own policy.'),
         ('Which Dubai meal plans have vegetarian options?', 'Messify has a vegetarian option every day, for every meal. Calo, VMeals and Meals On Me also list vegetarian plans.'),
         ('Can I skip days on a meal plan?', 'With Messify, yes: skip a day in the app and use that meal later in your plan. Monthly plans give you 30 days to use 26 days of meals, and weekly plans give you 9 days to use 7.'),
     ]
-    article_page('/guides/best-meal-plans-dubai/', 'Best meal plans in Dubai', 'Best Meal Plans in Dubai 2026: Prices Compared | Messify',
-                 'Dubai meal plans compared with published prices: Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me. What each costs and who it suits.',
+    article_page('/guides/best-meal-plans-dubai/', 'Best meal plans in Dubai', 'Best Meal Plans in Dubai (2026): Prices Compared | Messify',
+                 'Meal plans in Dubai compared with published prices: Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me. Affordable to premium, and who each suits.',
                  'The best meal plans in Dubai, compared', 'Updated October 2026',
                  f'The best meal plan in Dubai depends on your goal. For weight loss and macros, diet plans like Calo, Right Bite, Kcal and VMeals lead. For everyday meals, Messify costs AED 25.63–30.71 a meal and delivers all the day\'s meals every morning in Academic City, Silicon Oasis, International City and Dubai Festival City. Prices below are as published on {checked}.',
                  sections, faqs)
@@ -1932,7 +1985,7 @@ def page_guide_catering_cost():
     <h2>What changes the price per person</h2>
     <ol>
       <li><b>The menu.</b> The number of courses and the dishes themselves matter most. Lamb and seafood cost more than chicken; a single main course with sides costs less than a spread with appetisers, two mains, salads and desserts.</li>
-      <li><b>Headcount.</b> Larger events usually cost less per person, because cooking, transport and setup are shared across more guests. Very small events often have a minimum order.</li>
+      <li><b>Headcount.</b> Larger events usually cost less per person, because cooking, transport and setup are shared across more guests. Events with very few guests often have a minimum order.</li>
       <li><b>Service style.</b> Food delivered ready to serve costs least. A buffet set up at your venue adds equipment and setup time. Served or plated meals need the most staff. See <a href="/guides/buffet-vs-plated-catering/">catering styles compared</a>.</li>
       <li><b>Staff.</b> Servers, buffet attendants and clean-up are usually priced per staff member and per hour.</li>
       <li><b>Equipment.</b> Chafing dishes, serving ware, tables, linen, plates and cutlery. Disposable or reusable makes a difference too.</li>
@@ -1956,7 +2009,7 @@ def page_guide_catering_cost():
     <ol>
       <li><b>Line up the menus.</b> Same number of courses, similar dishes, similar portions.</li>
       <li><b>Add the extras</b> to each per-person price: delivery, setup, staff and equipment.</li>
-      <li><b>Check the quantities.</b> A low price with small portions is not cheaper if you run out. Our guide to <a href="/guides/how-much-food-per-person-catering/">how much food per person</a> gives you a benchmark.</li>
+      <li><b>Check the quantities.</b> A low price with light portions costs more if you run out. Our guide to <a href="/guides/how-much-food-per-person-catering/">how much food per person</a> gives you a benchmark.</li>
       <li><b>Compare the total,</b> including VAT, for your real headcount.</li>
     </ol>
 
@@ -1974,7 +2027,7 @@ def page_guide_catering_cost():
     faqs = [
         ('How is catering priced in Dubai?', 'Most caterers quote a price per person for the food, then add or include staff, equipment, delivery and setup. The menu, headcount, service style and location move the price the most.'),
         ('Why do catering quotes vary so much?', 'Quotes differ in menu, portion sizes and what is included. Compare them with the same menu, the same headcount and all extras such as staff, setup and delivery added in.'),
-        ('Is catering cheaper for more guests?', 'Usually, per person. Cooking, transport and setup are shared across more guests. Very small events often have a minimum order.'),
+        ('Does catering cost less per person for more guests?', 'Usually, yes. Cooking, transport and setup are shared across more guests. Events with very few guests often have a minimum order.'),
         ('Does a catering quote include VAT?', 'It depends on the caterer, so ask. Check whether the quote shows prices with or without VAT, and ask for a tax invoice if your company needs one.'),
         ('How much does Messify catering cost?', 'Every Messify catering quote is custom, based on your headcount, the menu you choose and the service style. Send your date, location and headcount for a price.'),
     ]
@@ -2100,15 +2153,15 @@ def page_guide_home_party():
         ('When should I book party catering?', 'A week or two ahead is comfortable for most home parties. Book earlier for weekends, Eid and large family gatherings.'),
         ('Does Messify cater parties at home?', 'Yes. We cater birthdays, family gatherings and house parties at home, with custom 100% halal menus quoted by headcount and buffet setups if you want one.'),
     ]
-    article_page('/guides/party-catering-at-home-dubai/', 'Party catering at home', 'Party Catering at Home in Dubai: A Guide | Messify',
-                 'How to plan party catering at home in Dubai: headcount, menu, space for a buffet, building access, timing, outdoor heat and food safety.',
-                 'Party catering at home in Dubai', 'Catering guide · 2026',
+    article_page('/guides/party-catering-at-home-dubai/', 'Party catering at home', 'Home & Party Catering in Dubai: Planning Guide | Messify',
+                 'How to plan home catering and party catering in Dubai: headcount, menu, buffet space, building access, timing, outdoor heat and food safety.',
+                 'Home and party catering in Dubai', 'Catering guide · 2026',
                  'For a party at home, give the caterer your headcount (children under 10 count as half), the time you want to eat and the space you have for a buffet table and power. Pick one or two mains that hold well, add a vegetarian dish, tell your building security about the delivery, and keep food out for no more than two hours.',
                  sections, faqs, kind='catering', published=CG_DATE)
 
 def page_guide_styles():
     rows = [
-        ('Delivered, ready to serve', 'Lowest', 'Office lunches, meetings, small parties', 'You or your team set out and serve the food'),
+        ('Delivered, ready to serve', 'Lowest', 'Office lunches, meetings, home parties', 'You or your team set out and serve the food'),
         ('Buffet setup', 'Medium', 'Parties, corporate events, weddings', 'Needs space for a table and a queue'),
         ('Served or plated', 'Highest', 'Formal dinners, award nights, VIP events', 'Needs the most staff and a fixed seating plan'),
         ('Family style (shared platters)', 'Medium', 'Family gatherings, team dinners', 'Needs space on each table for platters'),
@@ -2125,7 +2178,7 @@ def page_guide_styles():
     {table}
 
     <h2>Delivered catering</h2>
-    <p>The food arrives ready to serve, in trays or containers, and you set it out. It is the simplest and usually the lowest-cost option, and it suits office lunches, meetings and small gatherings where someone on your side can manage the table.</p>
+    <p>The food arrives ready to serve, in trays or containers, and you set it out. It is the simplest and usually the lowest-cost option, and it suits office lunches, meetings and gatherings at home where someone on your side can manage the table.</p>
 
     <h2>Buffet setup</h2>
     <p>The caterer sets up a full buffet at your venue, with dishes kept warm and the table arranged for guests to serve themselves. Buffets handle large numbers well, offer variety, and let guests choose what and how much they eat. Plan enough space for a queue: for more than about 60 guests, a table guests can reach from both sides keeps it moving.</p>
@@ -2152,7 +2205,7 @@ def page_guide_styles():
     <p>Messify delivers catering ready to serve and sets up full buffets at your venue, from office lunches and house parties to weddings. Every menu is custom and 100% halal. If you need served or plated service or live stations, mention it in your enquiry and the team will confirm what's possible for your event. <a href="/catering/#quote">Get a catering quote</a>.</p>
     <p>Not sure how much to order? Read <a href="/guides/how-much-food-per-person-catering/">how much food per person for catering</a>.</p>'''
     faqs = [
-        ('Is a buffet cheaper than a plated meal?', 'Usually, yes. A buffet needs fewer staff than serving each guest at their seat, so it tends to cost less per person for the same menu.'),
+        ('Does a buffet cost less than a plated meal?', 'Usually, yes. A buffet needs fewer staff than serving each guest at their seat, so it tends to cost less per person for the same menu.'),
         ('What is the difference between delivered catering and a buffet setup?', 'Delivered catering arrives ready to serve and you set it out. With a buffet setup, the caterer arranges the full buffet at your venue and keeps the food warm.'),
         ('Which catering style is best for a large event?', 'A buffet handles large numbers well and offers variety. For several hundred guests, plan multiple serving points so queues stay short.'),
         ('What are live stations?', 'Stations where a chef cooks or carves in front of guests, such as grills, shawarma, pasta or desserts. They need space, staff and often power or gas at the venue.'),
@@ -2161,7 +2214,7 @@ def page_guide_styles():
     article_page('/guides/buffet-vs-plated-catering/', 'Catering styles', 'Buffet vs Plated vs Delivered Catering | Messify',
                  'Buffet, plated, family style, live stations or delivered catering: how each style works, what it needs and which one suits your event.',
                  'Buffet, delivered or plated catering?', 'Catering guide · 2026',
-                 'Delivered catering is the simplest and usually lowest-cost option, best for office lunches and small groups. A buffet setup suits parties, corporate events and weddings and handles large numbers well. Served or plated meals are the most formal and need the most staff. Family style and live stations sit in between.',
+                 'Delivered catering is the simplest and usually lowest-cost option, best for office lunches and meetings. A buffet setup suits parties, corporate events and weddings and handles large numbers well. Served or plated meals are the most formal and need the most staff. Family style and live stations sit in between.',
                  sections, faqs, kind='catering', published=CG_DATE)
 
 def page_guide_wedding():
@@ -2257,8 +2310,8 @@ def page_guide_affordable():
       <li><b>Check delivery to your building first.</b> Messify delivers in Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City.</li>
     </ol>
 
-    <h2>Affordable, not the cheapest</h2>
-    <p>We'd rather be straight with you. Cooking for yourself is cheaper on ingredients, if you have the time and a kitchen. And some companies publish lower starting prices on certain plans: when we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Our <a href="/guides/best-meal-plans-dubai/">comparison of Dubai meal plans</a> shows published prices side by side.</p>
+    <h2>Affordable, and honest about it</h2>
+    <p>We'd rather be straight with you. Cooking for yourself costs less on ingredients, if you have the time and a kitchen. And some companies publish lower starting prices on certain plans: when we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Our <a href="/guides/best-meal-plans-dubai/">comparison of Dubai meal plans</a> shows published prices side by side.</p>
     <p>Where Messify fits is everyday meals at a predictable price: breakfast, lunch and dinner delivered together every morning, a new menu every day, 100% halal, with a vegetarian option every day, for every meal.</p>
 
     <h2>Who an affordable meal plan suits</h2>
@@ -2270,12 +2323,12 @@ def page_guide_affordable():
     <p>See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page, or read <a href="/guides/meal-plan-cost-dubai/">how much a meal plan costs in Dubai</a>.</p>'''
     faqs = [
         ('What is the most affordable meal plan in Dubai?', f"Compare the price per meal, not the plan price. Messify's lowest price per meal is the 3-meal monthly plan at AED {per(pr3, t3)}. When we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Check what each price includes and where each company delivers."),
-        ('Is a meal plan cheaper than ordering food in Dubai?', 'If you order in most days, a meal plan usually costs less per meal once delivery and service fees are counted. Use the calculator on this page with what you really spend.'),
+        ('Does a meal plan cost less than ordering food in Dubai?', 'If you order in most days, a meal plan usually costs less per meal once delivery and service fees are counted. Use the calculator on this page with what you really spend.'),
         ('How much is a monthly meal plan in Dubai?', 'Messify monthly plans cost AED 715, 1,400 or 1,999 for 1, 2 or 3 meals a day, which is AED 25.63 to 27.50 a meal.'),
-        ('What is the cheapest way to try a meal plan?', 'Start with a weekly plan. Messify\'s 1-meal weekly plan costs AED 215 for 7 meals.'),
+        ('What is the most affordable way to try a meal plan?', 'Start with a weekly plan. Messify\'s 1-meal weekly plan costs AED 215 for 7 meals.'),
         ('Do I lose meals if I skip a day?', 'With Messify, no. Skip a day in the app and use that meal later in your plan. Monthly plans give you 30 days to use 26 days of meals, and weekly plans give you 9 days to use 7.'),
     ]
-    article_page('/guides/affordable-meal-plans-dubai/', 'Affordable meal plans', 'Affordable Meal Plans in Dubai: Real Prices | Messify',
+    article_page('/guides/affordable-meal-plans-dubai/', 'Affordable meal plans', 'Affordable Meal Plans in Dubai from AED 25 a Meal | Messify',
                  'How to find an affordable meal plan in Dubai: price per meal, which plan costs least, how to avoid waste, and a calculator to compare with ordering in.',
                  'Affordable meal plans in Dubai', 'Meal plans on a budget · 2026',
                  f"An affordable meal plan is one with a fair price per meal that you actually use. Messify meal plans in Dubai cost AED 25.63 to 30.71 a meal: from AED 215 a week or AED 715 a month. The 3-meal monthly plan has the lowest price per meal (AED {per(pr3, t3)}), and the 1-meal weekly plan has the lowest upfront cost.",
@@ -2326,9 +2379,9 @@ CATER_AREAS = {
  'sharjah': {
   'name': 'Sharjah', 'short': 'Sharjah',
   'card': 'Corporate events, family occasions and parties across Sharjah, a short drive from our kitchen in International City.',
-  'title': 'Catering in Sharjah: Corporate, Party & Buffet | Messify',
+  'title': 'Catering Services in Sharjah: Events & Buffets | Messify',
   'desc': 'Catering in Sharjah for corporate events, family gatherings, parties at home, university events and weddings. Custom halal menus and buffet setups.',
-  'h1': 'Event catering in Sharjah.',
+  'h1': 'Catering services in Sharjah.',
   'lede': 'Sharjah is a short drive from our partner kitchen in International City. We cater corporate events, family gatherings, parties at home, university events and weddings across Sharjah, with custom 100% halal menus quoted by headcount.',
   'img': ('cat-chef-640.webp', 'cat-chef.webp', 1024, 1024, 'A chef carving at a buffet station while guests serve themselves at an evening event'),
   'where_title': 'Across Sharjah, from Al Majaz to Aljada.',
@@ -2461,7 +2514,8 @@ def page_cater_area(slug):
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">Catering in {c['name']}</span> {c['h1']}</h1>
+      <p class="kicker rise">Catering in {c['name']}</p>
+      <h1 class="h2 rise">{c['h1']}</h1>
       <p class="lede rise">{c['lede']}</p>
       <div class="actions">
         <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
@@ -2593,7 +2647,7 @@ def page_guide_calendar():
     <ul>
       <li><b>Peak dates</b> (December parties, iftars, Eid, New Year's Eve): four to six weeks.</li>
       <li><b>Busy-season weekends</b> (October to April): two to four weeks.</li>
-      <li><b>Weekday office lunches and small parties</b>: a few days to a week, if the date is quiet.</li>
+      <li><b>Weekday office lunches and parties at home</b>: a few days to a week, if the date is quiet.</li>
     </ul>
     <p>Whatever the occasion, send us your date, location, headcount and serving time for a <a href="/catering/#quote">catering quote</a>.</p>'''
     faqs = [
@@ -2727,7 +2781,7 @@ def page_guide_year_end():
     <ul>
       <li><b>Lunch at the office:</b> the easiest to organise and the most inclusive, because everyone is already there.</li>
       <li><b>Evening party at the office or a venue:</b> more of an occasion. Check whether the venue allows outside catering.</li>
-      <li><b>Bites and drinks:</b> lighter and cheaper than dinner, but if it runs past 8 PM, people expect a proper meal.</li>
+      <li><b>Bites and drinks:</b> lighter and lower-cost than dinner, but if it runs past 8 PM, people expect a proper meal.</li>
     </ul>
 
     <h2>Set a budget per person</h2>
@@ -2792,7 +2846,7 @@ CATER_TYPES = {
   'card': 'Conferences, launches, team days, annual parties and award nights.',
   'title': 'Corporate Event Catering in Dubai & the UAE | Messify',
   'desc': 'Corporate event catering in Dubai and the UAE: conferences, launches, team days, annual parties and award nights. Custom halal menus and buffet setups.',
-  'kicker': 'Corporate event catering', 'h1': 'Catering for company events, at any scale.',
+  'kicker': 'Corporate event catering', 'h1': 'Corporate event catering, at any scale.',
   'lede': "From a 40-person team day to a conference for several hundred, we cater corporate events across Dubai, Sharjah, Abu Dhabi and the rest of the UAE. Every menu is custom and 100% halal, quoted by headcount, with buffet setups at your venue.",
   'facts': [('5,000+', 'meals a day of kitchen capacity'), ('100%', 'halal, custom menus'), ('Buffet', 'setups at your venue')],
   'offers': [
@@ -2822,9 +2876,9 @@ CATER_TYPES = {
  'business-meetings': {
   'kind': 'event', 'name': 'Business meeting catering', 'short': 'Business meetings', 'icon': 'cup', 'img': 2, 'form': 'Business meeting or office lunch',
   'card': 'Working lunches, board meetings, workshops and training days.',
-  'title': 'Business Meeting & Office Lunch Catering | Messify',
+  'title': 'Meeting & Office Lunch Catering in Dubai | Messify',
   'desc': 'Catering for business meetings, working lunches, board meetings, workshops and training days in Dubai and the UAE. Custom halal menus by headcount.',
-  'kicker': 'Business meeting catering', 'h1': 'Meeting and office lunch catering.',
+  'kicker': 'Business meeting catering', 'h1': 'Meeting and office lunch catering in Dubai.',
   'lede': "Working lunches, board meetings, client workshops and training days. We deliver food that is easy to eat around a meeting table, timed to your break, with custom 100% halal menus quoted by headcount.",
   'facts': [('On time', 'for your break, not before'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
   'offers': [
@@ -2888,7 +2942,7 @@ CATER_TYPES = {
   'card': 'Family lunches, reunions, aqiqah, baby showers, engagements and housewarmings.',
   'title': 'Family Gathering Catering in Dubai & the UAE | Messify',
   'desc': 'Catering for family gatherings at home in Dubai and the UAE: family lunches, reunions, aqiqah, baby showers and housewarmings. Halal buffets by headcount.',
-  'kicker': 'Family gathering catering', 'h1': 'Family gatherings, catered at home.',
+  'kicker': 'Family gathering catering', 'h1': 'Family gathering catering, at home.',
   'lede': "Family lunches, reunions, aqiqah, baby showers, engagements and housewarmings. We cater family gatherings at home across the UAE, with custom 100% halal menus and a buffet setup if you want one, so you get to spend the day with your family instead of in the kitchen.",
   'facts': [('At home', 'villas, flats, gardens and majlis'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
   'offers': [
@@ -2952,7 +3006,7 @@ CATER_TYPES = {
   'card': 'Orientation days, society events, career fairs, graduations and campus functions.',
   'title': 'University & Student Event Catering in the UAE | Messify',
   'desc': 'Catering for university events in Dubai and the UAE: orientation days, society events, career fairs, graduations and campus functions. Halal menus.',
-  'kicker': 'University event catering', 'h1': 'Catering for campus events.',
+  'kicker': 'University event catering', 'h1': 'University event catering for campus events.',
   'lede': "Orientation days, society nights, career fairs, guest lectures and graduations. We cater university events across the UAE, including Dubai Academic City, where we deliver meal plans every day, with custom 100% halal menus that feed students properly.",
   'facts': [('Students', 'fed properly'), ('100%', 'halal menus'), ('Custom', 'menus, by headcount')],
   'offers': [
@@ -2964,7 +3018,7 @@ CATER_TYPES = {
     ('box', 'Bulk student meals', 'Large volumes for residences and campus programmes.'),
   ],
   'plan_title': 'Feeding students well, on a student budget.',
-  'plan': '''<p>Student events usually mean big appetites and a fixed budget. Rice dishes, curries and grills feed a crowd better than lots of small bites, and a vegetarian main makes sure everyone eats. Plan for walk-ins: free food at a campus event draws more people than the sign-up list.</p>
+  'plan': '''<p>Student events usually mean big appetites and a fixed budget. Rice dishes, curries and grills feed a crowd better than lots of finger food, and a vegetarian main makes sure everyone eats. Plan for walk-ins: free food at a campus event draws more people than the sign-up list.</p>
 <p>Check your campus rules on outside catering and where food can be served, and book early for orientation weeks and graduation season, which are busy.</p>
 <p>Students living in Academic City or Silicon Oasis can also get daily meals delivered: see <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</p>''',
   'menu': [('Crowd-pleasers', ['Biryani and rice dishes', 'Curries and grills', 'Pasta bakes', 'Vegetarian mains']),
@@ -3081,7 +3135,7 @@ CATER_TYPES = {
   'card': 'Office year-end parties, Christmas lunches, festive dinners and New Year gatherings.',
   'title': 'Christmas & Year-End Party Catering in Dubai | Messify',
   'desc': 'Christmas and year-end party catering in Dubai and the UAE: office parties, festive lunches, Thanksgiving-style dinners and New Year gatherings. Halal menus.',
-  'kicker': 'Christmas and year-end catering', 'h1': 'Year-end parties and festive menus.',
+  'kicker': 'Christmas and year-end catering', 'h1': 'Christmas and year-end party catering.',
   'lede': "Office year-end parties, Christmas lunches, Thanksgiving-style dinners with friends and New Year gatherings. We cater the festive season across the UAE with custom 100% halal menus and buffet setups, quoted by headcount.",
   'facts': [('Nov–Jan', 'the festive season'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
   'offers': [
@@ -3113,7 +3167,7 @@ CATER_TYPES = {
   'card': 'Eid Al Etihad celebrations for offices, schools, communities and families.',
   'title': 'UAE National Day Catering (Eid Al Etihad) | Messify',
   'desc': 'UAE National Day (Eid Al Etihad) catering for office celebrations, community events and family gatherings, with Emirati-inspired, 100% halal menus.',
-  'kicker': 'UAE National Day catering', 'h1': 'Catering for Eid Al Etihad celebrations.',
+  'kicker': 'UAE National Day catering', 'h1': 'UAE National Day catering for Eid Al Etihad.',
   'lede': "Office celebrations, community events and family gatherings for UAE National Day. We cater Eid Al Etihad across the UAE with Arabic and Emirati-inspired menus, 100% halal, quoted by headcount.",
   'facts': [('2–3 Dec', 'Eid Al Etihad 2026 holiday'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
   'offers': [
@@ -3173,7 +3227,8 @@ def page_cater_type(slug):
   <div class="wrap split">
     <div>
       {cr}
-      <h1 class="h2 rise"><span class="kicker">{t['kicker']}</span> {t['h1']}</h1>
+      <p class="kicker rise">{t['kicker']}</p>
+      <h1 class="h2 rise">{t['h1']}</h1>
       <p class="lede rise">{t['lede']}</p>
       <div class="actions">
         <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
@@ -3228,19 +3283,42 @@ def page_cater_type(slug):
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">More catering</p><h2 class="h3" id="more-title" style="font-size:1.4rem">{'Seasonal and festive catering' if other_kind == 'occasion' else 'Catering by event'}</h2></div>
     {type_cards(other_kind)}
+    <p class="more-links">Also: {' · '.join(f'<a href="/catering/{k}/">{v["name"]}</a>' for k, v in CATER_TYPES.items() if v['kind'] == t['kind'] and k != slug)}</p>
     <div class="sec-head" style="margin:48px 0 28px"><p class="eyebrow">Across the UAE</p><h2 class="h3" style="font-size:1.4rem">Where we cater</h2></div>
     {emirate_cards()}
   </div>
 </section>'''
     render(page, body)
 
+def page_lastmods(paths):
+    """Sitemap dates that change only when a page's content changes (tracked in lastmod.json), so Google keeps trusting them."""
+    import hashlib, datetime, re as _re
+    store_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'lastmod.json')
+    try:
+        store = json.load(open(store_path))
+    except (OSError, ValueError):
+        store = {}
+    today = datetime.date.today().isoformat()
+    out = {}
+    for u in paths:
+        html_text = open(os.path.join(DIST, u.strip('/'), 'index.html') if u != '/' else os.path.join(DIST, 'index.html')).read()
+        html_text = _re.sub(r'\?v=[0-9a-f]+', '', html_text)  # asset version tags are not content
+        h = hashlib.sha1(html_text.encode()).hexdigest()
+        prev = store.get(u)
+        if not prev or prev['hash'] != h:
+            store[u] = {'hash': h, 'date': today}
+        out[u] = store[u]['date']
+    json.dump(store, open(store_path, 'w'), indent=1, sort_keys=True)
+    return out
+
 # ---------------------------------------------------------------- technical files
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
             ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2'),
             ('/guides/affordable-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
+    lastmod = page_lastmods([u for u, _ in urls])
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
-        f'  <url><loc>{BASE}{u}</loc><lastmod>{TODAY}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
+        f'  <url><loc>{BASE}{u}</loc><lastmod>{lastmod[u]}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
     open(os.path.join(DIST, 'sitemap.xml'), 'w').write(sm)
     robots = f'''# Messify: search engines and AI assistants are welcome.
 User-agent: *
