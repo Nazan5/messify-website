@@ -716,3 +716,4 @@ a.event:hover h3{color:var(--accent-ink)}
 .popular a:hover{color:var(--accent-ink)}
 .more-links{margin:24px 0 0;color:var(--muted);font-size:.92rem;line-height:1.7}
 .more-links a{color:var(--fg)}
+@media (min-width:1000px){.areas{grid-template-columns:repeat(3,minmax(0,1fr))}}

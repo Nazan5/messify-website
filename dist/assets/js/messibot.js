@@ -62,7 +62,7 @@ const CONFIG = {
   whatsapp: "971502513033",
   whatsappDisplay: "+971 50 251 3033",
   email: "info@messify.me",
-  areas: ["Academic City", "Dubai Silicon Oasis", "International City", "Dubai Festival City"],
+  areas: ["Academic City", "Dubai Silicon Oasis", "International City", "Dubai Festival City", "Al Aweer", "Dubai Investments Park", "Jebel Ali / JAFZA", "Al Furjan", "Dubai South"],
   emirates: ["Dubai", "Sharjah", "Ajman", "Abu Dhabi", "Ras Al Khaimah", "Umm Al Quwain"],
   daysPerWeek: 7, daysPerMonth: 26,
   plans: [
@@ -89,8 +89,8 @@ const TOPICS = {
     qa: ["See plans", "What plans do you have?"],
     eyebrow: "Meal plans · Dubai",
     title: "Your meals, <em>handled.</em>",
-    facts: [["From AED 25","per meal"],["1 bag","every morning"],["Daily","new menu"]],
-    greeting: { reply: "Hey! I'm Messibot. Meal plans start from AED 25 a meal, delivered together every morning. Are you a student or a working professional?",
+    facts: [["From AED 25","per meal"],["1 bag","all your meals, packed cold"],["Daily","new menu"]],
+    greeting: { reply: "Hey! I'm Messibot. Meal plans start from AED 25 a meal, delivered together in one chilled bag. Are you a student or a working professional?",
       quick_replies: ["Student", "Working professional"] },
     stripLabel: "A taste of the menu",
     photos: [
@@ -256,7 +256,7 @@ const plural = n => n + " meal" + (n > 1 ? "s" : "");
 function planFor(m){ return CONFIG.plans.find(p => p.mpd === m) || CONFIG.plans[0]; }
 function pitchText(){ const p = planFor(lead.meals_per_day || 1);
   return `For ${plural(p.mpd)} a day, I'd go monthly: ${fmt(p.monthly)} for ${p.mpd * 26} meals, about AED ${per(p, "monthly").toFixed(1)} a meal, and you get 30 days to use them. Want to try it first? Weekly is ${fmt(p.weekly)} for ${p.mpd * 7} meals, to use within 9 days.`; }
-const AREA_KEYS = [["Academic City", / academic /], ["Dubai Silicon Oasis", / silicon | dso /], ["International City", / international | intl city | warsan /], ["Dubai Festival City", / festival | dfc | al badia | badia /]];
+const AREA_KEYS = [["Academic City", / academic /], ["Dubai Silicon Oasis", / silicon | dso /], ["International City", / international | intl city | warsan /], ["Dubai Festival City", / festival | dfc | al badia | badia /], ["Al Aweer", / aweer | awir /], ["Dubai Investments Park", / investments park | dip | green community | ritaj /], ["Jebel Ali / JAFZA", / jebel ali | jafza | jabal ali /], ["Al Furjan", / furjan /], ["Dubai South", / dubai south | the pulse | emaar south | dwc | maktoum airport /]];
 function areaMatch(t){ const hit = AREA_KEYS.find(([, re]) => re.test(t)); return hit ? hit[0] : undefined; }
 function mealsIn(t, cur){
   if (!cur && !/ meal| meals | a day | per day /.test(t)) return;
@@ -391,7 +391,7 @@ const FAQ = {
     { id: "extra", label: "Extra meals", re: / extra| friend| double| more food | hungry /, ans: () => "Hungry or friends coming over? Use extra tokens to order more meals that day." },
     { id: "hot", label: "Hot or chilled", re: / hot | cold | warm | fresh| reheat| microwave| chill| heat /, ans: () => "Meals are blast-chilled after cooking for safety and arrive chilled with an ice pack. A few minutes of reheating and they're almost as fresh as just cooked." },
     { id: "areas", label: "Delivery areas", re: / where | area| location| do you cover | available in | deliver to /, ans: () => `We deliver to ${listJoin(CONFIG.areas)} right now, and we're expanding.` },
-    { id: "delivery", label: "Delivery time", re: / deliver| what time | when | morning| arrive| timing/, ans: () => "One delivery every morning: all your meals for the day together in a Messify thermal bag. Want to know the delivery window for your building? The team can confirm it on WhatsApp." },
+    { id: "delivery", label: "Delivery time", re: / deliver| what time | when | morning| arrive| timing| same day| today /, ans: () => "In Academic City, Silicon Oasis, International City and Dubai Festival City, all your meals arrive together every morning in a Messify thermal bag. In our other areas, the team confirms the delivery details for your building on WhatsApp. Orders are placed a day ahead (choose by 6 PM): we don't take same-day orders." },
     { id: "halal", label: "Halal", re: / halal| haram| pork /, ans: () => "Yes, everything we serve is 100% halal." },
     { id: "allergy", label: "Allergies", re: / allerg| gluten| nut | nuts | dairy| lactose| shellfish| intoleran/, ans: () => "Tell the team about any allergies on WhatsApp before you start, and they'll confirm which dishes are safe for you." },
     { id: "veg", label: "Vegetarian", re: / veg| vegetarian| vegan| meat free| no meat | plant based/, ans: () => "Yes, there's a vegetarian option every day, for every meal. For vegan, the team can confirm what fits." },
@@ -400,7 +400,7 @@ const FAQ = {
     { id: "app", label: "App & ordering", re: / app | download| how do i order | ordering | ios | android | iphone /, ans: () => "Everything runs through the Messify app on iPhone and Android: pick your meals, skip days and top up tokens." },
     { id: "pay", label: "Payment", re: / pay| card | cash | apple pay /, ans: () => "You pay by card, right in the Messify app." },
     { id: "cancel", label: "Cancel / refund → team", re: / cancel| refund| money back /, end: () => ({ reply: "Our team handles cancellations and refunds directly. Tap below to message them on WhatsApp.", handoff: true, lead: { notes: "Asked about cancellation / refunds" } }) },
-    { id: "about", label: "What is Messify", re: / what is messify | who are you | what do you do | about messify /, ans: () => "Messify is a Dubai meal plan: balanced meals, a new menu every day, all delivered together each morning." },
+    { id: "about", label: "What is Messify", re: / what is messify | who are you | what do you do | about messify /, ans: () => "Messify is a Dubai meal plan: balanced meals, a new menu every day, all delivered together in one chilled bag." },
     { id: "hello", label: "Greetings", re: /^ (hi|hello|hey|salam|assalam[a-z ]*|good morning|good evening|yo) $/, ans: () => "Hey!" },
     { id: "thanks", label: "Thanks", re: / thank| shukran| cheers /, ans: () => "Anytime!" }
   ],
@@ -510,7 +510,7 @@ function showDoors(){
   msgs.innerHTML = `<div class="gatehead"><img src="${AV}" alt=""><h3>Hi, I'm Messibot</h3><p>What can I help you with today?</p></div>
   <div class="doors">
     <button type="button" class="door door--meals" data-go="meals"><img src="${IMG}bag-bowls-640.webp" alt=""><span class="door__shade"></span>
-      <span class="door__copy"><span class="door__tag">For every day</span><span class="door__title">Meal plans</span><span class="door__text">All your meals, delivered every morning. From AED 25 a meal.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
+      <span class="door__copy"><span class="door__tag">For every day</span><span class="door__title">Meal plans</span><span class="door__text">All your meals in one chilled bag. From AED 25 a meal.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
     <button type="button" class="door door--catering" data-go="catering"><img src="${IMG}cat-chef-640.webp" alt=""><span class="door__shade"></span>
       <span class="door__copy"><span class="door__tag">For events</span><span class="door__title">Catering</span><span class="door__text">Corporate, university, weddings and bulk, across six emirates.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
   </div>

@@ -10,6 +10,7 @@ dist/                    the finished website (this is what Netlify publishes)
     academic-city/       Meal plans in Dubai Academic City
     silicon-oasis/       Meal plans in Dubai Silicon Oasis
     international-city/  Meal plans in International City
+    festival-city/ al-aweer/ dubai-investments-park/ jebel-ali/ al-furjan/ dubai-south/   More delivery areas (AREAS in build.py; 'daily': False areas never promise every-morning delivery)
   catering/              Catering (includes party, buffet and home events)
     dubai/ sharjah/ ajman/ abu-dhabi/ ras-al-khaimah/ umm-al-quwain/   Catering by emirate
     corporate-events/ business-meetings/ weddings/ family-gatherings/ birthday-parties/ university-events/   Catering by event (CATER_TYPES in build.py)

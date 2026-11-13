@@ -1,186 +1,222 @@
 {
  "/": {
-  "date": "2026-10-30",
-  "hash": "c44e86e55df2d5cbf411ddce503defb0b36d64ce"
+  "date": "2026-11-13",
+  "hash": "5b9d204939568e68f870e8122adf38b6dd42c029"
  },
  "/about/": {
-  "date": "2026-10-30",
-  "hash": "e96d691727c41eeb5e41c7f483e7aff2ecc12f02"
+  "date": "2026-11-13",
+  "hash": "a30192d49cabe98f5d5e18675ee12cee58ba4732"
  },
  "/catering/": {
   "date": "2026-11-13",
-  "hash": "8ddfc4bf116508fccf2d66a195f015cc2b3df92e"
+  "hash": "2f5f0a7287407bc2b09f4e12d6dcafd59fbf665c"
  },
  "/catering/abu-dhabi/": {
-  "date": "2026-10-30",
-  "hash": "6735d773e30fa50b5836d520561197cd3ca2897c"
+  "date": "2026-11-13",
+  "hash": "c3202b9589b90472195fc907fd4312a7863aab62"
  },
  "/catering/ajman/": {
-  "date": "2026-10-30",
-  "hash": "661f68a70f31da4c227f149db7894b29c5ff1f13"
+  "date": "2026-11-13",
+  "hash": "9a9d8fc620617c854ece8e565addac7649f3a7fd"
  },
  "/catering/birthday-parties/": {
   "date": "2026-11-13",
-  "hash": "63826d502b8baec5d3136515c8d22a233ec46de0"
+  "hash": "9efbfda7f55c24d301e0b4b30b2d5e9bbf5d613a"
  },
  "/catering/business-meetings/": {
   "date": "2026-11-13",
-  "hash": "91fda30b0bf7b283fdd33e594569f67dd9789ad0"
+  "hash": "8219c7ac21e0e1426b6f06998f917d857d139c1f"
  },
  "/catering/christmas-year-end-parties/": {
   "date": "2026-11-13",
-  "hash": "05c5cefca6f89b5c57b9accd34d358b5c03be207"
+  "hash": "078374b0795ca74f1d97e66bc9bacb4f36a624a8"
  },
  "/catering/corporate-events/": {
   "date": "2026-11-13",
-  "hash": "d6b82c2ce534721855659697877a649e7c76afe7"
+  "hash": "7490d86bb1f240e836829ad898b7f26bf74ec1ca"
  },
  "/catering/diwali/": {
   "date": "2026-11-13",
-  "hash": "803f03a3c4769d08ce32e9bb18fe96c2966cf35c"
+  "hash": "3878d21bb8973b04ee8c5f4dde86324daa034f8d"
  },
  "/catering/dubai/": {
-  "date": "2026-10-30",
-  "hash": "61cf26f19bfb6564e2e988294c393fe3c88acedd"
+  "date": "2026-11-13",
+  "hash": "6628f3dce4466c3001963eff9b9fdbbf2343b0bc"
  },
  "/catering/eid/": {
   "date": "2026-11-13",
-  "hash": "3059d6ca5d3a655432e909fb70c2a432053d0451"
+  "hash": "e59e7cb1f14f6ddf72627950cac2107bd1f12c64"
  },
  "/catering/family-gatherings/": {
   "date": "2026-11-13",
-  "hash": "6f02801c9816e27a5a392e8b289bd12aa4c4ea49"
+  "hash": "651eb7a81d355df67a78f1102d96ca9f577fa304"
  },
  "/catering/iftar/": {
   "date": "2026-11-13",
-  "hash": "db5be10d4c26705ca48f39cc638e25b8fd72d0fa"
+  "hash": "2d24d2de25381042c1a70f985a99ec2dca252f1b"
  },
  "/catering/national-day/": {
   "date": "2026-11-13",
-  "hash": "0fc725c9319e4dc1cccf6d7d48ff096a7a315be3"
+  "hash": "4c0754b37a8e438a6123c73566a354e4cb2c3170"
  },
  "/catering/ras-al-khaimah/": {
-  "date": "2026-10-30",
-  "hash": "6d6676846956213a483ac14dedb8f388ad46bd4d"
+  "date": "2026-11-13",
+  "hash": "3173e5b9e595191e1e792356292e31103fc79070"
  },
  "/catering/sharjah/": {
-  "date": "2026-10-30",
-  "hash": "094883a7c724a928cc62ca85ca51e77c225bee21"
+  "date": "2026-11-13",
+  "hash": "38fb67a6d9e78f4af180d392c58fe34903d64a3c"
  },
  "/catering/umm-al-quwain/": {
-  "date": "2026-10-30",
-  "hash": "032a16dbde8d37383156e6dc7d901edc09e5fa62"
+  "date": "2026-11-13",
+  "hash": "750634c20fb6780a540e83912bcfeb88fea10566"
  },
  "/catering/university-events/": {
   "date": "2026-11-13",
-  "hash": "adfecda802a84dab19279c9973bfb2005d676554"
+  "hash": "b43b6ed2dcbc1113182187340552941b9fad270e"
  },
  "/catering/weddings/": {
   "date": "2026-11-13",
-  "hash": "86aff4034a73c678334c94504b36aaaa5ed5288b"
+  "hash": "4f6c95dec3bb81704333253b98d559c6a87001ab"
  },
  "/guides/": {
   "date": "2026-11-13",
-  "hash": "2fd304106d48b8af5d33c18b1dc9c7334dd62475"
+  "hash": "660177dbfcff99a96f5e4ccd2e3520dd609854a3"
  },
  "/guides/affordable-meal-plans-dubai/": {
   "date": "2026-11-13",
-  "hash": "ef637e9a5039793bfe88f5195f1ed9d36faff2d1"
+  "hash": "4e8bf267adb531c694b8d399400898b45fc5be75"
  },
  "/guides/best-meal-plans-dubai/": {
   "date": "2026-11-13",
-  "hash": "9c1760709ec4c684baab58862a9b5ef328d294ff"
+  "hash": "e70703763a759e242c77e9f21f919a72c72dc9f6"
  },
  "/guides/buffet-vs-plated-catering/": {
   "date": "2026-11-13",
-  "hash": "1945b7b97c0649404332f98d488d044016be24c4"
+  "hash": "52ca51d8f2365f7be8f0b8144bf727262e7abf77"
  },
  "/guides/catering-cost-dubai/": {
   "date": "2026-11-13",
-  "hash": "abc5e72a1e4e665c346ab5aa3b282b1cb7484c06"
+  "hash": "584a49fb9ea8da89e7e6bf247da93ac20f6e882f"
  },
  "/guides/corporate-event-catering-checklist/": {
   "date": "2026-11-13",
-  "hash": "9324fde1a57e09eb2bd4f957fdcf369b346f419e"
+  "hash": "d96475dd29061d39f1d885136b89822abd0ce89c"
  },
  "/guides/corporate-iftar-planning/": {
   "date": "2026-11-13",
-  "hash": "087aecce9e0856c0499ed921c44df2a53d041f25"
+  "hash": "2ff0f26d29b1bf73013c960dbeefe4186ad7bf59"
  },
  "/guides/diwali-party-food-planning/": {
   "date": "2026-11-13",
-  "hash": "b3102898389a67b20ad9692d4846bec2a033d964"
+  "hash": "c226cba603dbb9a0923f63b5162fd97e8b18deb1"
  },
  "/guides/halal-meal-plans-dubai/": {
   "date": "2026-11-13",
-  "hash": "f8225fe03fcdf9f635dcf9b63090453936f8d190"
+  "hash": "ecd07ebd54ee46b6a6921874f91611a29a295078"
+ },
+ "/guides/healthy-meal-plans-dubai/": {
+  "date": "2026-11-13",
+  "hash": "6725e6c3159d60718983a06a070681b3f2282f72"
  },
  "/guides/how-much-food-per-person-catering/": {
   "date": "2026-11-13",
-  "hash": "a60e14219c11abd26122cbbf029d375db43c93ab"
+  "hash": "1738d1be671057956459cd6a6d75e3d142c55550"
  },
  "/guides/meal-delivery-dubai-festival-city/": {
   "date": "2026-11-13",
-  "hash": "9b1ab5452b99b1b34c34d404478ccf1dc1de83e4"
+  "hash": "c6dc8dfd939a35e05e1d1d7dc4f941115258e47c"
  },
  "/guides/meal-plan-cost-dubai/": {
   "date": "2026-11-13",
-  "hash": "e9972d7aea6eab80490db1ae7b5a372460449875"
+  "hash": "54111c57f95e655bb268839529562e54d81d6bae"
+ },
+ "/guides/meal-plans-working-professionals-dubai/": {
+  "date": "2026-11-13",
+  "hash": "f527fbc44ee92ada0f7a50ee851879eb8874be54"
+ },
+ "/guides/office-lunch-delivery-jebel-ali-jafza/": {
+  "date": "2026-11-13",
+  "hash": "0240987b189669d62dc5db23019d294e659c09de"
  },
  "/guides/office-lunch-delivery-silicon-oasis/": {
   "date": "2026-11-13",
-  "hash": "7a782b19f27555ce60716dd574f3458d127e7098"
+  "hash": "cb7252e4de985822dd2c5d3f68361f4bb4184898"
  },
  "/guides/office-year-end-party-catering/": {
   "date": "2026-11-13",
-  "hash": "1a207d4fe31142e24dc360d6a98f75c5d6807eee"
+  "hash": "29a424e2d0f6f57a21b3308faddd81852f3c6040"
  },
  "/guides/party-catering-at-home-dubai/": {
   "date": "2026-11-13",
-  "hash": "14419901f596801591aa35b68c7688af1f3e7571"
+  "hash": "4c9815be679b4fbb529ad574b3b0d323cc8e7ddb"
+ },
+ "/guides/staff-meal-plans-companies-dubai/": {
+  "date": "2026-11-13",
+  "hash": "b72a063eb9ef2cc90cf7adf1feb278e80a032068"
  },
  "/guides/student-meal-plans-dubai/": {
   "date": "2026-11-13",
-  "hash": "d03d6b93cecb7c2aa5d996574bfe79ef52c73848"
+  "hash": "54dc6bf0bb2116fc36dd4212f88d943e72491d94"
  },
  "/guides/uae-event-catering-calendar/": {
   "date": "2026-11-13",
-  "hash": "337bf046f966f65f68c033ea9b534226b3098879"
+  "hash": "0959a98a352b80eca59acf6d3bdf062d047cdd6c"
  },
  "/guides/wedding-catering-checklist-uae/": {
   "date": "2026-11-13",
-  "hash": "4d3c6aa1fc8f6dd4e6fba787cb8f2ff073f41dc7"
+  "hash": "6ed15f5cdcef7b799e660f8842ab00c58ccb93f6"
  },
  "/guides/weekly-vs-monthly-meal-plan/": {
   "date": "2026-11-13",
-  "hash": "0806bd6b7957000e1ccf4540f854ba14312922c4"
+  "hash": "8909b751c3fbca3ae2396eed75d890f71fef26ef"
  },
  "/meal-plans/": {
   "date": "2026-11-13",
-  "hash": "fe3586564f1ae092921a727a21835ea17d081fef"
+  "hash": "94635abaa28cc8da9068b1b5b4f1ee2e6f4f9c82"
  },
  "/meal-plans/academic-city/": {
-  "date": "2026-10-30",
-  "hash": "f23ef41c30dc6388aff2314be899e3de7fc125bd"
+  "date": "2026-11-13",
+  "hash": "83390afd9cbd8ff5240ae9e0c0dd5aef34e0a63d"
+ },
+ "/meal-plans/al-aweer/": {
+  "date": "2026-11-13",
+  "hash": "f9e75d990f891e9080d524e06557db6b1bca2702"
+ },
+ "/meal-plans/al-furjan/": {
+  "date": "2026-11-13",
+  "hash": "2c20157443473d4b3389537be9ca4fee9a018e3b"
+ },
+ "/meal-plans/dubai-investments-park/": {
+  "date": "2026-11-13",
+  "hash": "4ee4e3ee79e69981c2c05a3812eedade271fbca8"
+ },
+ "/meal-plans/dubai-south/": {
+  "date": "2026-11-13",
+  "hash": "11152c5143555a34110035a42d33788c2fb75f4f"
  },
  "/meal-plans/festival-city/": {
-  "date": "2026-10-30",
-  "hash": "4f60c169ea6bf68eb0e303b689d9552f9f4c7f1c"
+  "date": "2026-11-13",
+  "hash": "89e44813014be2d7f57fe3f1cb8ab29f14147fe9"
  },
  "/meal-plans/international-city/": {
-  "date": "2026-10-30",
-  "hash": "dbf17f80de4b06cd39fb809c274053eee41e2e36"
+  "date": "2026-11-13",
+  "hash": "dbf7034b336b3e7fc88fdccfbba7e318e86633c1"
+ },
+ "/meal-plans/jebel-ali/": {
+  "date": "2026-11-13",
+  "hash": "af6a2a2690d5544d3de4733d62db7cdca24f8646"
  },
  "/meal-plans/silicon-oasis/": {
-  "date": "2026-10-30",
-  "hash": "cabc87badc382bd86db34a14b856bd6d2ff1ea52"
+  "date": "2026-11-13",
+  "hash": "e3436bed7fd32eba78bf5b13294ab520bb2cb521"
  },
  "/privacy/": {
-  "date": "2026-10-30",
-  "hash": "d6a78c014288b8f1d457ed66bfededea963acc5f"
+  "date": "2026-11-13",
+  "hash": "5dc7a7d2b0fa435f4cd6ed59d99d386ff346ff52"
  },
  "/terms/": {
-  "date": "2026-10-30",
-  "hash": "7f497cd64cb8d57e9480be559f17495101ba24cf"
+  "date": "2026-11-13",
+  "hash": "cdb0dac996e37c8054b27790d293f769c47a44a2"
  }
 }

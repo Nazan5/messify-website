@@ -7,8 +7,8 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-10-30'
-UPDATED_LABEL = 'October 2026'
+TODAY = '2026-11-13'
+UPDATED_LABEL = 'November 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
 PHONE_TEL = '+971502513033'
@@ -24,9 +24,9 @@ GA_ID = 'G-KNKHKG7LR2'  # Google Analytics 4
 LOGO = BASE + '/assets/img/messify-logo.png'
 
 ONE_LINER = ('Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City '
-             'and delivers breakfast, lunch and dinner together each morning across Dubai Academic City, Dubai Silicon Oasis, '
-             'International City and Dubai Festival City (DFC), from AED 25.63 a meal. It also caters corporate events, parties, university events '
-             'and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.')
+             'and delivered as weekly and monthly meal plans across Dubai Academic City, Dubai Silicon Oasis, International City, '
+             'Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali (JAFZA), Al Furjan and Dubai South, from AED 25.63 a meal. '
+             'It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.')
 
 PLANS = [  # meals a day, length, tokens, price
     (1, 'weekly', 7, 215), (2, 'weekly', 14, 415), (3, 'weekly', 21, 610),
@@ -41,7 +41,16 @@ PLACES = {
     'silicon-oasis': 'Dubai Silicon Oasis',
     'international-city': 'International City, Dubai',
     'festival-city': 'Dubai Festival City',
+    'al-aweer': 'Al Aweer, Dubai',
+    'dubai-investments-park': 'Dubai Investments Park (DIP)',
+    'jebel-ali': 'Jebel Ali and Jebel Ali Free Zone (JAFZA)',
+    'al-furjan': 'Al Furjan, Dubai',
+    'dubai-south': 'Dubai South',
 }
+# Meal plan delivery areas. The first four get every-morning delivery; never promise "every morning" for the others.
+MEAL_AREAS_TXT = ('Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, '
+                  'Dubai Investments Park (DIP), Jebel Ali (including JAFZA), Al Furjan and Dubai South')
+CORE_AREAS_TXT = 'Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC)'
 CATER_EMIRATES = ['Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi', 'Ras Al Khaimah', 'Umm Al Quwain']
 CATER_TXT = 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain'
 GMAPS = 'https://maps.google.com/maps?cid=12829665698799731370'  # Messify on Google Maps (reviews)
@@ -311,7 +320,7 @@ def plans_section(title='Pick a plan in ten seconds.', with_table=True):
 </section>'''
 
 def meal_form(area_default='', heading='Talk to us.', lede="Have a question before you start? Tell us which plan you're considering and we'll get back to you, usually on WhatsApp.", tint=True):
-    areas = ['Dubai Academic City', 'Dubai Silicon Oasis', 'International City', 'Dubai Festival City (DFC)', 'Somewhere else (join the waitlist)']
+    areas = [a['form_area'] for a in AREAS.values()] + ['Somewhere else (join the waitlist)']
     opts = ''.join(f'<option{" selected" if a == area_default else ""}>{a}</option>' for a in areas)
     return f'''<section class="sec{' sec--tint' if tint else ''}" id="contact" aria-labelledby="contact-title">
   <div class="wrap form-grid">
@@ -383,20 +392,15 @@ def band(title='You planned it right.', text='Tomorrow\'s meals are one tap away
 </section>'''
 
 def areas_cards(exclude=None, heading_level='h3'):
-    data = [
-        ('academic-city', 'Dubai International Academic City', 'Academic City', 'Universities and student residences, including KSK Homes and The Myriad.'),
-        ('silicon-oasis', 'Dubai Silicon Oasis', 'Silicon Oasis', 'Offices, residents, RIT Dubai and DSOA University Residence.'),
-        ('international-city', 'Home of our partner kitchen', 'International City', 'Every cluster, minutes from where your meals are cooked.'),
-        ('festival-city', 'Dubai Festival City (DFC)', 'Festival City', 'Homes in Al Badia and offices across DFC.'),
-    ]
-    out = ''.join(f'<a class="area" href="/meal-plans/{s}/"><small>{small}</small><b>Meal plans in {name}</b><span>{line}</span><span class="link-arrow">See the area {I["arrow"]}</span></a>'
-                  for s, small, name, line in data if s != exclude)
+    out = ''.join(f'<a class="area" href="/meal-plans/{s}/"><small>{a["card"][0]}</small><b>Meal plans in {a["name"]}</b><span>{a["card"][1]}</span><span class="link-arrow">See the area {I["arrow"]}</span></a>'
+                  for s, a in AREAS.items() if s != exclude)
     return f'<div class="areas">{out}</div>'
 
 FAQ_PRICE = ('How much does a meal plan cost in Dubai with Messify?',
              'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999. That works out to AED 25.63 to 30.71 per meal.')
 FAQ_AREAS = ('Which areas do you deliver meal plans to?',
-             'We deliver meal plans every morning to four areas: Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC). Message us on WhatsApp to check your building.')
+             'We deliver meal plans to Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali (including JAFZA), Al Furjan and Dubai South. Message us on WhatsApp to check your building.')
+FAQ_SAMEDAY = ('Can I order for the same day?', 'No. All Messify orders are placed at least a day ahead: choose your meals in the app by 6 PM the day before. We do not take same-day orders.')
 FAQ_START = ('How do I start a meal plan?',
              'Download the Messify app, pick your plan and pay in the app. Prefer to talk first? Message us on WhatsApp at +971 50 251 3033.')
 FAQ_SKIP = ('Can I skip a day?', 'Yes. Skip a day in the app and use that token on another day of your plan.')
@@ -410,7 +414,7 @@ def page_home():
         'path': '/', 'mode': 'meals', 'nav': None, 'body_class': 'has-gate',
         'title': 'Meal Plans in Dubai from AED 25 a Meal | Messify',
         'og_title': 'Messify | Daily meal plans and catering in Dubai',
-        'desc': 'Affordable daily meal plans in Dubai from AED 25 a meal, delivered every morning in one chilled bag. Plus custom catering across the UAE.',
+        'desc': 'Affordable meal plans in Dubai from AED 25 a meal, delivered in one chilled bag from Silicon Oasis to Jebel Ali. Plus custom catering across the UAE.',
         'preload': '<link rel="preload" as="image" href="/assets/img/bag-bowls-640.webp" imagesrcset="/assets/img/bag-bowls-640.webp 640w, /assets/img/bag-bowls.webp 1100w" imagesizes="(min-width: 900px) 50vw, 100vw">\n',
         'schema': [ORG, WEBSITE, BUSINESS, faq_schema(faqs)],
     }
@@ -422,7 +426,7 @@ def page_home():
       <div class="door__copy">
         <div class="door__tag">For every day</div>
         <p class="door__title">Meal plans</p>
-        <p class="door__text">Breakfast, lunch and dinner delivered together every morning. From AED 25 a meal.</p>
+        <p class="door__text">Breakfast, lunch and dinner, delivered together in one chilled bag. From AED 25 a meal.</p>
         <span class="door__cta">Explore meal plans {I["arrow"]}</span>
       </div>
     </a>
@@ -446,7 +450,7 @@ def page_home():
     <div class="sec-head" style="max-width:820px">
       <p class="eyebrow">Messify · Dubai</p>
       <h1 class="h2">Meal plans and catering in Dubai.</h1>
-      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. With daily meal delivery, subscribers get breakfast, lunch and dinner together each morning across Dubai Academic City, Silicon Oasis, International City and Dubai Festival City. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.</p>
+      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. Meal plan subscribers get breakfast, lunch and dinner delivered together in one chilled bag across Dubai Academic City, Silicon Oasis, International City, Dubai Festival City, Al Aweer, Dubai Investments Park, Jebel Ali, Al Furjan and Dubai South. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.</p>
     </div>
     <div class="duo">
       <a class="card-link" href="/meal-plans/">
@@ -475,7 +479,7 @@ def page_home():
   <div class="wrap">
     <div class="sec-head">
       <p class="eyebrow">Where we deliver</p>
-      <h2 class="h2" id="areas-title">Meal plans delivered every morning, close to where they're cooked.</h2>
+      <h2 class="h2" id="areas-title">Meal plans delivered across Dubai, cooked in International City.</h2>
     </div>
     {areas_cards()}
   </div>
@@ -492,11 +496,11 @@ def page_home():
       <p class="answer__lead">{ONE_LINER}</p>
       <table class="facts-table">
         <tr><th scope="row">Meal plan prices</th><td>AED 215–610 a week or AED 715–1,999 a month (AED 25.63–30.71 per meal)</td></tr>
-        <tr><th scope="row">Delivery</th><td>Every morning, all the day's meals in one chilled bag</td></tr>
+        <tr><th scope="row">Delivery</th><td>Meals arrive together in one chilled bag; order by 6 PM the day before (no same-day orders)</td></tr>
         <tr><th scope="row">Food</th><td>Balanced and 100% halal, with a new menu every day</td></tr>
         <tr><th scope="row">Vegetarian</th><td>A vegetarian option every day, for every meal</td></tr>
         <tr><th scope="row">Flexibility</th><td>1 meal = 1 token. Skip a day and use the token later in your plan.</td></tr>
-        <tr><th scope="row">Meal plan areas</th><td>Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC)</td></tr>
+        <tr><th scope="row">Meal plan areas</th><td>{MEAL_AREAS_TXT}</td></tr>
         <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain</td></tr>
         <tr><th scope="row">Google rating</th><td><a href="{GMAPS}" target="_blank" rel="noopener">{RATING} out of 5 on Google reviews</a></td></tr>
       </table>
@@ -516,13 +520,21 @@ def page_home():
         <li><a href="/guides/meal-plan-cost-dubai/">How much a meal plan costs in Dubai</a></li>
         <li><a href="/guides/student-meal-plans-dubai/">Student meal plans in Dubai</a></li>
         <li><a href="/guides/weekly-vs-monthly-meal-plan/">Weekly vs monthly meal plans</a></li>
+        <li><a href="/guides/healthy-meal-plans-dubai/">Healthy meal plans in Dubai</a></li>
+        <li><a href="/guides/staff-meal-plans-companies-dubai/">Staff meal plans for companies</a></li>
       </ul></div>
       <div><h3>Delivery areas</h3><ul>
         <li><a href="/meal-plans/academic-city/">Meal plans in Dubai Academic City</a></li>
         <li><a href="/meal-plans/silicon-oasis/">Meal plans in Dubai Silicon Oasis</a></li>
         <li><a href="/meal-plans/international-city/">Meal plans in International City</a></li>
         <li><a href="/meal-plans/festival-city/">Meal plans in Dubai Festival City</a></li>
+        <li><a href="/meal-plans/jebel-ali/">Meal plans in Jebel Ali and JAFZA</a></li>
+        <li><a href="/meal-plans/dubai-investments-park/">Meal plans in Dubai Investments Park</a></li>
+        <li><a href="/meal-plans/al-furjan/">Meal plans in Al Furjan</a></li>
+        <li><a href="/meal-plans/dubai-south/">Meal plans in Dubai South</a></li>
+        <li><a href="/meal-plans/al-aweer/">Meal plans in Al Aweer</a></li>
         <li><a href="/guides/office-lunch-delivery-silicon-oasis/">Office lunch delivery in Silicon Oasis</a></li>
+        <li><a href="/guides/office-lunch-delivery-jebel-ali-jafza/">Office lunch delivery in Jebel Ali and JAFZA</a></li>
       </ul></div>
       <div><h3>Catering</h3><ul>
         <li><a href="/catering/dubai/">Catering in Dubai</a></li>
@@ -554,20 +566,21 @@ def page_meal_plans():
             ("What's the difference between weekly and monthly plans?", 'Monthly plans are 26 days of meals to use within 30 days, and save you more on every meal. Weekly plans are 7 days of meals to use within 9 days, the easy way to try us out first.'),
             FAQ_SKIP,
             ('Can I order extra meals?', 'Yes. Two lunches in one day, or a friend coming over? Spend an extra token.'),
-            ('When do meals arrive?', "Every morning, all together in one Messify bag with an ice pack. Meals are blast-chilled, so you reheat them when you're ready to eat."),
+            ('When do meals arrive?', "In Academic City, Silicon Oasis, International City and Dubai Festival City, every morning, all together in one Messify bag with an ice pack. In our other areas, the team confirms the delivery details for your building on WhatsApp when you start. Meals are blast-chilled, so you reheat them when you're ready to eat."),
+            FAQ_SAMEDAY,
             ('Can I see the menu in advance?', "Yes. The menu changes every day, and tomorrow's menu is in the app the day before. Choose your meals by 6 PM for next-morning delivery."),
             ('Is Messify food halal?', 'Yes. All Messify meals are 100% halal.'),
             ('Do you have vegetarian meals?', 'Yes. There is a vegetarian option every day, for every meal: breakfast, lunch and dinner.'),
             FAQ_AREAS, FAQ_START]
     cr, crs = crumbs([('Home', '/'), ('Meal plans', '/meal-plans/')])
     service = {'@type': 'Service', '@id': BASE + '/meal-plans/#service', 'name': 'Messify meal plans', 'serviceType': 'Meal plan delivery',
-               'description': 'Daily meal plans in Dubai: 1, 2 or 3 fresh meals a day, delivered together every morning, weekly or monthly.',
+               'description': 'Meal plans in Dubai: 1, 2 or 3 fresh meals a day, delivered together in one chilled bag, weekly or monthly.',
                'provider': {'@id': BASE + '/#business'}, 'areaServed': [{'@type': 'Place', 'name': n} for n in PLACES.values()],
                'hasOfferCatalog': offer_catalog()}
     page = {
         'path': '/meal-plans/', 'mode': 'meals', 'nav': 'meals', 'exact': True,
         'title': 'Meal Plans in Dubai: Weekly & Monthly from AED 25 | Messify',
-        'desc': 'Affordable weekly and monthly meal plans in Dubai from AED 25 a meal. 1, 2 or 3 fresh, 100% halal meals a day, delivered together every morning.',
+        'desc': 'Affordable weekly and monthly meal plans in Dubai from AED 25 a meal. 1, 2 or 3 fresh, 100% halal meals a day, delivered in one chilled bag.',
         'preload': '<link rel="preload" as="image" href="/assets/img/bag-sofa-640.webp" imagesrcset="/assets/img/bag-sofa-640.webp 640w, /assets/img/bag-sofa.webp 900w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
         'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs],
     }
@@ -577,7 +590,7 @@ def page_meal_plans():
       {cr}
       <p class="kicker rise">Weekly &amp; monthly meal plans</p>
       <h1 class="h2 rise">Meal plans in Dubai. Your meals, handled.</h1>
-      <p class="lede rise">Fresh, balanced, 100% halal meals cooked daily in our partner kitchen in International City and delivered together each morning in one chilled Messify bag. Skip a day and have it later in your plan.</p>
+      <p class="lede rise">Fresh, balanced, 100% halal meals cooked daily in our partner kitchen in International City and delivered together in one chilled Messify bag. Order by 6 PM the day before, and skip a day whenever you need to.</p>
       <div class="actions">
         <a class="btn" href="#plans">See plans &amp; prices</a>
         <a class="btn btn--ghost" href="#how">How it works</a>
@@ -585,7 +598,7 @@ def page_meal_plans():
       {rating_badge()}
       <div class="facts">
         <div><b>From AED 25</b><span>per meal</span></div>
-        <div><b>Every morning</b><span>all your meals in one bag</span></div>
+        <div><b>One bag</b><span>all your meals, packed cold</span></div>
         <div><b>Daily</b><span>new menu, see it a day ahead</span></div>
       </div>
     </div>
@@ -601,7 +614,7 @@ def page_meal_plans():
   <div class="wrap">
     <div class="answer">
       <p class="answer__label">Quick answer</p>
-      <p class="answer__lead">Messify is an affordable meal subscription in Dubai. Plans cost AED 215–610 a week or AED 715–1,999 a month for 1 to 3 meals a day, which works out to AED 25.63–30.71 per meal. All of the day's meals arrive together every morning, and you can skip a day and use that meal later in your plan.</p>
+      <p class="answer__lead">Messify is an affordable meal subscription in Dubai. Plans cost AED 215–610 a week or AED 715–1,999 a month for 1 to 3 meals a day, which works out to AED 25.63–30.71 per meal. Meals are ordered a day ahead and arrive together in one chilled bag, and you can skip a day and use that meal later in your plan. Delivery covers nine areas, from Silicon Oasis and Academic City to Jebel Ali and Dubai South.</p>
     </div>
   </div>
 </section>
@@ -616,7 +629,7 @@ def page_meal_plans():
       <ol class="steps">
         <li><div><h3>Pick your plan</h3><p>1, 2 or 3 meals a day, weekly or monthly.</p></div></li>
         <li><div><h3>Check tomorrow's menu</h3><p>The menu changes every day. See it in the app and choose your meals by 6 PM.</p></div></li>
-        <li><div><h3>Get your bag</h3><p>All your meals arrive together each morning, packed with an ice pack.</p></div></li>
+        <li><div><h3>Get your bag</h3><p>Your meals arrive together in one Messify bag, packed cold with an ice pack.</p></div></li>
         <li><div><h3>Heat and eat</h3><p>Meals are blast-chilled after cooking. A few minutes to reheat and you're done.</p></div></li>
       </ol>
     </div>
@@ -679,8 +692,8 @@ def page_meal_plans():
 
 <section class="sec" aria-labelledby="where-title">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">Where we deliver</p><h2 class="h2" id="where-title">Delivered every morning, close to where it's cooked.</h2>
-      <p class="lede">Daily meal delivery to four areas: Academic City, Silicon Oasis, International City and Dubai Festival City (DFC). Meals are cooked in International City and arrive every morning.</p></div>
+    <div class="sec-head"><p class="eyebrow">Where we deliver</p><h2 class="h2" id="where-title">Meal plan delivery across Dubai.</h2>
+      <p class="lede">Meal plans delivered to Academic City, Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali and JAFZA, Al Furjan and Dubai South. Meals are cooked fresh in International City and arrive chilled, ready to reheat.</p></div>
     {areas_cards()}
   </div>
 </section>
@@ -701,6 +714,7 @@ def page_meal_plans():
 # ---------------------------------------------------------------- area pages
 AREAS = {
  'academic-city': {
+  'daily': True, 'card': ('Dubai International Academic City', 'Universities and student residences, including KSK Homes and The Myriad.'),
   'name': 'Academic City', 'place': 'Dubai International Academic City', 'kicker': 'Dubai International Academic City (DIAC)',
   'title': 'Meal Plans in Dubai Academic City (DIAC) | Messify',
   'desc': 'Student meal plans delivered every morning to universities and residences in Dubai Academic City, including KSK Homes and The Myriad. From AED 25 a meal.',
@@ -729,6 +743,7 @@ AREAS = {
   'form_area': 'Dubai Academic City',
  },
  'silicon-oasis': {
+  'daily': True, 'card': ('Dubai Silicon Oasis', 'Offices, residents, RIT Dubai and DSOA University Residence.'),
   'name': 'Silicon Oasis', 'place': 'Dubai Silicon Oasis', 'kicker': 'Dubai Silicon Oasis (DSO)',
   'title': 'Meal Plans in Dubai Silicon Oasis (DSO) | Messify',
   'desc': 'Daily meal plans and office lunch delivery in Dubai Silicon Oasis, for teams, residents and RIT Dubai students. From AED 25 a meal.',
@@ -757,6 +772,7 @@ AREAS = {
   'form_area': 'Dubai Silicon Oasis',
  },
  'international-city': {
+  'daily': True, 'card': ('Home of our partner kitchen', 'Every cluster, minutes from where your meals are cooked.'),
   'name': 'International City', 'place': 'International City, Dubai', 'kicker': 'International City, Dubai',
   'title': 'Meal Plans in International City, Dubai | Messify',
   'desc': 'Cooked in our partner kitchen in International City. Fresh daily meal plans delivered every morning across the clusters, from AED 25 a meal.',
@@ -784,6 +800,7 @@ AREAS = {
   'form_area': 'International City',
  },
  'festival-city': {
+  'daily': True, 'card': ('Dubai Festival City (DFC)', 'Homes in Al Badia and offices across DFC.'),
   'name': 'Festival City', 'place': 'Dubai Festival City', 'kicker': 'Dubai Festival City (DFC)',
   'title': 'Meal Plans in Dubai Festival City (DFC) | Messify',
   'desc': 'Daily meal plans delivered every morning in Dubai Festival City (DFC), to homes in Al Badia and offices across DFC. 100% halal, from AED 25 a meal.',
@@ -810,6 +827,154 @@ AREAS = {
     ('How much is a meal plan in Dubai Festival City?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
   ],
   'form_area': 'Dubai Festival City (DFC)',
+ },
+ 'al-aweer': {
+  'name': 'Al Aweer', 'place': 'Al Aweer, Dubai', 'kicker': 'Al Aweer (Al Awir), Dubai', 'daily': False,
+  'card': ('Next to International City', 'Al Aweer 1 and 2, homes and workplaces around the Al Aweer market.'),
+  'title': 'Meal Plans in Al Aweer, Dubai | Messify',
+  'desc': 'Meal plans for homes and workplaces in Al Aweer 1 and 2 and around the Al Aweer market, next door to the kitchen where our meals are cooked. From AED 25 a meal.',
+  'h1': 'Meal plans in Al Aweer.',
+  'lede': "Al Aweer sits right next to International City, where our partner kitchen cooks every Messify meal. Fresh, balanced, 100% halal meals for homes in Al Aweer 1 and 2 and for teams working around the Al Aweer market, packed cold and ready to reheat.",
+  'facts': [('From AED 25', 'per meal'), ('Next door', 'to our kitchen'), ('Skip a day', 'have it later in your plan')],
+  'img': ('biryani.webp', 'biryani.webp', 1600, 1181, 'Paneer makhani with saffron rice', '50% 50%'),
+  'where_title': 'Where we deliver in Al Aweer.',
+  'groups': [
+    ('home', 'Homes', ['Villas and homes in Al Aweer 1', 'Villas and homes in Al Aweer 2', 'Family compounds across Al Aweer'], 'Message us your address to confirm'),
+    ('office', 'Workplaces', ['Offices and businesses around the Dubai Central Fruit and Vegetable Market (Al Aweer market)', 'Workplaces and staff accommodation in Al Aweer'], 'Team plans for staff'),
+  ],
+  'why_title': 'Why Al Aweer chooses Messify.',
+  'reasons': [
+    ('Cooked next door', 'Our partner kitchen is in International City, right beside Al Aweer, so your meals have a short trip and arrive packed cold with an ice pack.'),
+    ('Lunch sorted for the team', 'Working around the market? One plan covers lunch for a whole team, and each person picks their own meals in the app.'),
+    ('Skip when life happens', 'Away for a day or eating with family? Skip in the app and use that token later in your plan.'),
+  ],
+  'faqs': [
+    ('Do you deliver meal plans to Al Aweer?', 'Yes. We deliver meal plans to homes in Al Aweer 1 and 2 and to workplaces around the Al Aweer market. Message us on WhatsApp with your address and we will confirm.'),
+    ('How does delivery work in Al Aweer?', 'Your meals arrive chilled in a Messify bag with an ice pack. Keep them in the fridge and reheat when you are ready to eat. When you start, our team confirms the delivery details for your address on WhatsApp.'),
+    ('Can I order for the same day?', 'No. All Messify orders are placed at least a day ahead; we do not take same-day orders. Choose your meals in the app by 6 PM.'),
+    ('How much is a meal plan in Al Aweer?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
+  ],
+  'form_area': 'Al Aweer',
+ },
+ 'dubai-investments-park': {
+  'name': 'Dubai Investments Park', 'short': 'DIP', 'place': 'Dubai Investments Park', 'kicker': 'Dubai Investments Park (DIP 1 and DIP 2)', 'daily': False,
+  'card': ('Dubai Investments Park (DIP)', 'Offices, warehouses and homes in DIP 1, DIP 2 and Green Community.'),
+  'title': 'Meal Plans in Dubai Investments Park (DIP) | Messify',
+  'desc': 'Meal plans and staff lunch for offices, warehouses and homes in Dubai Investments Park (DIP 1 and 2) and Green Community. 100% halal, from AED 25 a meal.',
+  'h1': 'Meal plans in Dubai Investments Park.',
+  'lede': "Lunch for offices, factories and warehouses, and everyday meals for homes in DIP 1, DIP 2 and Green Community. Fresh, balanced, 100% halal meals, cooked daily in our partner kitchen and packed cold, ready to keep in the fridge and reheat.",
+  'facts': [('From AED 25', 'per meal'), ('Team plans', 'for offices and sites'), ('Skip a day', 'have it later in your plan')],
+  'img': ('fresh-chill.webp', 'fresh-chill.webp', 1000, 844, 'A chicken and vegetable bowl on an office desk beside a laptop, coffee and a Certified Chill ice pack', '50% 50%'),
+  'where_title': 'Where we deliver in Dubai Investments Park.',
+  'groups': [
+    ('office', 'Offices, factories and warehouses', ['Offices and business centres in DIP 1', 'Factories, warehouses and showrooms in DIP 2', 'Staff accommodation in DIP'], 'Team plans for staff and site teams'),
+    ('home', 'Homes', ['Green Community Village and Green Community West', 'Ritaj and other residential buildings in DIP', 'Villas and apartments across DIP'], 'Message us your building to confirm'),
+  ],
+  'why_title': 'Why people in DIP choose Messify.',
+  'guide': ('/guides/staff-meal-plans-companies-dubai/', 'Read our guide to staff meal plans for companies'),
+  'reasons': [
+    ('Lunch without leaving site', 'When the nearest food court is a drive away, having lunch already in the office fridge saves the whole break.'),
+    ('One plan for the whole team', 'Companies in DIP can cover staff lunch on one monthly plan, and each person still picks their own meals in the app.'),
+    ('Everyday meals at home', 'Living in Green Community or around DIP? A 2 or 3-meal plan covers lunch and dinner without a decision every day.'),
+  ],
+  'faqs': [
+    ('Do you deliver meal plans in Dubai Investments Park?', 'Yes. We deliver to offices, factories, warehouses and homes in DIP 1 and DIP 2, including Green Community. Message us on WhatsApp with your building and we will confirm.'),
+    ('Can a company in DIP get lunch for its staff?', 'Yes. Teams can share one monthly plan, and each person chooses their own meals in the app. Message us with your team size and location for a team plan.'),
+    ('How does delivery work in DIP?', 'Your meals arrive chilled in Messify bags with ice packs. Keep them in the fridge and reheat when you are ready. When you start, our team confirms the delivery details for your building on WhatsApp.'),
+    ('Can I order for the same day?', 'No. All Messify orders are placed at least a day ahead; we do not take same-day orders.'),
+    ('How much is a meal plan in Dubai Investments Park?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
+  ],
+  'form_area': 'Dubai Investments Park (DIP)',
+ },
+ 'jebel-ali': {
+  'name': 'Jebel Ali', 'place': 'Jebel Ali, Dubai', 'kicker': 'Jebel Ali and JAFZA', 'daily': False,
+  'card': ('Jebel Ali and JAFZA', 'Offices and teams in JAFZA, the industrial areas and Jebel Ali Village.'),
+  'title': 'Meal Plans in Jebel Ali & JAFZA | Office Lunch | Messify',
+  'desc': 'Meal plans and office lunch for JAFZA, Jebel Ali Industrial Area and Jebel Ali Village. Team plans for offices and sites, 100% halal, from AED 25 a meal.',
+  'h1': 'Meal plans and office lunch in Jebel Ali.',
+  'lede': "Office lunch for teams in Jebel Ali Free Zone and the industrial areas, and everyday meals for homes in Jebel Ali Village. Fresh, balanced, 100% halal meals, packed cold so lunch is in the fridge before anyone gets hungry.",
+  'facts': [('From AED 25', 'per meal'), ('Team plans', 'for offices and sites'), ('Skip a day', 'have it later in your plan')],
+  'img': ('fresh-chill.webp', 'fresh-chill.webp', 1000, 844, 'A chicken and vegetable bowl on an office desk beside a laptop, coffee and a Certified Chill ice pack', '50% 50%'),
+  'where_title': 'Where we deliver in Jebel Ali.',
+  'groups': [
+    ('office', 'Offices and sites', ['Jebel Ali Free Zone (JAFZA North and JAFZA South)', 'Jebel Ali Industrial Areas 1, 2 and 3', 'Warehouses, logistics companies and staff accommodation'], 'Tell us your gate and building to confirm'),
+    ('home', 'Homes', ['Jebel Ali Village', 'Homes and apartments around Jebel Ali'], 'Message us your building to confirm'),
+  ],
+  'why_title': 'Why teams in Jebel Ali choose Messify.',
+  'guide': ('/guides/office-lunch-delivery-jebel-ali-jafza/', 'Read our guide to office lunch delivery in Jebel Ali and JAFZA'),
+  'reasons': [
+    ('No lunch run in the heat', 'Free zone and industrial sites are spread out. With meals already in the office fridge, nobody spends the lunch break driving to find food.'),
+    ('One plan for the whole team', 'Cover staff lunch on one monthly plan, and let each person pick their own meals in the app.'),
+    ('Flexible around shifts and leave', 'Every meal is a token: skip a day for leave or a site visit and use it later in your plan.'),
+  ],
+  'faqs': [
+    ('Do you deliver lunch to offices in JAFZA?', 'Yes. We deliver meal plans to offices and teams in Jebel Ali Free Zone and the Jebel Ali industrial areas. Message us on WhatsApp with your company, gate and building and we will confirm.'),
+    ('Can our company get staff lunch in Jebel Ali?', 'Yes. Teams can share one monthly plan, and each person chooses their own meals in the app. Message us with your team size and location for a team plan.'),
+    ('How does delivery work in Jebel Ali?', 'Your meals arrive chilled in Messify bags with ice packs. Keep them in the office fridge and reheat at lunch. When you start, our team confirms the delivery details for your site on WhatsApp.'),
+    ('Do you deliver to Jebel Ali Village?', 'Yes. We deliver meal plans to homes in Jebel Ali Village. Message us your address to confirm.'),
+    ('How much is a meal plan in Jebel Ali?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
+  ],
+  'form_area': 'Jebel Ali / JAFZA',
+ },
+ 'al-furjan': {
+  'name': 'Al Furjan', 'place': 'Al Furjan, Dubai', 'kicker': 'Al Furjan, Dubai', 'daily': False,
+  'card': ('Al Furjan', 'Villas, townhouses and apartments across Al Furjan.'),
+  'title': 'Meal Plans in Al Furjan, Dubai | Messify',
+  'desc': 'Meal plans for homes in Al Furjan: villas, townhouses and apartments near Al Furjan Pavilion. Fresh, balanced, 100% halal meals from AED 25 a meal.',
+  'h1': 'Meal plans in Al Furjan.',
+  'lede': "Breakfast, lunch and dinner sorted for homes across Al Furjan, from the villas and townhouses to the apartments around Al Furjan Pavilion. Fresh, balanced, 100% halal meals with a new menu every day, packed cold and ready to reheat.",
+  'facts': [('From AED 25', 'per meal'), ('New menu', 'every day'), ('Skip a day', 'have it later in your plan')],
+  'img': ('bag-sofa-640.webp', 'bag-sofa.webp', 900, 1350, 'A steaming meal bowl beside a Messify bag and a Certified Chill ice pack', '50% 62%'),
+  'where_title': 'Where we deliver in Al Furjan.',
+  'groups': [
+    ('home', 'Homes', ['Villas and townhouses across Al Furjan', 'Apartment buildings around Al Furjan Pavilion', 'Buildings near Al Furjan metro station'], 'Message us your building to confirm'),
+    ('office', 'Nearby', ['Jebel Ali and JAFZA', 'Dubai Investments Park'], 'Both on our delivery map too'),
+  ],
+  'why_title': 'Why people in Al Furjan choose Messify.',
+  'guide': ('/guides/meal-plans-working-professionals-dubai/', 'Read our guide to meal plans for working professionals'),
+  'reasons': [
+    ('No daily food decision', 'Your meals are chosen ahead in the app, so dinner is already in the fridge when you get home from work.'),
+    ('A new menu every day', 'Indian, Arabic and Continental dishes, with a vegetarian option every day, for every meal.'),
+    ('Priced for everyday eating', 'From AED 25.63 a meal on the 3-meal monthly plan, with skip-a-day flexibility built in.'),
+  ],
+  'faqs': [
+    ('Do you deliver meal plans in Al Furjan?', 'Yes. We deliver meal plans to villas, townhouses and apartments across Al Furjan. Message us on WhatsApp with your building and we will confirm.'),
+    ('How does delivery work in Al Furjan?', 'Your meals arrive chilled in a Messify bag with an ice pack. Keep them in the fridge and reheat when you are ready. When you start, our team confirms the delivery details for your building on WhatsApp.'),
+    ('Can I order for the same day?', 'No. All Messify orders are placed at least a day ahead; we do not take same-day orders.'),
+    ('Is the food halal? Is there a vegetarian option?', 'Every Messify meal is 100% halal, and there is a vegetarian option every day, for every meal.'),
+    ('How much is a meal plan in Al Furjan?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
+  ],
+  'form_area': 'Al Furjan',
+ },
+ 'dubai-south': {
+  'name': 'Dubai South', 'place': 'Dubai South', 'kicker': 'Dubai South', 'daily': False,
+  'card': ('Dubai South', 'Homes in The Pulse and Emaar South, and teams near Al Maktoum Airport.'),
+  'title': 'Meal Plans in Dubai South | Messify',
+  'desc': 'Meal plans for Dubai South: homes in The Pulse, Emaar South and the Residential District, and teams near Al Maktoum Airport. From AED 25 a meal.',
+  'h1': 'Meal plans in Dubai South.',
+  'lede': "Everyday meals for homes in The Pulse, Emaar South and the Residential District, and lunch for teams in the Logistics District, the Business Park and around Al Maktoum International Airport. Fresh, balanced, 100% halal meals, packed cold and ready to reheat.",
+  'facts': [('From AED 25', 'per meal'), ('Homes and teams', 'across Dubai South'), ('Skip a day', 'have it later in your plan')],
+  'img': ('bag-bowls-640.webp', 'bag-bowls.webp', 1100, 1650, 'A Messify bag holding two kebab rice bowls, ready for delivery', '50% 40%'),
+  'where_title': 'Where we deliver in Dubai South.',
+  'groups': [
+    ('home', 'Homes', ['The Pulse townhouses and apartments', 'Emaar South', 'Dubai South Residential District'], 'Message us your building to confirm'),
+    ('office', 'Offices and teams', ['Dubai South Business Park', 'Logistics District', 'Offices and teams around Al Maktoum International Airport (DWC)'], 'Team plans for staff'),
+  ],
+  'why_title': 'Why people in Dubai South choose Messify.',
+  'guide': ('/guides/staff-meal-plans-companies-dubai/', 'Read our guide to staff meal plans for companies'),
+  'reasons': [
+    ('Meals sorted in a growing area', 'New communities often have fewer places to eat nearby. A plan means lunch and dinner are already in the fridge.'),
+    ('Lunch for shift teams', 'Logistics and airport teams work around the clock. Keep meals chilled and reheat whenever the break comes.'),
+    ('Skip when life happens', 'Travelling, working late or eating out? Skip in the app and use that token later in your plan.'),
+  ],
+  'faqs': [
+    ('Do you deliver meal plans in Dubai South?', 'Yes. We deliver to homes in The Pulse, Emaar South and the Residential District, and to teams in the Logistics District, the Business Park and around Al Maktoum Airport. Message us on WhatsApp with your building and we will confirm.'),
+    ('Can a company in Dubai South get staff meals?', 'Yes. Teams can share one monthly plan, and each person chooses their own meals in the app. Message us with your team size and location.'),
+    ('How does delivery work in Dubai South?', 'Your meals arrive chilled in Messify bags with ice packs. Keep them in the fridge and reheat when you are ready. When you start, our team confirms the delivery details for your building on WhatsApp.'),
+    ('Can I order for the same day?', 'No. All Messify orders are placed at least a day ahead; we do not take same-day orders.'),
+    ('How much is a meal plan in Dubai South?', 'Weekly plans cost AED 215, 415 or 610 for 1, 2 or 3 meals a day. Monthly plans cost AED 715, 1,400 or 1,999, which is AED 25.63 to 30.71 per meal.'),
+  ],
+  'form_area': 'Dubai South',
  },
 }
 
@@ -852,7 +1017,7 @@ def page_area(slug):
 <section class="sec sec--tint" aria-labelledby="where-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Delivery in {a['name']}</p><h2 class="h2" id="where-title">{a['where_title']}</h2>
-      <p class="lede">All of the day's meals arrive together every morning in one chilled Messify bag.</p></div>
+      <p class="lede">{a.get('delivery_line') or ("All of the day's meals arrive together every morning in one chilled Messify bag." if a.get('daily') else "Your meals arrive chilled in Messify bags with ice packs, ready to keep in the fridge and reheat. When you start, our team confirms the delivery details for your building on WhatsApp.")}</p></div>
     <div class="places">{groups}</div>
     <p class="disclaim">Names of universities, residences and buildings are used only to describe where we deliver. Messify is not affiliated with them.</p>
   </div>
@@ -1008,6 +1173,10 @@ def page_catering():
         ('Do you do buffet setups?', 'Yes. We set up full buffets at your venue, from office lunches and house parties to weddings, with the menu built around your headcount.'),
         ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
         ('Can we choose our own menu?', 'Yes. Pick any mix of appetisers, main courses, salads, desserts and beverages, in Indian, Arabic, Continental, Italian, Chinese or other flavours.'),
+        ('How much does catering cost per person in Dubai?', 'It depends on the menu, the headcount and the service style: delivered ready to serve costs less than a full buffet setup. Every Messify quote is built for your event. Our guide to how catering is priced in Dubai explains what moves the price.'),
+        ('How far in advance should I book catering?', 'At least one day ahead: we do not take same-day orders. For weddings, large corporate events and peak dates such as December and Ramadan, book a few weeks ahead.'),
+        ('Do you cater in Jebel Ali, DIP and Dubai South?', 'Yes. We cater offices, sites and homes across Dubai, including Jebel Ali and JAFZA, Dubai Investments Park, Dubai South, Al Furjan and Al Aweer.'),
+        ('Can the whole menu be vegetarian?', 'Yes. Vegetarian dishes can go into any menu, or the whole menu can be vegetarian. Our partner kitchen cooks both vegetarian and non-vegetarian food.'),
         ('How do I get a catering quote?', 'Fill in the form on this page, or message us on WhatsApp at +971 50 251 3033 with your date, location and headcount.'),
     ]
     cr, crs = crumbs([('Home', '/'), ('Catering', '/catering/')])
@@ -1017,10 +1186,11 @@ def page_catering():
                'areaServed': [{'@type': 'AdministrativeArea', 'name': c} for c in CATER_EMIRATES],
                'hasOfferCatalog': {'@type': 'OfferCatalog', 'name': 'Catering services', 'itemListElement': [
                    {'@type': 'Offer', 'itemOffered': {'@type': 'Service', 'name': n}} for n in
-                   ('Corporate and office catering', 'Party and home event catering', 'University event catering', 'Wedding catering', 'Buffet catering', 'Bulk catering')]}}
+                   ('Corporate and office catering', 'Business meeting and office lunch catering', 'Party and home event catering', 'Birthday party catering', 'Family gathering catering', 'University event catering', 'Wedding catering', 'Buffet catering', 'Iftar catering', 'Eid catering', 'Bulk and staff catering',
+                    'Indian catering', 'Arabic catering', 'Continental catering', 'Italian catering', 'Chinese catering')]}}
     page = {'path': '/catering/', 'mode': 'catering', 'nav': 'catering', 'exact': True,
-            'title': 'Catering Services in Dubai & the UAE | Messify',
-            'desc': 'Custom halal catering and buffet setups for corporate events, parties, university events and weddings in Dubai, Sharjah, Abu Dhabi and across the UAE.',
+            'title': 'Catering Company in Dubai: Buffet & Event Catering | Messify',
+            'desc': 'Halal catering company in Dubai and across the UAE: buffet setups, corporate events, office lunches, parties and weddings. Custom menus quoted by headcount.',
             'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
             'preload': '<link rel="preload" as="image" href="/assets/img/cat-serving-640.webp" imagesrcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
             'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs]}
@@ -1033,7 +1203,7 @@ def page_catering():
     <div>
       {cr}
       <p class="kicker rise">Corporate, party &amp; wedding catering</p>
-      <h1 class="h2 rise">Catering in Dubai &amp; the UAE. <em class="it">Your event, fed properly.</em></h1>
+      <h1 class="h2 rise">Catering services in Dubai &amp; the UAE. <em class="it">Your event, fed properly.</em></h1>
       <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
         <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
@@ -1047,6 +1217,26 @@ def page_catering():
       </div>
     </div>
     <div class="photo photo--tall"><img src="/assets/img/cat-serving-640.webp" srcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" sizes="(min-width: 900px) 45vw, 100vw" alt="A gloved server lifting the lid of a gold chafing dish at a catered buffet" width="1100" height="1375" fetchpriority="high"></div>
+  </div>
+</section>
+
+
+<section class="sec sec--tight" aria-label="Quick answer">
+  <div class="wrap">
+    <div class="answer">
+      <p class="answer__label">Quick answer</p>
+      <p class="answer__lead">Messify is a halal catering company based in International City, Dubai. We cater corporate events, office lunches and meetings, weddings, parties and family gatherings, university events and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, delivered ready to serve or as a full buffet setup. Every menu is custom and quoted by headcount.</p>
+      <table class="facts-table">
+        <tr><th scope="row">Events</th><td>Corporate events, business meetings, weddings, birthdays, family gatherings, university events, iftars, Eid, Diwali, year-end parties, bulk and staff meals</td></tr>
+        <tr><th scope="row">Service styles</th><td>Delivered ready to serve, or a full buffet set up at your venue</td></tr>
+        <tr><th scope="row">Cuisines</th><td>Indian, Arabic, Continental, Italian, Chinese and more, mixed any way you like</td></tr>
+        <tr><th scope="row">Food</th><td>100% halal; vegetarian dishes in any menu</td></tr>
+        <tr><th scope="row">Capacity</th><td>5,000+ meals a day from our partner kitchen operation</td></tr>
+        <tr><th scope="row">Areas</th><td>All of Dubai, including Jebel Ali, DIP and Dubai South, plus Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain</td></tr>
+        <tr><th scope="row">Pricing</th><td>Custom quote by headcount, menu and service style</td></tr>
+        <tr><th scope="row">Booking</th><td>At least one day ahead; a few weeks ahead for weddings, large events and peak dates</td></tr>
+      </table>
+    </div>
   </div>
 </section>
 
@@ -1077,12 +1267,29 @@ def page_catering():
     </div>
     <div class="mosaic">
       <figure class="m1"><img src="/assets/img/cat-canapes.webp" alt="Trays of canapés on slate boards at a catered event" width="900" height="1200" loading="lazy"></figure>
-      <figure class="m2"><img src="/assets/img/cat-buffet.webp" alt="A buffet table set with tartlets, skewers and desserts" width="736" height="981" loading="lazy"></figure>
+      <figure class="m2"><img src="/assets/img/cat-chef-640.webp" alt="A chef carving at a buffet station while guests serve themselves" width="640" height="640" loading="lazy"></figure>
     </div>
   </div>
 </section>
 
-<section class="sec" aria-labelledby="why-title">
+
+<section class="sec" aria-labelledby="cuisine-title">
+  <div class="wrap">
+    <div class="sec-head"><p class="eyebrow">Catering by cuisine</p><h2 class="h2" id="cuisine-title">Indian, Arabic, Continental and more.</h2>
+      <p class="lede">Most of our events mix cuisines, so every guest finds something they love. A few starting points, all 100% halal:</p></div>
+    <div class="reasons">
+      <div class="reason"><h3>Indian catering</h3><p>Biryani, curries, tandoori grills, paneer dishes, dal and breads, with Indian sweets to finish. Vegetarian Indian menus too.</p></div>
+      <div class="reason"><h3>Arabic catering</h3><p>Mandi, machboos and ouzi-style rice dishes, mixed grills, mezze and salads, with Arabic sweets and coffee.</p></div>
+      <div class="reason"><h3>Continental catering</h3><p>Roasts, creamy chicken, pasta bakes, salads and desserts for corporate lunches and festive dinners.</p></div>
+      <div class="reason"><h3>Italian catering</h3><p>Pasta, bakes and Italian-style salads that hold well on a buffet.</p></div>
+      <div class="reason"><h3>Chinese catering</h3><p>Fried rice, noodles and stir-fries for parties and office lunches.</p></div>
+      <div class="reason"><h3>Mixed menus</h3><p>A biryani beside a pasta bake beside a mezze table: tell us your guests and we'll build the mix.</p></div>
+    </div>
+    <p class="fine" style="margin-top:20px">Dishes are examples to start from. Every menu is confirmed in your quote.</p>
+  </div>
+</section>
+
+<section class="sec sec--tint" aria-labelledby="why-title">
   <div class="wrap split split--top">
     <div class="sec-head"><p class="eyebrow">Why Messify</p><h2 class="h2" id="why-title">Built to feed hundreds, consistently.</h2><p class="lede">What sets us apart from other catering companies in Dubai.</p></div>
     <ul class="why">
@@ -1095,7 +1302,7 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec sec--tint" aria-labelledby="occasions-title">
+<section class="sec" aria-labelledby="occasions-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Every occasion</p><h2 class="h2" id="occasions-title">Catering for every kind of event.</h2></div>
     {type_cards('event')}
@@ -1104,14 +1311,14 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec" aria-labelledby="uae-title">
+<section class="sec sec--tint" aria-labelledby="uae-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Where we cater</p><h2 class="h2" id="uae-title">Catering across the UAE.</h2></div>
     {emirate_cards()}
   </div>
 </section>
 
-<section class="sec sec--tint" aria-labelledby="steps-title">
+<section class="sec" aria-labelledby="steps-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">How it works</p><h2 class="h2" id="steps-title">From enquiry to plated, in four steps.</h2></div>
     <ol class="steps" style="max-width:820px">
@@ -1123,21 +1330,21 @@ def page_catering():
   </div>
 </section>
 
-<section class="sec" aria-labelledby="faq-title">
+<section class="sec sec--tint" aria-labelledby="faq-title">
   <div class="wrap split split--top">
     <div class="sec-head"><p class="eyebrow">Questions</p><h2 class="h2" id="faq-title">Good to know.</h2></div>
     {faq_html(faqs)}
   </div>
 </section>
 
-<section class="sec sec--tint" aria-labelledby="cguides-title">
+<section class="sec" aria-labelledby="cguides-title">
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">Planning help</p><h2 class="h2" id="cguides-title">Catering guides.</h2><p class="lede">How much food to order, how catering is priced and what to sort before the day.</p></div>
     {guide_cards(CATERING_GUIDES)}
   </div>
 </section>
 
-{catering_form(tint=False)}'''
+{catering_form(tint=True)}'''
     render(page, body)
 
 def catering_form(emirate='Dubai', title="Let's build your next event.", tint=True, event=None):
@@ -1194,14 +1401,15 @@ def page_about():
     rows = [
         ('What Messify does', 'Daily meal plans and event catering in Dubai and the UAE.'),
         ('Where meals are cooked', 'Partner kitchen in International City, Dubai'),
-        ('Meal plan delivery areas', 'Dubai International Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC) only'),
+        ('Meal plan delivery areas', MEAL_AREAS_TXT),
         ('Who it serves', 'Students, working professionals, office teams and residents'),
         ('Meal plan options', '1, 2 or 3 meals a day. Monthly: 26 days of meals to use within 30 days. Weekly: 7 days of meals to use within 9 days.'),
         ('Meal plan prices', plans),
         ('Price per meal', 'AED 25.63 to AED 30.71'),
         ('Token system', '1 meal = 1 token. Skip a day and use the token later in your plan. Spend extra tokens to double up.'),
-        ('Delivery', "Every morning. All of the day's meals arrive together in one chilled Messify bag with an ice pack."),
-        ('Menu', "Changes every day. Tomorrow's menu is visible in the app the day before; choose your meals by 6 PM for next-morning delivery."),
+        ('Delivery', "Meals arrive together in a chilled Messify bag with an ice pack. Every morning in Academic City, Silicon Oasis, International City and DFC; in other areas the delivery details are confirmed on WhatsApp when you start."),
+        ('Ordering', 'Orders are placed at least a day ahead: choose meals in the app by 6 PM the day before. No same-day orders.'),
+        ('Menu', "Changes every day. Tomorrow's menu is visible in the app the day before."),
         ('Halal', 'All meals are 100% halal'),
         ('Vegetarian', 'A vegetarian option every day, for every meal'),
         ('Food safety', 'Prepared with gloved hands, blast-chilled after cooking, sealed in kraft bowls, packed cold.'),
@@ -1237,7 +1445,7 @@ def page_about():
   <div class="wrap">
     <div class="sec-head"><p class="eyebrow">What makes us different</p><h2 class="h2" id="diff-title">One less thing to think about.</h2></div>
     <div class="reasons">
-      <div class="reason"><h3>The whole day in one bag</h3><p>Breakfast, lunch and dinner arrive together every morning, so there's nothing to wait for later.</p></div>
+      <div class="reason"><h3>Your meals in one bag</h3><p>Breakfast, lunch and dinner arrive together in one chilled bag, so there's nothing to wait for at mealtimes.</p></div>
       <div class="reason"><h3>Tokens, not rigid plans</h3><p>Skip a day and eat it later, or double up when you need to. Your plan bends around your week.</p></div>
       <div class="reason"><h3>Priced for everyday eating</h3><p>From AED 25.63 a meal on the 3-meal monthly plan, with a new menu every day.</p></div>
     </div>
@@ -1388,7 +1596,16 @@ GUIDES = [
      'Meal plans for Al Badia homes and offices in DFC: how morning delivery works, prices and how to start.'),
     ('/guides/halal-meal-plans-dubai/', 'Halal meal plans in Dubai',
      'What to check before choosing a halal meal plan, how Messify keeps every meal 100% halal, prices and delivery areas.'),
+    ('/guides/healthy-meal-plans-dubai/', 'Healthy meal plans in Dubai: diet plan or everyday meals?',
+     'Diet plans vs everyday balanced meal plans: what each is for, what to look for and what they cost.'),
+    ('/guides/meal-plans-working-professionals-dubai/', 'Meal plans for working professionals in Dubai',
+     'Which plan suits your working week, office delivery, travel days and how it compares with ordering in.'),
+    ('/guides/staff-meal-plans-companies-dubai/', 'Staff meal plans for companies in Dubai',
+     'Costs per employee, allowance vs canteen vs meal plan, and how to set up staff meals at your workplace.'),
+    ('/guides/office-lunch-delivery-jebel-ali-jafza/', 'Office lunch delivery in Jebel Ali and JAFZA',
+     'How teams in JAFZA and the Jebel Ali industrial areas sort lunch: options, prices and team plans.'),
 ]
+NEW_GUIDE_PATHS = ['/guides/healthy-meal-plans-dubai/', '/guides/meal-plans-working-professionals-dubai/', '/guides/staff-meal-plans-companies-dubai/', '/guides/office-lunch-delivery-jebel-ali-jafza/']
 
 def article_schema(path, headline, desc, published='2026-10-13', modified=None):
     return {'@type': 'Article', '@id': BASE + path + '#article', 'headline': headline, 'description': desc,
@@ -1535,8 +1752,8 @@ def page_guide_cost():
     <h2>How much does a meal cost in Dubai?</h2>
     <p>The cost of one meal in Dubai depends less on the food and more on how you get it. The price on the menu is rarely the price you pay, so compare the total at the bottom of the receipt:</p>
     <ul>
-      <li><b>Cooking at home:</b> the lowest cost on ingredients, but you pay in time for shopping, cooking and washing up, and in food that goes off before you use it. Hard to do in a residence with a small or shared kitchen.</li>
-      <li><b>Ordering in:</b> the menu price plus delivery fees, service fees and, on small orders, a small-order fee. Tips and the occasional extra drink add more. Check what your last few orders really came to.</li>
+      <li><b>Cooking at home:</b> the lowest cost on ingredients, but you pay in time for shopping, cooking and washing up, and in food that goes off before you use it. Hard to do in a residence with a compact or shared kitchen.</li>
+      <li><b>Ordering in:</b> the menu price plus delivery fees, service fees and, on low-value orders, a minimum-order fee. Tips and the occasional extra drink add more. Check what your last few orders really came to.</li>
       <li><b>Eating out:</b> the menu price plus the time and travel to get there, every day.</li>
       <li><b>An everyday meal plan:</b> one fixed price per meal, decided once a week or once a month. With Messify that is <b>AED 25.63 to 30.71 a meal</b>, depending on the plan.</li>
     </ul>
@@ -1559,7 +1776,7 @@ def page_guide_cost():
     <h2>Five things that change the real price</h2>
     <ol>
       <li><b>Meals you actually eat.</b> A low-priced plan you can't fully use is expensive. Check how long you have to use your meals and whether you can skip days. With Messify you skip a day in the app and use that meal later in your plan.</li>
-      <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers all of the day's meals together every morning in one chilled bag. Meals are blast-chilled after cooking, so they are heat and eat: a few minutes to reheat when you're ready.</li>
+      <li><b>Delivery.</b> Some services charge per delivery or per drop. Messify delivers your meals together in one chilled bag. Meals are blast-chilled after cooking, so they are heat and eat: a few minutes to reheat when you're ready.</li>
       <li><b>Menu variety.</b> If you get bored by week two, you'll go back to ordering in. Messify's menu changes every day and you pick tomorrow's meals in the app by 6 PM.</li>
       <li><b>Dietary fit.</b> Every Messify meal is 100% halal and there's a vegetarian option every day, for every meal.</li>
       <li><b>Where you live.</b> Plans only help if they deliver to you. Messify meal plans deliver to Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City.</li>
@@ -1575,7 +1792,7 @@ def page_guide_cost():
         ('Is a weekly meal plan more expensive than a monthly one?', f"Per meal, yes. A Messify weekly plan costs AED {per(p[1]['weekly'][1], p[1]['weekly'][0])} to {per(p[3]['weekly'][1], p[3]['weekly'][0])} per meal, while monthly plans cost AED 25.63 to 27.50. Weekly plans are the easy way to try us first."),
         ('How much does a meal plan cost per day in Dubai?', "With Messify, a day of meals on a monthly plan costs AED 27.50 for 1 meal, AED 53.85 for 2 meals and AED 76.88 for all 3 meals. Weekly plans cost a little more per day."),
         ('Do Messify prices include VAT?', 'Yes. Prices include VAT unless stated otherwise.'),
-        ('Are Messify meals heat and eat?', 'Yes. Meals are cooked fresh daily, blast-chilled and delivered every morning in one chilled bag. Keep them cold and reheat for a few minutes when you are ready to eat.'),
+        ('Are Messify meals heat and eat?', 'Yes. Meals are cooked fresh daily, blast-chilled and delivered in one chilled bag. Keep them cold and reheat for a few minutes when you are ready to eat.'),
         ('Can I skip days on a meal plan?', 'With Messify, yes. Skip a day in the app and use that meal on another day of your plan. Monthly plans give you 30 days to use 26 days of meals; weekly plans give you 9 days to use 7.'),
     ]
     article_page('/guides/meal-plan-cost-dubai/', 'Meal plan cost', 'Cost of a Meal in Dubai & Meal Plan Prices (2026) | Messify',
@@ -1587,7 +1804,7 @@ def page_guide_cost():
 def page_guide_students():
     sections = f'''
     <h2>Why students in Dubai use meal plans</h2>
-    <p>Student life in Dubai makes eating well harder than it should be. Residences often have small or shared kitchens, lectures and labs run through lunch, and delivery apps add up fast. A meal plan fixes the daily question of what to eat and puts a ceiling on what you spend on food each month.</p>
+    <p>Student life in Dubai makes eating well harder than it should be. Residences often have compact or shared kitchens, lectures and labs run through lunch, and delivery apps add up fast. A meal plan fixes the daily question of what to eat and puts a ceiling on what you spend on food each month.</p>
 
     <h2>What a student meal plan costs</h2>
     <p>Messify plans start from AED 25 a meal. Most students pick one of these:</p>
@@ -1684,7 +1901,7 @@ def page_guide_best():
     providers = [
         # name, type, published price, what stands out, source url
         ('Messify', 'Everyday meal plan', 'AED 25.63–30.71 a meal (AED 215 a week, AED 715 a month and up)',
-         'Breakfast, lunch and dinner delivered together each morning; skip a day and use the meal later; 100% halal with a vegetarian option every meal',
+         'Breakfast, lunch and dinner delivered together in one chilled bag; skip a day and use the meal later; 100% halal with a vegetarian option every meal',
          '/meal-plans/'),
         ('Right Bite', 'Diet & nutrition plans', 'From AED 22 a meal (Essentials); goal-based plans from AED 25–42 a meal',
          'Wide range of goal plans, including weight loss, diabetic and GLP-1 support', 'https://rightbite.com/en-ae/subscribe-to-a-plan'),
@@ -1888,7 +2105,7 @@ def page_guide_halal():
     <ol>
       <li><b>Choose a plan</b> in the Messify app: 1, 2 or 3 meals a day, weekly or monthly.</li>
       <li><b>Pick tomorrow's meals by 6 PM.</b> The menu changes daily, so you choose from the next day's dishes.</li>
-      <li><b>Get your bag every morning.</b> All of the day's meals arrive together in one chilled bag, at your home, residence or office.</li>
+      <li><b>Get your bag.</b> Your meals arrive together in one chilled bag, at your home, residence or office.</li>
       <li><b>Keep them cold and reheat</b> when you're ready to eat.</li>
     </ol>
     <p>Each meal on your plan is a token. If you're away or eating with family one day, skip it in the app and use that meal on another day of your plan.</p>
@@ -1902,12 +2119,14 @@ def page_guide_halal():
     <p>That works out at AED 25.63 to 30.71 per meal, depending on the plan. Our <a href="/guides/meal-plan-cost-dubai/">meal plan cost guide</a> compares this with ordering in.</p>
 
     <h2>Where Messify delivers</h2>
-    <p>Messify delivers halal meal plans every morning to four areas of Dubai:</p>
+    <p>Messify delivers halal meal plans to nine areas of Dubai:</p>
     <ul>
       <li><a href="/meal-plans/academic-city/">Dubai Academic City</a>, including university residences</li>
       <li><a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis</a>, for homes and offices</li>
-      <li><a href="/meal-plans/international-city/">International City</a>, where our meals are cooked</li>
+      <li><a href="/meal-plans/international-city/">International City</a>, where our meals are cooked, and neighbouring <a href="/meal-plans/al-aweer/">Al Aweer</a></li>
       <li><a href="/meal-plans/festival-city/">Dubai Festival City</a>, including Al Badia</li>
+      <li><a href="/meal-plans/jebel-ali/">Jebel Ali and JAFZA</a>, <a href="/meal-plans/dubai-investments-park/">Dubai Investments Park</a> and <a href="/meal-plans/dubai-south/">Dubai South</a>, for offices, sites and homes</li>
+      <li><a href="/meal-plans/al-furjan/">Al Furjan</a>, for villas and apartments</li>
     </ul>
     <p>Students, working professionals and families in these areas use a plan so the question of "what's for lunch, and is it halal?" is answered before the day begins.</p>
 
@@ -1919,14 +2138,243 @@ def page_guide_halal():
         ('Where is the food cooked?', 'All meals are cooked fresh daily in our partner kitchen in International City, Dubai.'),
         ('Is there a vegetarian option on a halal meal plan?', 'Yes. There is a vegetarian option every day, for every meal. The kitchen cooks both vegetarian and non-vegetarian food.'),
         ('Does a halal meal plan cost more?', 'No. Halal is standard on every Messify plan. Prices start from AED 25 a meal, with weekly plans from AED 215 and monthly plans from AED 715.'),
-        ('Which areas do you deliver halal meal plans to?', 'Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), including Al Badia. All of the day\'s meals arrive together every morning in one chilled bag.'),
+        ('Which areas do you deliver halal meal plans to?', 'Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali (including JAFZA), Al Furjan and Dubai South.'),
     ]
     article_page('/guides/halal-meal-plans-dubai/', 'Halal meal plans',
                  'Halal Meal Plans in Dubai: What to Check | Messify',
                  'Halal meal plans in Dubai: what to ask before you choose, how Messify keeps every meal 100% halal, prices from AED 25 a meal and delivery areas.',
                  'Halal meal plans in Dubai', 'Halal food · 2026',
-                 "Every Messify meal is 100% halal, every day, for every meal, with a vegetarian option at each one. Meals are cooked fresh daily in our partner kitchen in International City and delivered together each morning to Academic City, Silicon Oasis, International City and Dubai Festival City, from AED 25 a meal.",
+                 "Every Messify meal is 100% halal, every day, for every meal, with a vegetarian option at each one. Meals are cooked fresh daily in our partner kitchen in International City and delivered across nine areas of Dubai, from Academic City and Silicon Oasis to Jebel Ali and Dubai South, from AED 25 a meal.",
                  sections, faqs, published='2026-11-13')
+
+
+# ---------------------------------------------------------------- guides for the new areas (November 2026)
+NG_DATE = '2026-11-13'
+
+def page_guide_jafza():
+    sections = '''
+    <h2>Why lunch is harder in Jebel Ali</h2>
+    <p>Jebel Ali Free Zone and the Jebel Ali industrial areas are built for business, not for lunch. Sites are spread out, many teams work in warehouses or offices a drive away from the nearest food court, and for most of the year the walk outside is not an option. Ordering in works on some days, but riders take longer to reach free zone gates and industrial plots, and the order has to happen again tomorrow.</p>
+    <p>This guide covers the options for office lunch in Jebel Ali and JAFZA, what they cost and how to set up a meal plan for one person or a whole team.</p>
+
+    <h2>Four ways teams in Jebel Ali handle lunch</h2>
+    <ul>
+      <li><b>Ordering in every day.</b> Plenty of choice, but you decide every day, pay delivery and service fees on each order, and wait for the rider to find your gate.</li>
+      <li><b>Bringing food from home.</b> Low cost on ingredients, but someone has to cook and pack it every evening.</li>
+      <li><b>A canteen or company kitchen.</b> Works for large sites, but needs space, staff and licences most companies don't have.</li>
+      <li><b>A meal plan.</b> Meals are chosen ahead in an app and arrive packed cold, so lunch is already in the office fridge. One plan price, no daily ordering.</li>
+    </ul>
+
+    <h2>How a Messify meal plan works for JAFZA and Jebel Ali</h2>
+    <ol>
+      <li><b>Pick a plan.</b> 1, 2 or 3 meals a day, weekly or monthly. Most office workers start with 1 meal a day for lunch.</li>
+      <li><b>Choose your meals ahead.</b> The menu changes every day and you choose in the Messify app. Orders are always placed at least a day ahead; there are no same-day orders.</li>
+      <li><b>Keep them cold.</b> Meals arrive chilled in Messify bags with ice packs. Put them in the office fridge.</li>
+      <li><b>Reheat at lunch.</b> Meals are blast-chilled after cooking, so a few minutes in the microwave and lunch is ready.</li>
+    </ol>
+    <p>When you start, our team confirms the delivery details for your company, gate and building on WhatsApp. Every meal is cooked fresh in our partner kitchen in International City, is 100% halal and comes with a vegetarian option every day, for every meal.</p>
+
+    <h2>What it costs</h2>
+    <p>Prices are the same in Jebel Ali as in every Messify area, from AED 25 a meal:</p>
+    <ul>
+      <li><b>1 meal a day, weekly: AED 215.</b> The easiest way to try it for a week.</li>
+      <li><b>1 meal a day, monthly: AED 715.</b> 26 days of meals to use within 30 days, AED 27.50 a meal.</li>
+      <li><b>2 meals a day, monthly: AED 1,400.</b> Lunch at work and dinner at home, AED 26.92 a meal.</li>
+    </ul>
+    <p>Compare it with what you spend on delivery apps using our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a>.</p>
+
+    <h2>Lunch for the whole team</h2>
+    <p>If several people in your office or warehouse want lunch sorted, a team plan keeps it simple: one monthly plan, one delivery for everyone, and each person still picks their own meals in the app. Companies that pay for staff lunch get one bill instead of dozens of delivery orders. Our guide to <a href="/guides/staff-meal-plans-companies-dubai/">staff meal plans for companies in Dubai</a> covers budgets and setup.</p>
+
+    <h2>Shifts, leave and site visits</h2>
+    <p>Teams in Jebel Ali rarely have identical weeks. Every meal on a Messify plan is a token: skip a day for leave or a site visit and use that meal later in your plan. Monthly plans give you 30 days to use 26 days of meals.</p>
+
+    <h2>Checklist before you start</h2>
+    <ol>
+      <li><b>Check delivery access</b> to your gate and building, and tell us if a delivery pass is needed.</li>
+      <li><b>Make sure there's a fridge and a microwave</b> in the office or pantry.</li>
+      <li><b>Decide on 1 or 2 meals a day:</b> lunch only, or lunch plus dinner at home.</li>
+      <li><b>Try a week first</b>, then move to monthly for a lower price per meal.</li>
+    </ol>
+    <p>See <a href="/meal-plans/jebel-ali/">meal plans in Jebel Ali</a>, or <a href="/start/">start your plan</a>. Planning a company event or a meeting lunch instead? See <a href="/catering/corporate-events/">corporate event catering</a>.</p>'''
+    faqs = [
+        ('Do you deliver office lunch to JAFZA?', 'Yes. Messify delivers meal plans to offices and teams in Jebel Ali Free Zone and the Jebel Ali industrial areas. Meals arrive chilled with ice packs, ready to keep in the office fridge and reheat at lunch.'),
+        ('How much is office lunch delivery in Jebel Ali?', 'Messify meal plans start from AED 25 a meal. A 1-meal weekly plan costs AED 215, and a 1-meal monthly plan costs AED 715, or AED 27.50 a meal.'),
+        ('Can my company pay for staff lunch?', 'Yes. Teams can share one monthly plan with one delivery for everyone, and each person chooses their own meals in the app. Message us on WhatsApp with your team size and location.'),
+        ('Can I order lunch for today?', 'No. All Messify orders are placed at least a day ahead; there are no same-day orders.'),
+        ('Is the food halal?', 'Every Messify meal is 100% halal, with a vegetarian option every day, for every meal.'),
+    ]
+    article_page('/guides/office-lunch-delivery-jebel-ali-jafza/', 'Office lunch in Jebel Ali',
+                 'Office Lunch Delivery in Jebel Ali & JAFZA | Messify',
+                 'How to sort office lunch in Jebel Ali and JAFZA: meal plans from AED 25 a meal, team plans for staff, and what to check before you start.',
+                 'Office lunch delivery in Jebel Ali and JAFZA', 'For offices in Jebel Ali · 2026',
+                 "Messify delivers meal plans to offices and teams in Jebel Ali Free Zone (JAFZA) and the Jebel Ali industrial areas. Meals are ordered a day ahead and arrive chilled with ice packs, ready to keep in the office fridge and reheat at lunch, from AED 25 a meal (AED 215 for a 1-meal weekly plan). Teams can share one monthly plan.",
+                 sections, faqs, published=NG_DATE)
+
+def page_guide_staff_meals():
+    rows = [(n, n * 715, n * 1400) for n in (5, 10, 25, 50)]
+    trs = ''.join(f'<tr><th scope="row">{n} employees</th><td class="num" data-label="Lunch only (1 meal a day)">{aed(a)}</td><td class="num" data-label="Lunch and dinner (2 meals a day)">{aed(b)}</td></tr>' for n, a, b in rows)
+    table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
+  <caption>Monthly cost of staff meals on Messify monthly plans (AED, 26 days of meals per person)</caption>
+  <thead><tr><th scope="col">Team size</th><th scope="col" class="num">Lunch only (1 meal a day)</th><th scope="col" class="num">Lunch and dinner (2 meals a day)</th></tr></thead>
+  <tbody>{trs}</tbody></table></div>'''
+    sections = f'''
+    <h2>Why companies pay for staff meals</h2>
+    <p>Feeding staff used to mean a canteen or a cash allowance. For most companies in Dubai, neither fits: a canteen needs space, licences and staff, and an allowance disappears into delivery apps without anyone eating better. A company meal plan sits in between. The company pays one predictable bill, every employee gets a proper meal, and nobody loses half the lunch break waiting for a rider.</p>
+    <p>It matters most where food options are thin: free zones, industrial areas, warehouses, logistics sites and new business districts such as Jebel Ali, Dubai Investments Park and Dubai South.</p>
+
+    <h2>Three ways to set up staff meals</h2>
+    <ul>
+      <li><b>Food allowance.</b> Simple to run, but the money is spent on whatever is easiest, and there's no control over quality or cost.</li>
+      <li><b>On-site canteen.</b> Good for very large sites, but expensive to set up and run.</li>
+      <li><b>Company meal plan.</b> Meals for each employee, chosen ahead in an app and delivered to the workplace. One plan, one bill, no kitchen to run.</li>
+    </ul>
+
+    <h2>What staff meals cost</h2>
+    <p>On Messify monthly plans, lunch for one employee is AED 715 a month (26 days of meals, AED 27.50 a meal). Lunch and dinner is AED 1,400 a month (AED 26.92 a meal). Here is what that means for a team:</p>
+    {table}
+    <p>Every employee's meals are tokens they can skip and use later in the plan, so leave and site visits don't waste money. For shorter projects or trial runs, weekly plans start at AED 215 per person.</p>
+
+    <h2>How a company meal plan works with Messify</h2>
+    <ol>
+      <li><b>Tell us your team size, location and start date</b> on WhatsApp.</li>
+      <li><b>Each employee chooses their meals</b> in the Messify app from a menu that changes every day, with a vegetarian option every day, for every meal. Orders are placed at least a day ahead.</li>
+      <li><b>Meals are delivered to your workplace</b> chilled, in Messify bags with ice packs, ready for the fridge.</li>
+      <li><b>Staff reheat at lunch.</b> Meals are blast-chilled after cooking, so a few minutes in the microwave is all it takes.</li>
+    </ol>
+    <p>Every meal is 100% halal and cooked fresh daily in our partner kitchen in International City.</p>
+
+    <h2>What to sort before you start</h2>
+    <ul>
+      <li><b>Fridge and microwave space</b> for the whole team.</li>
+      <li><b>Delivery access:</b> gate passes, loading bays or reception rules at your building.</li>
+      <li><b>A point of contact</b> who receives the delivery.</li>
+      <li><b>Dietary needs:</b> vegetarian and allergy needs are handled by each person choosing their own meals.</li>
+      <li><b>Budget rules:</b> lunch only, or lunch and dinner for staff who live on site.</li>
+    </ul>
+
+    <h2>Where Messify delivers company meal plans</h2>
+    <p>Messify delivers meal plans to workplaces in <a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis</a>, <a href="/meal-plans/festival-city/">Dubai Festival City</a>, <a href="/meal-plans/international-city/">International City</a>, <a href="/meal-plans/al-aweer/">Al Aweer</a>, <a href="/meal-plans/dubai-investments-park/">Dubai Investments Park</a>, <a href="/meal-plans/jebel-ali/">Jebel Ali and JAFZA</a> and <a href="/meal-plans/dubai-south/">Dubai South</a>. See every plan on our <a href="/meal-plans/">meal plans in Dubai</a> page.</p>
+    <p>Need food for one event rather than every day? That's catering: see <a href="/catering/corporate-events/">corporate event catering</a> and <a href="/catering/business-meetings/">meeting and office lunch catering</a>.</p>'''
+    faqs = [
+        ('How much do staff meals cost per employee in Dubai?', 'On Messify monthly plans, lunch for one employee costs AED 715 a month (AED 27.50 a meal) and lunch and dinner costs AED 1,400 a month (AED 26.92 a meal).'),
+        ('Can a company pay for employee meal plans?', 'Yes. Teams can share one monthly plan with one delivery for everyone, and each employee chooses their own meals in the app. Message us on WhatsApp with your team size and location.'),
+        ('What happens when an employee is on leave?', 'Every meal is a token. Skip the days in the app and use those meals later in the plan. Monthly plans give 30 days to use 26 days of meals.'),
+        ('Which areas do you deliver staff meals to?', 'Dubai Silicon Oasis, Dubai Festival City, International City, Al Aweer, Dubai Investments Park, Jebel Ali and JAFZA, Dubai South, Academic City and Al Furjan.'),
+        ('Are staff meals halal?', 'Yes. Every Messify meal is 100% halal, with a vegetarian option every day, for every meal.'),
+    ]
+    article_page('/guides/staff-meal-plans-companies-dubai/', 'Staff meal plans',
+                 'Staff Meal Plans for Companies in Dubai: Costs | Messify',
+                 'How companies in Dubai set up staff meals: costs per employee from AED 715 a month, allowance vs canteen vs meal plan, and what to sort first.',
+                 'Staff meal plans for companies in Dubai', 'For employers · 2026',
+                 'A company meal plan gives every employee a proper meal for one predictable bill. On Messify monthly plans, lunch for one employee costs AED 715 a month (AED 27.50 a meal), so lunch for a team of 10 costs AED 7,150 a month. Each employee picks their own meals in the app, and meals arrive chilled at the workplace.',
+                 sections, faqs, published=NG_DATE)
+
+def page_guide_healthy():
+    sections = '''
+    <h2>Two very different things called "healthy meal plans"</h2>
+    <p>Search for healthy meal plans in Dubai and you'll find two kinds of service mixed together. <b>Diet plans</b> are built around a goal: calorie targets, macros, weight loss or muscle gain, often with nutritionist support. <b>Everyday meal plans</b> are built around a habit: balanced, freshly cooked meals that replace delivery apps and fast food, without counting anything.</p>
+    <p>Both can be healthy. The right one depends on what you're trying to fix.</p>
+
+    <h2>Who needs a diet plan</h2>
+    <ul>
+      <li>You have a specific weight, calorie or macro target.</li>
+      <li>You follow a medical diet or have been told to by a doctor or dietitian.</li>
+      <li>You want portion sizes and nutrition worked out for you to the gram.</li>
+    </ul>
+    <p>Diet plans usually cost more per meal because of the planning and support behind them. Our <a href="/guides/best-meal-plans-dubai/">comparison of meal plans in Dubai</a> lists published prices for the main providers.</p>
+
+    <h2>Who an everyday balanced meal plan suits</h2>
+    <ul>
+      <li>You mostly want to stop ordering fast food and junk on busy days.</li>
+      <li>You want proper meals at a predictable price, with no cooking.</li>
+      <li>You don't want to count calories, but you do want a balanced plate.</li>
+    </ul>
+    <p>For many students and working professionals, the biggest health gain is simply eating a planned, balanced meal instead of whatever is quickest at 1 PM or 10 PM.</p>
+
+    <h2>What to look for in an everyday healthy meal plan</h2>
+    <ul>
+      <li><b>Variety.</b> A menu that changes daily keeps you from getting bored and going back to delivery apps.</li>
+      <li><b>Balance on the plate.</b> Protein, vegetables and carbohydrates in sensible portions.</li>
+      <li><b>Vegetarian options</b> on days you want a lighter meal.</li>
+      <li><b>Clear ingredients.</b> If you have allergies, check that allergens are listed for every meal.</li>
+      <li><b>Food safety.</b> Meals that are cooked, chilled and kept cold properly until you eat them.</li>
+      <li><b>A price you can keep paying.</b> A healthy habit only works if it lasts more than two weeks.</li>
+    </ul>
+
+    <h2>Where Messify fits</h2>
+    <p>Messify is an everyday meal plan, not a diet programme. Meals are balanced and freshly cooked every day in our partner kitchen in International City, the menu changes daily, every meal is 100% halal, and there's a vegetarian option every day, for every meal. Allergens are listed on each meal. Meals are blast-chilled after cooking and packed cold with an ice pack.</p>
+    <p>Plans start from AED 25 a meal: AED 215 a week or AED 715 a month for 1 meal a day, up to AED 1,999 a month for breakfast, lunch and dinner. If you need calorie targets or a medical diet, a specialist diet plan is the better choice. If you want proper everyday meals sorted, see our <a href="/meal-plans/">meal plans in Dubai</a>.</p>
+
+    <h2>Simple ways to eat better on any meal plan</h2>
+    <ol>
+      <li><b>Keep meals in the fridge</b> and reheat them properly; don't leave them out.</li>
+      <li><b>Pick the vegetarian option</b> a couple of times a week for a lighter day.</li>
+      <li><b>Drink water with meals</b> rather than sugary drinks.</li>
+      <li><b>Use the plan for the meals you usually get wrong.</b> For most people that's lunch at work and late dinner.</li>
+    </ol>'''
+    faqs = [
+        ('What is the difference between a diet plan and a meal plan?', 'A diet plan is built around a target such as calories, macros or weight loss. An everyday meal plan gives you balanced, freshly cooked meals without counting anything.'),
+        ('Is Messify a diet plan?', 'No. Messify is an everyday meal plan: balanced meals, a new menu every day, 100% halal, with a vegetarian option every day, for every meal. If you need calorie targets or a medical diet, a specialist diet plan is the better choice.'),
+        ('How much does a healthy meal plan cost in Dubai?', 'Diet plans usually cost more per meal because of the planning and support behind them. Messify everyday meal plans start from AED 25 a meal, AED 215 a week or AED 715 a month.'),
+        ('Are allergens listed on the meals?', 'Yes. Allergens are listed on each Messify meal.'),
+        ('Do you have vegetarian healthy meals?', 'Yes. There is a vegetarian option every day, for every meal.'),
+    ]
+    article_page('/guides/healthy-meal-plans-dubai/', 'Healthy meal plans',
+                 'Healthy Meal Plans in Dubai: Diet or Everyday? | Messify',
+                 'Healthy meal plans in Dubai explained: diet plans vs everyday balanced meal plans, what to look for, what they cost and which one suits you.',
+                 'Healthy meal plans in Dubai: diet plan or everyday meals?', 'Eating well · 2026',
+                 'There are two kinds of healthy meal plans in Dubai. Diet plans are built around calorie, macro or weight targets and usually cost more per meal. Everyday meal plans give you balanced, freshly cooked meals without counting anything. Messify is an everyday meal plan from AED 25 a meal, with a new menu daily, 100% halal and a vegetarian option at every meal.',
+                 sections, faqs, published=NG_DATE)
+
+def page_guide_professionals():
+    sections = '''
+    <h2>The working week, food edition</h2>
+    <p>Breakfast skipped or grabbed on the way. Lunch ordered at 1 PM along with everyone else in the building. Dinner decided at 9 PM, delivered at 10. For a lot of working professionals in Dubai, that's every weekday: three food decisions a day, three delivery fees, and meals that depend on how busy the day was.</p>
+    <p>A meal plan removes the decisions. You choose your meals ahead, they arrive packed cold, and the only thing left to do is reheat. This guide covers which plan suits which working pattern, what it costs and how to make it fit your week.</p>
+
+    <h2>Which plan suits your week</h2>
+    <ul>
+      <li><b>Office five days, social weekends:</b> 1 meal a day for lunch at work. Monthly at AED 715 (AED 27.50 a meal).</li>
+      <li><b>Long days, cooking is not happening:</b> 2 meals a day for lunch and dinner. Monthly at AED 1,400 (AED 26.92 a meal).</li>
+      <li><b>Every meal sorted:</b> 3 meals a day, breakfast included. Monthly at AED 1,999 (AED 25.63 a meal), the lowest price per meal.</li>
+      <li><b>Not sure yet:</b> try a weekly plan from AED 215, then switch to monthly.</li>
+    </ul>
+
+    <h2>How it fits around work</h2>
+    <ol>
+      <li><b>Choose your meals ahead</b> in the Messify app. The menu changes every day, and orders are placed at least a day ahead.</li>
+      <li><b>Your meals arrive packed cold</b> in a Messify bag with an ice pack, at home or at the office.</li>
+      <li><b>Keep them in the fridge</b> and reheat for a few minutes when you're ready.</li>
+      <li><b>Skip days you don't need.</b> Travelling for work or out for dinner? Every meal is a token you can use later in your plan.</li>
+    </ol>
+
+    <h2>Is it worth it compared with ordering in?</h2>
+    <p>If you order in most working days, a meal plan usually costs less per meal once delivery and service fees are counted, and it removes the daily decision. Put your own numbers into our <a href="/guides/meal-plan-cost-dubai/#calculator">meal plan vs ordering in calculator</a> to see the difference over a month.</p>
+
+    <h2>Office lunch for the team</h2>
+    <p>If colleagues want lunch sorted too, teams can share one monthly plan with one delivery for everyone, and each person picks their own meals. Employers can also cover it as a staff benefit: see <a href="/guides/staff-meal-plans-companies-dubai/">staff meal plans for companies</a>.</p>
+
+    <h2>Where Messify delivers for working professionals</h2>
+    <ul>
+      <li><a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis</a> and <a href="/meal-plans/festival-city/">Dubai Festival City</a>, offices and homes</li>
+      <li><a href="/meal-plans/jebel-ali/">Jebel Ali and JAFZA</a>, <a href="/meal-plans/dubai-investments-park/">Dubai Investments Park</a> and <a href="/meal-plans/dubai-south/">Dubai South</a>, offices, sites and homes</li>
+      <li><a href="/meal-plans/al-furjan/">Al Furjan</a>, <a href="/meal-plans/international-city/">International City</a>, <a href="/meal-plans/al-aweer/">Al Aweer</a> and <a href="/meal-plans/academic-city/">Academic City</a></li>
+    </ul>
+    <p>Every meal is 100% halal, with a vegetarian option every day, for every meal. See all plans on our <a href="/meal-plans/">meal plans in Dubai</a> page, or <a href="/start/">start your plan</a>.</p>'''
+    faqs = [
+        ('What is the best meal plan for working professionals in Dubai?', 'It depends on your week. Lunch only suits office days; lunch and dinner suits long days; 3 meals a day gives the lowest price per meal. With Messify that is AED 715, 1,400 or 1,999 a month.'),
+        ('Can I get my meal plan delivered to the office?', 'Yes. Messify delivers to offices and homes in its delivery areas. Meals arrive packed cold, ready for the office fridge.'),
+        ('What if I travel for work?', 'Skip those days in the app and use the meals later in your plan. Monthly plans give you 30 days to use 26 days of meals.'),
+        ('Can I order on the same day?', 'No. Messify orders are always placed at least a day ahead.'),
+        ('Does a meal plan cost less than ordering in?', 'If you order in most working days, a meal plan usually costs less per meal once delivery and service fees are counted. Use our calculator to check with your own numbers.'),
+    ]
+    article_page('/guides/meal-plans-working-professionals-dubai/', 'Meal plans for professionals',
+                 'Meal Plans for Working Professionals in Dubai | Messify',
+                 'Meal plans for working professionals in Dubai: which plan suits your week, prices from AED 25 a meal, office delivery and how to fit it around work.',
+                 'Meal plans for working professionals in Dubai', 'For working professionals · 2026',
+                 'For working professionals in Dubai, a meal plan replaces three daily food decisions with one choice made ahead. Messify plans cost AED 715 a month for lunch only, AED 1,400 for lunch and dinner, or AED 1,999 for all three meals (AED 25.63 a meal). Meals arrive packed cold at home or the office, and you can skip days you travel.',
+                 sections, faqs, published=NG_DATE)
 
 # ---------------------------------------------------------------- catering guides
 CATERING_GUIDES = [
@@ -2022,7 +2470,7 @@ def page_guide_food_per_person():
       <li><b>Order less</b> for a short daytime meeting, for an event straight after another meal, or when most of the menu is heavy (biryani, rich curries, grills).</li>
       <li><b>Children:</b> count children under 10 as half a guest. Babies and toddlers rarely need their own portion.</li>
       <li><b>Number of dishes:</b> more dishes doesn't mean more food in total. Guests take smaller servings of each, so split the same total across the dishes.</li>
-      <li><b>Buffer:</b> for a buffet, a small buffer covers guests who arrive without an RSVP and second helpings. A plated meal needs much less spare.</li>
+      <li><b>Buffer:</b> for a buffet, a modest buffer covers guests who arrive without an RSVP and second helpings. A plated meal needs much less spare.</li>
     </ul>
 
     <h2>Headcount: the number that drives everything</h2>
@@ -2382,11 +2830,11 @@ def page_guide_affordable():
 
     <h2>Affordable, and honest about it</h2>
     <p>We'd rather be straight with you. Cooking for yourself costs less on ingredients, if you have the time and a kitchen. And some companies publish lower starting prices on certain plans: when we last checked, Right Bite listed its Essentials plan from AED 22 a meal. Our <a href="/guides/best-meal-plans-dubai/">comparison of Dubai meal plans</a> shows published prices side by side.</p>
-    <p>Where Messify fits is everyday meals at a predictable price: breakfast, lunch and dinner delivered together every morning, a new menu every day, 100% halal, with a vegetarian option every day, for every meal.</p>
+    <p>Where Messify fits is everyday meals at a predictable price: breakfast, lunch and dinner delivered together in one chilled bag, a new menu every day, 100% halal, with a vegetarian option every day, for every meal.</p>
 
     <h2>Who an affordable meal plan suits</h2>
     <ul>
-      <li><b>Students</b> in shared residences with small kitchens. See <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</li>
+      <li><b>Students</b> in shared residences with compact kitchens. See <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</li>
       <li><b>Young professionals</b> who order in most days and want one predictable food bill.</li>
       <li><b>Office workers</b> who want lunch sorted before the workday starts.</li>
     </ul>
@@ -2434,7 +2882,8 @@ CATER_AREAS = {
   'where_title': 'Across Dubai, from offices to homes.',
   'groups': [
     ('office', 'Offices and business districts', ['Business Bay and Downtown Dubai', 'DIFC', 'Dubai Silicon Oasis', 'JLT, Dubai Internet City and Media City', 'Al Barsha and Al Quoz']),
-    ('home', 'Homes and communities', ['Mirdif and Dubai Festival City', 'Arabian Ranches and Dubai Hills', 'Jumeirah and Al Barsha', 'Al Warqa and International City', 'Dubai Marina and JBR']),
+    ('box', 'Free zones and industrial areas', ['Jebel Ali Free Zone (JAFZA) and Jebel Ali', 'Dubai Investments Park (DIP)', 'Dubai South and the Logistics District', 'Al Aweer and Ras Al Khor']),
+    ('home', 'Homes and communities', ['Mirdif and Dubai Festival City', 'Arabian Ranches and Dubai Hills', 'Al Furjan and Jebel Ali Village', 'Al Warqa, Al Aweer and International City', 'Dubai Marina and JBR']),
     ('cap', 'Campuses and venues', ['Dubai Academic City and Knowledge Park', 'Hotels and event halls', 'Community halls and majlis', 'Outdoor and garden events']),
   ],
   'logistics': "Most of Dubai is a short drive from International City, which keeps hot food hot and cold food cold. For office lunches, tell us the time you want to eat rather than the meeting start time, and check whether your building needs a delivery pass or a service lift booking. For weddings and large events, share your date as early as you can so the menu, staff and setup can be planned.",
@@ -3387,7 +3836,7 @@ def page_lastmods(paths):
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
             ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2'),
-            ('/guides/affordable-meal-plans-dubai/', '0.7'), ('/guides/halal-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
+            ('/guides/affordable-meal-plans-dubai/', '0.7'), ('/guides/halal-meal-plans-dubai/', '0.7')] + [(f'/meal-plans/{a}/', '0.8') for a, v in AREAS.items() if not v.get('daily')] + [(p, '0.7') for p in NEW_GUIDE_PATHS] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
     lastmod = page_lastmods([u for u, _ in urls])
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{lastmod[u]}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
@@ -3419,12 +3868,14 @@ Sitemap: {BASE}/sitemap.xml
     cater_lines = '\n'.join(f'- [Catering in {c["name"]}]({BASE}/catering/{slug}/): {c["desc"]}' for slug, c in CATER_AREAS.items())
     type_lines = '\n'.join(f'- [{t["name"]}]({BASE}/catering/{slug}/): {t["desc"]}' for slug, t in CATER_TYPES.items())
     cguide_lines = '\n'.join(f'- [{t}]({BASE}{p}): {d}' for p, t, d in CATERING_GUIDES)
+    new_area_lines = '\n'.join(f'- [Meal plans in {a["name"]}]({BASE}/meal-plans/{s}/): {a["desc"]}' for s, a in AREAS.items() if not a.get('daily'))
+    nguide_lines = '\n'.join(f'- [{t}]({BASE}{p}): {d}' for p, t, d in GUIDES if p in NEW_GUIDE_PATHS)
     plan_lines = '\n'.join(f'- {mlabel(m)}, {ln}: {aed(p)} ({t} meals, AED {per(p, t)} per meal)' for m, ln, t, p in PLANS)
     llms = f'''# Messify
 
 > {ONE_LINER}
 
-Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. All of the day's meals are delivered together every morning in one chilled bag. The menu changes daily, all meals are 100% halal, and there is a vegetarian option every day, for every meal. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Meal plan delivery covers Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC) only.
+Messify sells daily meal plans through the Messify app. Each meal on a plan is a token: customers can skip a day and use the token later in their plan, or spend extra tokens to double up. Meals are delivered together in one chilled bag; orders are placed at least a day ahead (choose meals by 6 PM the day before, no same-day orders). The menu changes daily, all meals are 100% halal, and there is a vegetarian option every day, for every meal. Monthly plans are 26 days of meals to use within 30 days; weekly plans are 7 days of meals to use within 9 days. Meal plan delivery covers {MEAL_AREAS_TXT}. In Academic City, Silicon Oasis, International City and DFC, all of the day's meals arrive together every morning.
 
 ## Meal plan prices (AED)
 {plan_lines}
@@ -3435,6 +3886,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in Dubai Silicon Oasis]({BASE}/meal-plans/silicon-oasis/): delivery to offices, residents, RIT Dubai and DSOA University Residence
 - [Meal plans in International City]({BASE}/meal-plans/international-city/): where Messify meals are cooked
 - [Meal plans in Dubai Festival City (DFC)]({BASE}/meal-plans/festival-city/): delivery to homes in Al Badia and offices across DFC
+{new_area_lines}
 - [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain
 - [The best meal plans in Dubai, compared]({BASE}/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): what a meal costs in Dubai, meal plan prices per meal and per day, with a meal plan vs ordering-in calculator
@@ -3444,6 +3896,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Office lunch delivery in Dubai Silicon Oasis]({BASE}/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
 - [Affordable meal plans in Dubai]({BASE}/guides/affordable-meal-plans-dubai/): price per meal, the lowest-cost plans and how to avoid waste
 - [Halal meal plans in Dubai]({BASE}/guides/halal-meal-plans-dubai/): every Messify meal is 100% halal; what to check, prices and delivery areas
+{nguide_lines}
 {cater_lines}
 {type_lines}
 {cguide_lines}
@@ -3497,6 +3950,7 @@ if __name__ == '__main__':
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
     page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable(); page_guide_halal()
+    page_guide_jafza(); page_guide_staff_meals(); page_guide_healthy(); page_guide_professionals()
     page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
     for s in CATER_AREAS: page_cater_area(s)
     page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end()
