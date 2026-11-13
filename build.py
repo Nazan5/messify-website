@@ -1386,12 +1386,14 @@ GUIDES = [
      'Lunch on your desk before the 1 PM rush: how morning delivery works, prices, team plans and work-from-home days.'),
     ('/guides/meal-delivery-dubai-festival-city/', 'Daily meal delivery in Dubai Festival City',
      'Meal plans for Al Badia homes and offices in DFC: how morning delivery works, prices and how to start.'),
+    ('/guides/halal-meal-plans-dubai/', 'Halal meal plans in Dubai',
+     'What to check before choosing a halal meal plan, how Messify keeps every meal 100% halal, prices and delivery areas.'),
 ]
 
-def article_schema(path, headline, desc, published='2026-10-13'):
+def article_schema(path, headline, desc, published='2026-10-13', modified=None):
     return {'@type': 'Article', '@id': BASE + path + '#article', 'headline': headline, 'description': desc,
             'url': BASE + path, 'mainEntityOfPage': BASE + path, 'inLanguage': 'en-AE', 'image': OG_IMAGE,
-            'datePublished': published, 'dateModified': TODAY,
+            'datePublished': published, 'dateModified': modified or TODAY,
             'author': {'@id': BASE + '/#organization'}, 'publisher': {'@id': BASE + '/#organization'}}
 
 def guide_cards(guides, exclude=None, tag='h3'):
@@ -1438,10 +1440,12 @@ def read_time(htmltext):
     words = len(re.sub(r'<[^>]+>', ' ', htmltext).split())
     return max(3, round(words / 200))
 
-def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after='', kind='meals', published='2026-10-13'):
+def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after='', kind='meals', published='2026-10-13', updated=None):
+    modified = max(TODAY, published, updated or '')
+    upd_label = date.fromisoformat(modified).strftime('%B %Y')
     cr, crs = crumbs([('Home', '/'), ('Guides', '/guides/'), (crumb, path)])
     page = {'path': path, 'mode': kind, 'nav': kind, 'title': title, 'desc': desc,
-            'schema': [ORG, BUSINESS, article_schema(path, h1, desc, published), faq_schema(faqs), crs]}
+            'schema': [ORG, BUSINESS, article_schema(path, h1, desc, published, modified), faq_schema(faqs), crs]}
     if kind == 'catering':
         page.update({'cta': ('/catering/#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering'})
     mins = read_time(quick + sections + ''.join(q + a for q, a in faqs))
@@ -1450,7 +1454,7 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
     {cr}
     <p class="kicker">{kicker}</p>
       <h1 class="h2">{h1}</h1>
-    <p class="byline">By the Messify team · Updated {UPDATED_LABEL} · {mins} min read</p>
+    <p class="byline">By the Messify team · Updated {upd_label} · {mins} min read</p>
     <div class="answer">
       <p class="answer__label">Quick answer</p>
       <p class="answer__lead">{quick}</p>
@@ -1857,6 +1861,72 @@ def page_guide_dfc():
                  'Daily meal delivery in Dubai Festival City', 'For DFC · 2026',
                  "Messify delivers daily meal plans in Dubai Festival City (DFC), to homes in Al Badia and offices across DFC. All of the day's meals arrive together every morning in one chilled bag, from AED 25 a meal (AED 215 for a 1-meal weekly plan). Start in the Messify app or on WhatsApp.",
                  sections, faqs)
+
+def page_guide_halal():
+    sections = f'''
+    <h2>Why halal matters when you choose a meal plan</h2>
+    <p>For many people in Dubai, halal isn't a preference you weigh against price or taste. It's the first filter. When you eat out you can usually see where food comes from and ask about it. A meal plan is different: you hand over two or three meals a day, every day, to one kitchen you may never visit. So it's worth knowing exactly what you are signing up for before you pay.</p>
+    <p>This guide explains what to check before choosing a halal meal plan in Dubai, and how Messify handles halal food on its plans.</p>
+
+    <h2>What to check before you choose</h2>
+    <p>Most food sold in the UAE is halal, but "most" is not the same as "every meal on your plan". These questions take two minutes to ask on WhatsApp or by email, and any provider should be happy to answer them:</p>
+    <ul>
+      <li><b>Is every meal halal, or only some?</b> Some plans mix in imported or speciality items. Ask whether the whole menu is halal, every day.</li>
+      <li><b>Where is the food cooked?</b> Knowing the kitchen and its location tells you who is responsible for what ends up in your bag.</li>
+      <li><b>Are any ingredients a concern for you?</b> If you avoid things such as alcohol used in cooking, gelatine or certain flavourings, ask about them by name.</li>
+      <li><b>What happens if you have a question about a dish?</b> You want a real person who can answer, not a form that disappears.</li>
+    </ul>
+
+    <h2>How Messify handles halal food</h2>
+    <p>Every Messify meal is 100% halal. There is no separate halal menu to pick from and no option to switch off: the whole menu is halal, every day, for every meal.</p>
+    <p>All meals are cooked fresh daily in our partner kitchen in International City, Dubai. The menu changes every day, and you can see it in the Messify app before you choose. If you want to know more about a dish or an ingredient, message us on WhatsApp and someone on our team will answer.</p>
+
+    <h2>Halal and vegetarian, every day</h2>
+    <p>Alongside the halal menu, there is a vegetarian option every day, for every meal: breakfast, lunch and dinner. That helps if you share a plan with a vegetarian housemate or colleague, if you simply want a lighter day, or if you'd rather not eat meat on a particular day. The kitchen cooks both vegetarian and non-vegetarian food.</p>
+
+    <h2>How a halal meal plan works with Messify</h2>
+    <ol>
+      <li><b>Choose a plan</b> in the Messify app: 1, 2 or 3 meals a day, weekly or monthly.</li>
+      <li><b>Pick tomorrow's meals by 6 PM.</b> The menu changes daily, so you choose from the next day's dishes.</li>
+      <li><b>Get your bag every morning.</b> All of the day's meals arrive together in one chilled bag, at your home, residence or office.</li>
+      <li><b>Keep them cold and reheat</b> when you're ready to eat.</li>
+    </ol>
+    <p>Each meal on your plan is a token. If you're away or eating with family one day, skip it in the app and use that meal on another day of your plan.</p>
+
+    <h2>What it costs</h2>
+    <p>Halal is standard on every plan, so there is no extra charge for it. Prices start from AED 25 a meal:</p>
+    <ul>
+      <li><b>Weekly:</b> AED 215, 415 or 610 for 1, 2 or 3 meals a day (7 days of meals to use within 9 days).</li>
+      <li><b>Monthly:</b> AED 715, 1,400 or 1,999 for 1, 2 or 3 meals a day (26 days of meals to use within 30 days).</li>
+    </ul>
+    <p>That works out at AED 25.63 to 30.71 per meal, depending on the plan. Our <a href="/guides/meal-plan-cost-dubai/">meal plan cost guide</a> compares this with ordering in.</p>
+
+    <h2>Where Messify delivers</h2>
+    <p>Messify delivers halal meal plans every morning to four areas of Dubai:</p>
+    <ul>
+      <li><a href="/meal-plans/academic-city/">Dubai Academic City</a>, including university residences</li>
+      <li><a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis</a>, for homes and offices</li>
+      <li><a href="/meal-plans/international-city/">International City</a>, where our meals are cooked</li>
+      <li><a href="/meal-plans/festival-city/">Dubai Festival City</a>, including Al Badia</li>
+    </ul>
+    <p>Students, working professionals and families in these areas use a plan so the question of "what's for lunch, and is it halal?" is answered before the day begins.</p>
+
+    <h2>How to start</h2>
+    <p>Orders aren't taken on this website. Download the Messify app and choose your plan there, or message us on WhatsApp and our team will help you pick one. See all plans and prices on our <a href="/meal-plans/">meal plans in Dubai</a> page, or <a href="/start/">start your plan</a>.</p>
+    <p>Planning an event rather than everyday meals? Our <a href="/catering/">catering</a> menus are 100% halal too.</p>'''
+    faqs = [
+        ('Are Messify meal plans halal?', 'Yes. Every Messify meal is 100% halal, every day, for every meal. There is no separate halal menu: the whole menu is halal.'),
+        ('Where is the food cooked?', 'All meals are cooked fresh daily in our partner kitchen in International City, Dubai.'),
+        ('Is there a vegetarian option on a halal meal plan?', 'Yes. There is a vegetarian option every day, for every meal. The kitchen cooks both vegetarian and non-vegetarian food.'),
+        ('Does a halal meal plan cost more?', 'No. Halal is standard on every Messify plan. Prices start from AED 25 a meal, with weekly plans from AED 215 and monthly plans from AED 715.'),
+        ('Which areas do you deliver halal meal plans to?', 'Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC), including Al Badia. All of the day\'s meals arrive together every morning in one chilled bag.'),
+    ]
+    article_page('/guides/halal-meal-plans-dubai/', 'Halal meal plans',
+                 'Halal Meal Plans in Dubai: What to Check | Messify',
+                 'Halal meal plans in Dubai: what to ask before you choose, how Messify keeps every meal 100% halal, prices from AED 25 a meal and delivery areas.',
+                 'Halal meal plans in Dubai', 'Halal food · 2026',
+                 "Every Messify meal is 100% halal, every day, for every meal, with a vegetarian option at each one. Meals are cooked fresh daily in our partner kitchen in International City and delivered together each morning to Academic City, Silicon Oasis, International City and Dubai Festival City, from AED 25 a meal.",
+                 sections, faqs, published='2026-11-13')
 
 # ---------------------------------------------------------------- catering guides
 CATERING_GUIDES = [
@@ -2588,7 +2658,7 @@ def page_cater_area(slug):
 # ---------------------------------------------------------------- occasion guides
 CATERING_GUIDES += [
     ('/guides/uae-event-catering-calendar/', 'UAE event catering calendar 2026–27',
-     'Halloween, Diwali, Thanksgiving, National Day, Christmas, Ramadan, Eid and graduation season: dates and when to book.'),
+     'Thanksgiving, National Day, Christmas, New Year, Ramadan, Eid, graduations and Diwali: dates and when to book.'),
     ('/guides/corporate-iftar-planning/', 'How to plan a corporate iftar',
      'Timing around Maghrib, headcount, menu, venue and the details that make a Ramadan iftar for your team work.'),
     ('/guides/diwali-party-food-planning/', 'Planning food for a Diwali party',
@@ -2600,8 +2670,6 @@ OG_DATE = '2026-10-23'
 
 def page_guide_calendar():
     rows = [
-        ('31 October 2026', 'Halloween', 'Kids\' and themed parties at home, school and community events.', '1–2 weeks', '/catering/birthday-parties/'),
-        ('8 November 2026', 'Diwali', 'Dhanteras is 6 November and Bhai Dooj 10 November. Parties at home, office celebrations, community events.', '2–3 weeks', '/catering/diwali/'),
         ('26 November 2026', 'Thanksgiving (US)', 'Expat dinners and Friendsgivings, usually on the nearest weekend.', '2 weeks', '/catering/christmas-year-end-parties/'),
         ('2–3 December 2026', 'UAE National Day (Eid Al Etihad)', 'Office celebrations in the days before the holiday, community and family events.', '3–4 weeks', '/catering/national-day/'),
         ('December 2026', 'Year-end and Christmas parties', 'The busiest weeks of the year for office parties. Christmas is 25 December.', '4–6 weeks', '/catering/christmas-year-end-parties/'),
@@ -2612,10 +2680,12 @@ def page_guide_calendar():
         ('About 16 or 17 May 2027', 'Eid al-Adha', 'Family gatherings and open houses. Expected, subject to the moon sighting.', '3–4 weeks', '/catering/eid/'),
         ('May to June 2027', 'Graduation season', 'Graduation parties for students and families, school and university events.', '2–3 weeks', '/catering/university-events/'),
         ('Late August to September 2027', 'New academic year', 'Orientation days, welcome events and society fairs on campus.', '3–4 weeks', '/catering/university-events/'),
+        ('Late October or early November 2027', 'Diwali', 'Parties at home, office celebrations, community events. The exact 2027 date will be added here once confirmed.', '2–3 weeks', '/catering/diwali/'),
+        ('31 October 2027', 'Halloween', 'Kids\' and themed parties at home, school and community events.', '1–2 weeks', '/catering/birthday-parties/'),
     ]
     trs = ''.join(f'<tr><th scope="row">{o}</th><td data-label="Date">{d}</td><td data-label="What people cater">{w}</td><td data-label="Book ahead">{b}</td></tr>' for d, o, w, b, _ in rows)
     table = f'''<div class="table-wrap"><table class="ptable ptable--wrap">
-  <caption>UAE catering calendar, October 2026 to September 2027</caption>
+  <caption>UAE catering calendar, November 2026 to October 2027</caption>
   <thead><tr><th scope="col">Occasion</th><th scope="col">Date</th><th scope="col">What people cater</th><th scope="col">Book ahead</th></tr></thead>
   <tbody>{trs}</tbody></table></div>'''
     sections = f'''
@@ -2626,19 +2696,21 @@ def page_guide_calendar():
     {table}
     <p class="disclaim">Islamic dates depend on the moon sighting and are confirmed close to the day. Book for the expected date and confirm your final numbers once it is announced.</p>
 
-    <h2>October and November: Halloween, Diwali and Thanksgiving</h2>
-    <p><b>Halloween</b> (31 October) is mostly children's parties and themed house parties: finger food, mild dishes for children and something proper for the adults. See <a href="/catering/birthday-parties/">party catering</a>.</p>
-    <p><b>Diwali</b> falls on Sunday 8 November 2026. Menus are mostly vegetarian, with snacks and sweets to share, and many families host on the weekend around it. See <a href="/catering/diwali/">Diwali catering</a> and our <a href="/guides/diwali-party-food-planning/">Diwali food guide</a>.</p>
+    <h2>November: Thanksgiving</h2>
     <p><b>Thanksgiving</b> is Thursday 26 November 2026. In the UAE it is usually celebrated by American and other expat families and friends on the nearest weekend, as a roast-style dinner.</p>
 
     <h2>December: National Day, year-end parties, Christmas and New Year</h2>
-    <p>December is the most crowded month. <b>UAE National Day</b> (Eid Al Etihad) is a public holiday on 2 and 3 December 2026, and offices celebrate in the days before it. <b>Year-end office parties</b> cluster in the first three weeks of December, then come <b>Christmas</b> and <b>New Year's Eve</b>. If your company holds a December party, fix the date and book in October or early November. See <a href="/catering/national-day/">National Day catering</a> and <a href="/catering/christmas-year-end-parties/">year-end party catering</a>.</p>
+    <p>December is the most crowded month. <b>UAE National Day</b> (Eid Al Etihad) is a public holiday on 2 and 3 December 2026, and offices celebrate in the days before it. <b>Year-end office parties</b> cluster in the first three weeks of December, then come <b>Christmas</b> and <b>New Year's Eve</b>. If your company holds a December party, fix the date and book in October or early November; if that has passed, book as soon as your date is set. See <a href="/catering/national-day/">National Day catering</a> and <a href="/catering/christmas-year-end-parties/">year-end party catering</a>.</p>
 
     <h2>February and March: Ramadan and Eid al-Fitr</h2>
-    <p><b>Ramadan 2027</b> is expected to begin around 8 February 2027. Iftar catering is in demand every evening of the month, especially at weekends and in the last ten days. Corporate iftars need booking four to six weeks ahead. <b>Eid al-Fitr</b> is expected around 9 or 10 March 2027, when families host lunches and open houses. See <a href="/catering/iftar/">iftar catering</a>, our <a href="/guides/corporate-iftar-planning/">corporate iftar guide</a> and <a href="/catering/eid/">Eid catering</a>.</p>
+    <p><b>Ramadan 2027</b> is expected to begin around 8 February 2027, subject to the moon sighting. Iftar catering is in demand every evening of the month, especially at weekends and in the last ten days. Corporate iftars need booking four to six weeks ahead. <b>Eid al-Fitr</b> is expected around 9 or 10 March 2027 (subject to the moon sighting), when families host lunches and open houses. See <a href="/catering/iftar/">iftar catering</a>, our <a href="/guides/corporate-iftar-planning/">corporate iftar guide</a> and <a href="/catering/eid/">Eid catering</a>.</p>
 
     <h2>May to September: Eid al-Adha, graduations and the new academic year</h2>
-    <p><b>Eid al-Adha</b> is expected around 16 or 17 May 2027. <b>Graduation season</b> runs from May into June. Summer is quieter as many residents travel, then <b>orientation weeks</b> bring campus events from late August. See <a href="/catering/university-events/">university event catering</a>.</p>
+    <p><b>Eid al-Adha</b> is expected around 16 or 17 May 2027, subject to the moon sighting. <b>Graduation season</b> runs from May into June. Summer is quieter as many residents travel, then <b>orientation weeks</b> bring campus events from late August. See <a href="/catering/university-events/">university event catering</a>.</p>
+
+    <h2>October 2027: Diwali and Halloween</h2>
+    <p><b>Diwali 2027</b> falls in late October or early November 2027; we will add the exact date here once it is confirmed. Menus are mostly vegetarian, with snacks and sweets to share, and many families host on the weekend around it. See <a href="/catering/diwali/">Diwali catering</a> and our <a href="/guides/diwali-party-food-planning/">Diwali food guide</a>.</p>
+    <p><b>Halloween</b> (Sunday 31 October 2027) is mostly children's parties and themed house parties: finger food, mild dishes for children and something proper for the adults. See <a href="/catering/birthday-parties/">party catering</a>.</p>
 
     <h2>Events that happen all year</h2>
     <p>Weddings, birthdays, family gatherings, business meetings and corporate events happen in every month, though weddings and outdoor events are concentrated in the cooler months. See <a href="/catering/weddings/">wedding catering</a>, <a href="/catering/family-gatherings/">family gatherings</a>, <a href="/catering/business-meetings/">business meetings</a> and <a href="/catering/corporate-events/">corporate events</a>.</p>
@@ -2653,15 +2725,15 @@ def page_guide_calendar():
     faqs = [
         ('When is the busiest time for catering in the UAE?', 'The cooler months from October to April, and especially December (National Day, year-end parties, Christmas and New Year) and Ramadan.'),
         ('When is Ramadan 2027?', 'Ramadan 2027 is expected to begin around 8 February 2027 and end around 9 March 2027, subject to the moon sighting.'),
-        ('When is Diwali 2026 in the UAE?', 'Diwali falls on Sunday 8 November 2026, with Dhanteras on 6 November and Bhai Dooj on 10 November.'),
+        ('When is Diwali 2027 in the UAE?', 'Diwali 2026 was on 8 November. Diwali 2027 falls in late October or early November 2027; the exact date will be added once confirmed.'),
         ('When is UAE National Day 2026?', 'The Eid Al Etihad public holiday in 2026 is on 2 and 3 December.'),
         ('How far in advance should I book catering for the festive season?', 'Four to six weeks for December parties, iftars, Eid and New Year\'s Eve; two to four weeks for other busy-season weekends.'),
     ]
     article_page('/guides/uae-event-catering-calendar/', 'Catering calendar', 'UAE Event Catering Calendar 2026–27: Dates | Messify',
-                 'Key UAE catering dates for 2026–27: Halloween, Diwali, Thanksgiving, National Day, Christmas, Ramadan, Eid and graduations, and when to book.',
+                 'Key UAE catering dates for 2026–27: Thanksgiving, National Day, Christmas, New Year, Ramadan, Eid, graduations and Diwali, and when to book.',
                  'UAE event catering calendar 2026–27', 'Catering guide · 2026–27',
-                 'The busiest catering dates in the UAE for 2026–27 are Diwali (8 November 2026), UAE National Day (2–3 December), December year-end parties, Christmas and New Year, then Ramadan (expected from about 8 February 2027) and Eid al-Fitr (about 9–10 March 2027). Book four to six weeks ahead for peak dates.',
-                 sections, faqs, kind='catering', published=OG_DATE)
+                 'The busiest catering dates in the UAE for 2026–27 are UAE National Day (2–3 December 2026), December year-end parties, Christmas and New Year, then Ramadan (expected from about 8 February 2027, subject to the moon sighting) and Eid al-Fitr (expected about 9–10 March 2027). Book four to six weeks ahead for peak dates.',
+                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-13')
 
 def page_guide_corporate_iftar():
     sections = '''
@@ -2716,8 +2788,8 @@ def page_guide_corporate_iftar():
     article_page('/guides/corporate-iftar-planning/', 'Corporate iftar', 'How to Plan a Corporate Iftar in the UAE | Messify',
                  'Plan a corporate iftar in Dubai and the UAE: timing around Maghrib, format, headcount, menu in stages, prayer space and when to book for Ramadan 2027.',
                  'How to plan a corporate iftar', 'Ramadan guide · 2027',
-                 'Book a corporate iftar four to six weeks ahead. Confirm the Maghrib time for your date, choose the format (office, venue, ghabga or staff meals), collect RSVPs, have dates and water on the tables before Maghrib, set aside space for prayer, and serve the main meal after the prayer. Ramadan 2027 is expected to begin around 8 February 2027.',
-                 sections, faqs, kind='catering', published=OG_DATE)
+                 'Book a corporate iftar four to six weeks ahead. Confirm the Maghrib time for your date, choose the format (office, venue, ghabga or staff meals), collect RSVPs, have dates and water on the tables before Maghrib, set aside space for prayer, and serve the main meal after the prayer. Ramadan 2027 is expected to begin around 8 February 2027, subject to the moon sighting.',
+                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-13')
 
 def page_guide_diwali():
     rows = [('Snacks (samosas, pakoras, dhokla)', '4–6 pieces'), ('Rice, biryani or pulao (cooked)', '150 g'), ('Paneer, dal and vegetable curries (all together)', '250 g'),
@@ -2728,8 +2800,8 @@ def page_guide_diwali():
   <thead><tr><th scope="col">Item</th><th scope="col">Per adult guest</th></tr></thead>
   <tbody>{trs}</tbody></table></div>'''
     sections = f'''
-    <h2>Diwali 2026 dates in the UAE</h2>
-    <p>Diwali (Lakshmi Puja) falls on <b>Sunday 8 November 2026</b>. Dhanteras is on Friday 6 November and Bhai Dooj on Tuesday 10 November in the UAE. Many families host on the weekend around Diwali, and offices often celebrate in the working days just before or after, so book early.</p>
+    <h2>Diwali 2027 dates in the UAE</h2>
+    <p>Diwali 2026 was on Sunday 8 November. <b>Diwali 2027</b> falls in late October or early November 2027, and we will add the exact dates for Dhanteras, Lakshmi Puja and Bhai Dooj here once they are confirmed. Many families host on the weekend around Diwali, and offices often celebrate in the working days just before or after, so book early.</p>
 
     <h2>Build a vegetarian menu</h2>
     <p>Most Diwali menus are vegetarian. A balanced spread has four parts:</p>
@@ -2760,22 +2832,22 @@ def page_guide_diwali():
     <h2>Get a Diwali catering quote</h2>
     <p>We cater Diwali parties at home, office celebrations and community gatherings across the UAE. See <a href="/catering/diwali/">Diwali catering</a> or send your date, location and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
     faqs = [
-        ('When is Diwali 2026?', 'Diwali (Lakshmi Puja) falls on Sunday 8 November 2026 in the UAE, with Dhanteras on 6 November and Bhai Dooj on 10 November.'),
+        ('When is Diwali 2027?', 'Diwali 2026 was on 8 November. Diwali 2027 falls in late October or early November 2027; the exact date will be added here once confirmed.'),
         ('What food is served at a Diwali party?', 'Usually a vegetarian spread: snacks such as samosas and pakoras, paneer, dal and vegetable curries, biryani or pulao, puri or naan, and Indian sweets with chai.'),
         ('How much food do I need for a Diwali party?', 'Per adult, plan about 4–6 snacks, 150 g of rice or biryani, 250 g of curries and dal, 2 breads, some raita and salad, and 2–3 sweets.'),
         ('Can a caterer provide Jain food?', 'Some can. Ask whether the kitchen can cook without onion, garlic and root vegetables, and whether it also cooks meat.'),
         ('Does Messify cater Diwali?', 'Yes. We cater Diwali parties at home, office celebrations and community gatherings, with vegetarian Indian menus and sweets.'),
     ]
     article_page('/guides/diwali-party-food-planning/', 'Diwali party food', 'Diwali Party Food: Menu & How Much to Order | Messify',
-                 'Plan the food for a Diwali party in the UAE: a vegetarian menu, how much to order per guest, snacks and sweets, Jain guests and timing for 2026.',
-                 'Planning food for a Diwali party', 'Diwali guide · 2026',
-                 'Diwali 2026 is on Sunday 8 November. A Diwali party menu is usually vegetarian: snacks as guests arrive, two or three curries (paneer, dal, vegetables), rice and breads, and Indian sweets with chai. Per adult, plan about 150 g of rice, 250 g of curries, 2 breads and 2–3 sweets.',
-                 sections, faqs, kind='catering', published=OG_DATE)
+                 'Plan the food for a Diwali party in the UAE: a vegetarian menu, how much to order per guest, snacks and sweets, Jain guests and timing.',
+                 'Planning food for a Diwali party', 'Diwali guide',
+                 'Diwali 2027 falls in late October or early November 2027. A Diwali party menu is usually vegetarian: snacks as guests arrive, two or three curries (paneer, dal, vegetables), rice and breads, and Indian sweets with chai. Per adult, plan about 150 g of rice, 250 g of curries, 2 breads and 2–3 sweets.',
+                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-13')
 
 def page_guide_year_end():
     sections = '''
     <h2>Fix the date first</h2>
-    <p>December is the busiest month for events in the UAE. UAE National Day is on 2 and 3 December 2026, and most companies hold their year-end party in the first three weeks of December, before people travel. Popular dates go first, so set your date in October or early November and book the caterer straight away.</p>
+    <p>December is the busiest month for events in the UAE. UAE National Day is on 2 and 3 December 2026, and most companies hold their year-end party in the first three weeks of December, before people travel. Popular dates go first, so set your date as early as you can (ideally by October or early November) and book the caterer straight away.</p>
 
     <h2>Choose the format</h2>
     <ul>
@@ -2815,7 +2887,7 @@ def page_guide_year_end():
                  'Plan catering for an office year-end party in Dubai and the UAE: when to book in December, format, budget per person, a menu for a mixed team and logistics.',
                  'Catering an office year-end party', 'Catering guide · 2026',
                  'Book December office party catering in October or early November, because the first three weeks of December are the busiest of the year. Decide between an office lunch, an evening party or bites and drinks, set a budget per person, choose a halal menu that mixes cuisines, and collect dietary needs with RSVPs.',
-                 sections, faqs, kind='catering', published=OG_DATE)
+                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-13')
 
 # ---------------------------------------------------------------- catering by event type and occasion
 I.update({
@@ -3115,14 +3187,14 @@ CATER_TYPES = {
     ('party', 'Card parties and get-togethers', 'Evening bites and dinner for Diwali get-togethers.'),
   ],
   'plan_title': 'Planning food for Diwali.',
-  'plan': '''<p>Diwali 2026 falls on Sunday 8 November, with Dhanteras on 6 November and Bhai Dooj on 10 November in the UAE. Many families host on the weekend around Diwali, so book as early as you can.</p>
+  'plan': '''<p>Diwali 2026 was on Sunday 8 November. Diwali 2027 falls in late October or early November 2027, and we will add the exact date here once it is confirmed. Many families host on the weekend around Diwali, so book as early as you can.</p>
 <p>Most Diwali menus are vegetarian. <b>Please note:</b> our partner kitchen cooks both vegetarian and non-vegetarian food. If your guests need food cooked in a pure-vegetarian kitchen, or Jain food without onion and garlic, tell us in your enquiry and we will say upfront what we can and can't do.</p>
 <p>Our <a href="/guides/diwali-party-food-planning/">guide to planning food for a Diwali party</a> covers menus, quantities and timing.</p>''',
   'menu': [('Snacks and starters', ['Samosas, pakoras and chaat-style bites', 'Paneer tikka', 'Dhokla and savoury snacks']),
            ('Mains', ['Paneer makhani and dal makhani', 'Chole, mixed vegetable curries', 'Biryani and pulao', 'Puri, naan and roti']),
            ('Sweets', ['Gulab jamun and Indian desserts', 'Kheer', 'Chai, juices and soft drinks'])],
   'faqs': [
-    ('When is Diwali 2026 in the UAE?', 'Diwali (Lakshmi Puja) falls on Sunday 8 November 2026, with Dhanteras on 6 November and Bhai Dooj on 10 November in the UAE.'),
+    ('When is Diwali 2027 in the UAE?', 'Diwali 2026 was on 8 November. Diwali 2027 falls in late October or early November 2027; the exact date will be added once confirmed.'),
     ('Do you cater vegetarian Diwali menus?', 'Yes. We build Diwali menus around vegetarian Indian dishes, snacks and sweets.'),
     ('Is your kitchen pure vegetarian?', 'No. Our partner kitchen cooks both vegetarian and non-vegetarian food. If you need a pure-vegetarian kitchen or Jain food, tell us and we will tell you upfront what we can do.'),
     ('Do you cater office Diwali celebrations?', 'Yes. We cater Diwali lunches and celebrations for teams, with sweets and snacks to share.'),
@@ -3202,7 +3274,7 @@ def type_cards(kind=None, exclude=None):
     out = ''.join(f'<a class="emirate" href="/catering/{slug}/"><span class="emirate__ico">{I[t["icon"]]}</span><h3 class="h3">{t["name"]}</h3><p>{t["card"]}</p><span class="link-arrow">See {label(t["name"])} {I["arrow"]}</span></a>'
                   for slug, t in CATER_TYPES.items() if (kind is None or t['kind'] == kind) and slug != exclude)
     if kind == 'occasion' and exclude is None:
-        out += f'<a class="emirate" href="/guides/uae-event-catering-calendar/"><span class="emirate__ico">{I["clock"]}</span><h3 class="h3">UAE catering calendar</h3><p>Every key date for 2026–27, from Diwali to Eid al-Adha, and how early to book.</p><span class="link-arrow">See the calendar {I["arrow"]}</span></a>'
+        out += f'<a class="emirate" href="/guides/uae-event-catering-calendar/"><span class="emirate__ico">{I["clock"]}</span><h3 class="h3">UAE catering calendar</h3><p>Every key date for the next 12 months, from National Day to Diwali, and how early to book.</p><span class="link-arrow">See the calendar {I["arrow"]}</span></a>'
     return f'<div class="emirates">{out}</div>'
 
 def page_cater_type(slug):
@@ -3315,7 +3387,7 @@ def page_lastmods(paths):
 def tech_files():
     urls = [('/', '1.0'), ('/meal-plans/', '0.9'), ('/meal-plans/academic-city/', '0.9'), ('/meal-plans/silicon-oasis/', '0.9'),
             ('/meal-plans/international-city/', '0.8'), ('/meal-plans/festival-city/', '0.9'), ('/guides/meal-delivery-dubai-festival-city/', '0.7'), ('/catering/', '0.9'), ('/guides/', '0.6'), ('/guides/best-meal-plans-dubai/', '0.8'), ('/guides/meal-plan-cost-dubai/', '0.8'), ('/guides/student-meal-plans-dubai/', '0.8'), ('/guides/weekly-vs-monthly-meal-plan/', '0.7'), ('/guides/office-lunch-delivery-silicon-oasis/', '0.7'), ('/about/', '0.6'), ('/terms/', '0.2'), ('/privacy/', '0.2'),
-            ('/guides/affordable-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
+            ('/guides/affordable-meal-plans-dubai/', '0.7'), ('/guides/halal-meal-plans-dubai/', '0.7')] + [(f'/catering/{c}/', '0.8') for c in CATER_AREAS] + [(f'/catering/{c}/', '0.8') for c in CATER_TYPES] + [(p, '0.7') for p, _, _ in CATERING_GUIDES]
     lastmod = page_lastmods([u for u, _ in urls])
     sm = '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n' + ''.join(
         f'  <url><loc>{BASE}{u}</loc><lastmod>{lastmod[u]}</lastmod><priority>{p}</priority></url>\n' for u, p in urls) + '</urlset>\n'
@@ -3371,6 +3443,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Daily meal delivery in Dubai Festival City]({BASE}/guides/meal-delivery-dubai-festival-city/): meal plans for Al Badia homes and offices in DFC
 - [Office lunch delivery in Dubai Silicon Oasis]({BASE}/guides/office-lunch-delivery-silicon-oasis/): morning delivery for offices in DSO, prices, team plans
 - [Affordable meal plans in Dubai]({BASE}/guides/affordable-meal-plans-dubai/): price per meal, the lowest-cost plans and how to avoid waste
+- [Halal meal plans in Dubai]({BASE}/guides/halal-meal-plans-dubai/): every Messify meal is 100% halal; what to check, prices and delivery areas
 {cater_lines}
 {type_lines}
 {cguide_lines}
@@ -3423,7 +3496,7 @@ if __name__ == '__main__':
     sync_js_prices()
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
-    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable()
+    page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable(); page_guide_halal()
     page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
     for s in CATER_AREAS: page_cater_area(s)
     page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end()
