@@ -310,6 +310,22 @@
     });
   });
 
+  /* ---------- Catering quote bar (phones) ---------- */
+  var qbar = $('[data-qbar]');
+  if (qbar) {
+    var qform = document.getElementById('quote'), formOn = false;
+    var qupd = function () { qbar.classList.toggle('is-on', window.scrollY > 480 && !formOn); };
+    if (qform && 'IntersectionObserver' in window) {
+      new IntersectionObserver(function (es) { formOn = es[0].isIntersecting; qupd(); }, { rootMargin: '0px 0px -30% 0px' }).observe(qform);
+    }
+    window.addEventListener('scroll', qupd, { passive: true });
+    qupd();
+    qbar.addEventListener('click', function (e) {
+      var a = e.target.closest('a');
+      if (a && typeof window.gtag === 'function') window.gtag('event', 'quote_bar_click', { link: a.dataset.k, page_path: location.pathname });
+    });
+  }
+
   /* ---------- Meal plan vs ordering-in calculator (guides) ---------- */
   $$('[data-calc]').forEach(function (box) {
     var spend = $('#calc-spend', box);

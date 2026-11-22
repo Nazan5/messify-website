@@ -249,7 +249,28 @@ FOOTER = f'''<footer class="foot">
   </div>
 </footer>'''
 
+def lift_quote(body):
+    """Catering pages: put the quote form straight after the first section, and close the page with a short band that jumps back to it."""
+    i = body.find('id="quote"')
+    if i < 0: return body, False
+    start = body.rfind('<section', 0, i); end = body.find('</section>', i) + len('</section>')
+    form = body[start:end]; rest = body[:start] + body[end:]
+    first = rest.find('</section>') + len('</section>')
+    band = band_catering(title='Ready when you are.', text="Send your date, location and headcount, and we'll come back with a menu and a price.").replace('href="/catering/#quote"', 'href="#quote"')
+    return rest[:first] + '\n\n' + form + rest[first:] + '\n\n' + band, True
+
+def quote_bar(has_form):
+    href = '#quote' if has_form else '/catering/#quote'
+    wa = WA + '?text=' + quote("Hi Messify, I'd like a catering quote.")
+    return (f'<div class="qbar" data-qbar><a class="btn" href="{href}" data-k="quote">Get a quote</a>'
+            f'<a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener" data-k="whatsapp">{I["wa"]}WhatsApp</a></div>')
+
 def render(page, body):
+    qbar = ''
+    if page.get('mode') == 'catering':
+        body, has_form = lift_quote(body)
+        qbar = quote_bar(has_form)
+        page = dict(page, body_class=(page.get('body_class', '') + ' has-qbar').strip())
     out = head(page) + f'''
 <body class="{page.get('body_class', '')}">
 <a class="skip" href="#content">Skip to content</a>
@@ -259,6 +280,7 @@ def render(page, body):
 {body}
 </main>
 {FOOTER}
+{qbar}
 <script src="/assets/js/site.js?v={ver('/assets/js/site.js')}" defer></script>
 <script src="/assets/js/messibot.js?v={ver('/assets/js/messibot.js')}" defer></script>
 </body>
@@ -1189,9 +1211,9 @@ def page_catering():
                    ('Corporate and office catering', 'Business meeting and office lunch catering', 'Party and home event catering', 'Birthday party catering', 'Family gathering catering', 'University event catering', 'Wedding catering', 'Buffet catering', 'Iftar catering', 'Eid catering', 'Bulk and staff catering',
                     'Indian catering', 'Arabic catering', 'Continental catering', 'Italian catering', 'Chinese catering')]}}
     page = {'path': '/catering/', 'mode': 'catering', 'nav': 'catering', 'exact': True,
-            'title': 'Catering Company in Dubai: Buffet & Event Catering | Messify',
+            'title': 'Catering Services in Dubai: Buffet & Event Catering | Messify',
             'desc': 'Halal catering company in Dubai and across the UAE: buffet setups, corporate events, office lunches, parties and weddings. Custom menus quoted by headcount.',
-            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
+            'cta': ('#quote', 'Get a quote', 'Quote'),
             'preload': '<link rel="preload" as="image" href="/assets/img/cat-serving-640.webp" imagesrcset="/assets/img/cat-serving-640.webp 640w, /assets/img/cat-serving.webp 1100w" imagesizes="(min-width: 900px) 45vw, 100vw">\n',
             'schema': [ORG, BUSINESS, service, faq_schema(faqs), crs]}
     ev = event_tiles(CATER_EVENTS)
@@ -1206,7 +1228,7 @@ def page_catering():
       <h1 class="h2 rise">Catering services in Dubai &amp; the UAE. <em class="it">Your event, fed properly.</em></h1>
       <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
-        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn" href="#quote">Get a quote</a>
         <a class="btn btn--ghost" href="{WA}?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener">WhatsApp us</a>
       </div>
       {rating_badge()}
@@ -1645,7 +1667,7 @@ def band_catering(title='Planning an event?', text="Send your date, location and
     <div class="band band--walnut">
       <div><h2 class="h2">{title}</h2><p class="lede">{text}</p></div>
       <div class="actions" style="margin-top:0">
-        <a class="btn" href="/catering/#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn" href="/catering/#quote">Get a quote</a>
         <a class="btn btn--ghost" href="{WA}?text={quote("Hi Messify, I'd like a catering quote.")}" target="_blank" rel="noopener">WhatsApp us</a>
       </div>
     </div>
@@ -1664,7 +1686,7 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
     page = {'path': path, 'mode': kind, 'nav': kind, 'title': title, 'desc': desc,
             'schema': [ORG, BUSINESS, article_schema(path, h1, desc, published, modified), faq_schema(faqs), crs]}
     if kind == 'catering':
-        page.update({'cta': ('/catering/#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering'})
+        page.update({'cta': ('/catering/#quote', 'Get a quote', 'Quote')})
     mins = read_time(quick + sections + ''.join(q + a for q, a in faqs))
     body = f'''<section class="sec sec--first">
   <div class="wrap article">
@@ -1683,7 +1705,7 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
 </section>
 {extra_after}
 {guide_more(path, CATERING_GUIDES if kind == 'catering' else GUIDES)}
-{band_catering() if kind == 'catering' else band()}'''
+{catering_form(title='Get a quote for your event.') if kind == 'catering' else band()}'''
     render(page, body)
 
 def calculator():
@@ -3021,7 +3043,7 @@ def page_cater_area(slug):
                'areaServed': {'@type': 'AdministrativeArea', 'name': c['name'], 'containedInPlace': {'@type': 'Country', 'name': 'United Arab Emirates'}},
                'hasOfferCatalog': catering_catalog()}
     page = {'path': path, 'mode': 'catering', 'nav': 'catering', 'title': c['title'], 'desc': c['desc'],
-            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
+            'cta': ('#quote', 'Get a quote', 'Quote'),
             'schema': [ORG, BUSINESS, service, faq_schema(c['faqs']), crs]}
     small, big, w, h, alt = c['img']
     srcset = f' srcset="/assets/img/{small} 640w, /assets/img/{big} {w}w" sizes="(min-width: 900px) 45vw, 100vw"' if small != big else ''
@@ -3037,7 +3059,7 @@ def page_cater_area(slug):
       <h1 class="h2 rise">{c['h1']}</h1>
       <p class="lede rise">{c['lede']}</p>
       <div class="actions">
-        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn" href="#quote">Get a quote</a>
         <a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener">WhatsApp us</a>
       </div>
       {rating_badge()}
@@ -3734,7 +3756,7 @@ def page_cater_type(slug):
                'description': t['desc'], 'provider': {'@id': BASE + '/#business'},
                'areaServed': [{'@type': 'AdministrativeArea', 'name': c} for c in CATER_EMIRATES]}
     page = {'path': path, 'mode': 'catering', 'nav': 'catering', 'title': t['title'], 'desc': t['desc'],
-            'cta': ('#quote', 'Get a quote', 'Quote'), 'cta_bot': 'catering',
+            'cta': ('#quote', 'Get a quote', 'Quote'),
             'schema': [ORG, BUSINESS, service, faq_schema(t['faqs']), crs]}
     small, big, w, h, alt = CATER_IMGS[t['img']]
     srcset = f' srcset="/assets/img/{small} 640w, /assets/img/{big} {w}w" sizes="(min-width: 900px) 45vw, 100vw"' if small != big else ''
@@ -3752,7 +3774,7 @@ def page_cater_type(slug):
       <h1 class="h2 rise">{t['h1']}</h1>
       <p class="lede rise">{t['lede']}</p>
       <div class="actions">
-        <a class="btn" href="#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn" href="#quote">Get a quote</a>
         <a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener">WhatsApp us</a>
       </div>
       {rating_badge()}

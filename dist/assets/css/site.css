@@ -717,3 +717,17 @@ a.event:hover h3{color:var(--accent-ink)}
 .more-links{margin:24px 0 0;color:var(--muted);font-size:.92rem;line-height:1.7}
 .more-links a{color:var(--fg)}
 @media (min-width:1000px){.areas{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+/* Catering quote bar: phones only, appears after the hero and hides while the form is on screen.
+   Leaves room on the right for the Messibot launcher. */
+.qbar{display:none}
+@media (max-width:760px){
+  .qbar{position:fixed;left:12px;right:84px;bottom:calc(14px + env(safe-area-inset-bottom,0px));z-index:60;display:flex;gap:8px;padding:6px;border-radius:999px;
+    background:var(--surface,#1C1714);border:1px solid var(--line);box-shadow:0 18px 40px -16px rgba(0,0,0,.55);
+    transform:translateY(160%);transition:transform .35s cubic-bezier(.2,.7,.2,1)}
+  .qbar.is-on{transform:none}
+  .qbar .btn{flex:1;min-height:44px;padding:0 10px;font-size:.88rem;gap:6px}
+  .qbar .btn svg{width:16px;height:16px}
+  .has-qbar .foot{padding-bottom:96px}
+}
+@media (prefers-reduced-motion:reduce){.qbar{transition:none}}

@@ -33,7 +33,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&amp;family=Poppins:wght@400;500;600;700&amp;display=swap">
-<link rel="stylesheet" href="/assets/css/site.css?v=b82e6e91">
+<link rel="stylesheet" href="/assets/css/site.css?v=7c2a40ac">
 <script type="application/ld+json">
 {
  "@context": "https://schema.org",
@@ -245,7 +245,7 @@
 }
 </script>
 </head>
-<body class="">
+<body class="has-qbar">
 <a class="skip" href="#content">Skip to content</a>
 
 <header class="bar">
@@ -255,7 +255,7 @@
       <span class="switch__thumb" aria-hidden="true"></span>
       <a href="/meal-plans/">Meal plans</a><a href="/catering/" class="is-on">Catering</a>
     </nav>
-    <div class="bar__end"><a class="btn btn--sm" href="/catering/#quote" data-messibot="catering"><span class="cta-long">Get a quote</span><span class="cta-short">Quote</span></a></div>
+    <div class="bar__end"><a class="btn btn--sm" href="/catering/#quote"><span class="cta-long">Get a quote</span><span class="cta-short">Quote</span></a></div>
   </div>
 </header>
 <main id="content">
@@ -311,6 +311,49 @@
   </div>
 </section>
 
+<section class="sec sec--tint" id="quote" aria-labelledby="quote-title">
+  <div class="wrap form-grid">
+    <div>
+      <p class="eyebrow">Get a quote</p>
+      <h2 class="h2" id="quote-title">Get a quote for your event.</h2>
+      <p class="lede">Send the details and we'll come back with a menu and price for your headcount.</p>
+      <div class="contact-lines">
+  <div><span class="ci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M22 16.9v3a2 2 0 0 1-2.2 2 19.8 19.8 0 0 1-8.6-3.1 19.5 19.5 0 0 1-6-6A19.8 19.8 0 0 1 2.1 4.2 2 2 0 0 1 4.1 2h3a2 2 0 0 1 2 1.7c.1 1 .4 1.9.7 2.8a2 2 0 0 1-.5 2.1L8.1 9.9a16 16 0 0 0 6 6l1.3-1.3a2 2 0 0 1 2.1-.4c.9.3 1.9.6 2.8.7a2 2 0 0 1 1.7 2Z"/></svg></span><small>Phone &amp; WhatsApp</small><a href="tel:+971502513033">+971 50 251 3033</a></div>
+  <div><span class="ci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-10 6L2 7"/></svg></span><small>Email</small><a href="mailto:info@messify.me">info@messify.me</a></div>
+  <div><span class="ci"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="1.8"/><path d="M12 7v5l3 2" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></span><small>Open</small><b>Daily, 8 AM to 11 PM</b></div>
+</div>
+    </div>
+    <div>
+      <form class="form" data-form="catering" data-done="quoteDone" data-wa-intro="Hi Messify, I'd like a catering quote." novalidate>
+        <input type="hidden" name="_subject" value="New catering enquiry from messify.me">
+        <div class="row">
+          <div class="field"><label for="q-name">Your name</label><input id="q-name" name="name" data-label="Name" autocomplete="name" placeholder="Sara Khan" required><span class="err" aria-live="polite"></span></div>
+          <div class="field"><label for="q-phone">Phone number (WhatsApp)</label><input id="q-phone" name="phone" data-label="Phone (WhatsApp)" type="tel" inputmode="tel" autocomplete="tel" placeholder="+971 50 000 0000" required><span class="err" aria-live="polite"></span></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="q-type">Event type</label><select id="q-type" name="type" data-label="Event type"><option>Corporate event</option><option>Business meeting or office lunch</option><option>Wedding</option><option>Family gathering</option><option>Birthday party</option><option>University event</option><option>Iftar or Ramadan event</option><option>Eid</option><option>Diwali</option><option>Christmas or year-end party</option><option>National Day</option><option>Buffet setup</option><option>Bulk catering</option><option>Other</option></select></div>
+          <div class="field"><label for="q-emirate">Emirate</label><select id="q-emirate" name="emirate" data-label="Emirate"><option selected>Dubai</option><option>Sharjah</option><option>Ajman</option><option>Abu Dhabi</option><option>Ras Al Khaimah</option><option>Umm Al Quwain</option></select></div>
+        </div>
+        <div class="row">
+          <div class="field"><label for="q-date">Event date</label><input id="q-date" name="date" data-label="Event date" type="date"></div>
+          <div class="field"><label for="q-guests">Headcount</label><input id="q-guests" name="guests" data-label="Headcount" type="number" inputmode="numeric" min="1" placeholder="150" required><span class="err" aria-live="polite"></span></div>
+        </div>
+        <div class="field"><label for="q-location">Location <span class="opt-tag">(optional)</span></label><input id="q-location" name="location" data-label="Location" autocomplete="street-address" placeholder="Venue or area, e.g. Business Bay"></div>
+        <div class="field"><label for="q-notes">Anything else?</label><textarea id="q-notes" name="notes" data-label="Notes" placeholder="Menu ideas, dietary needs, timings"></textarea></div>
+        <div class="hp" aria-hidden="true"><label for="q-web">Leave this empty</label><input id="q-web" name="website" tabindex="-1" autocomplete="off"></div>
+        <button class="btn" type="submit">Send enquiry</button>
+        <p class="form-status" role="alert"></p>
+      </form>
+      <div class="form form-done" id="quoteDone" tabindex="-1" hidden>
+        <span class="tick"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="m5 12 4 4 10-10"/></svg></span>
+        <h3 data-done-title>Enquiry received.</h3>
+        <p>We'll come back with a menu and price for your headcount.</p>
+        <a class="btn btn--ghost" data-done-wa href="https://wa.me/971502513033" target="_blank" rel="noopener">Prefer WhatsApp? Send it there</a>
+      </div>
+    </div>
+  </div>
+</section>
+
 <section class="sec sec--tint sec--tight" aria-labelledby="more-guides">
   <div class="wrap">
     <div class="sec-head" style="margin-bottom:28px"><p class="eyebrow">Guides</p><h2 class="h3" id="more-guides" style="font-size:1.4rem">Keep reading</h2></div>
@@ -318,12 +361,14 @@
     <p class="more-links">More guides: <a href="/guides/party-catering-at-home-dubai/">Party catering at home in Dubai</a> · <a href="/guides/buffet-vs-plated-catering/">Buffet, delivered or plated catering?</a> · <a href="/guides/wedding-catering-checklist-uae/">Wedding catering checklist for the UAE</a></p>
   </div>
 </section>
+
+
 <section class="sec">
   <div class="wrap">
     <div class="band band--walnut">
-      <div><h2 class="h2">Planning an event?</h2><p class="lede">Send your date, location and headcount, and we'll come back with a menu and a price.</p></div>
+      <div><h2 class="h2">Ready when you are.</h2><p class="lede">Send your date, location and headcount, and we'll come back with a menu and a price.</p></div>
       <div class="actions" style="margin-top:0">
-        <a class="btn" href="/catering/#quote" data-messibot="catering">Get a quote</a>
+        <a class="btn" href="#quote">Get a quote</a>
         <a class="btn btn--ghost" href="https://wa.me/971502513033?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener">WhatsApp us</a>
       </div>
     </div>
@@ -368,7 +413,8 @@
     <div class="foot__base"><span>© <span data-year>2026</span> Messify. International City, Dubai, UAE.</span><span><a href="https://apps.apple.com/ae/app/my-messify/id6749799177" target="_blank" rel="noopener">App Store</a> · <a href="https://play.google.com/store/apps/details?id=com.messifyfzc.messify" target="_blank" rel="noopener">Google Play</a></span></div>
   </div>
 </footer>
-<script src="/assets/js/site.js?v=a32df391" defer></script>
+<div class="qbar" data-qbar><a class="btn" href="#quote" data-k="quote">Get a quote</a><a class="btn btn--ghost" href="https://wa.me/971502513033?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener" data-k="whatsapp"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 11.5a8.4 8.4 0 0 1-12.4 7.4L3 21l2.1-5.4A8.4 8.4 0 1 1 21 11.5Z"/></svg>WhatsApp</a></div>
+<script src="/assets/js/site.js?v=93264ac1" defer></script>
 <script src="/assets/js/messibot.js?v=ac70ce75" defer></script>
 </body>
 </html>
