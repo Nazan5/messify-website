@@ -314,6 +314,18 @@
     });
   });
 
+  /* ---------- Seasonal promo strip: gone after its date, counts down the days ---------- */
+  var promo = $('[data-promo]');
+  if (promo) {
+    var now = Date.now(), until = Date.parse(promo.dataset.until), ev = Date.parse(promo.dataset.event);
+    if (until && now >= until) { promo.remove(); document.body.classList.remove('has-promo'); }
+    else if (ev && now < ev) {
+      var d = Math.ceil((ev - now) / 86400000), c = $('[data-promo-count]', promo);
+      if (c && d > 1) c.textContent = ' ' + d + ' days to go.';
+    }
+    promo.addEventListener('click', function () { if (typeof window.gtag === 'function') window.gtag('event', 'promo_click', { promo: 'national_day', page_path: location.pathname }); });
+  }
+
   /* ---------- Catering quote bar (phones) ---------- */
   var qbar = $('[data-qbar]');
   if (qbar) {

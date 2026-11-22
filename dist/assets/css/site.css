@@ -731,3 +731,22 @@ a.event:hover h3{color:var(--accent-ink)}
   .has-qbar .foot{padding-bottom:96px}
 }
 @media (prefers-reduced-motion:reduce){.qbar{transition:none}}
+
+/* Seasonal promo strip, second row of the fixed header */
+.promo{display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:4px 6px;min-height:34px;padding:6px 16px;
+  background:#17181C;color:#F3ECE2;font-size:.8rem;line-height:1.35;text-align:center;text-decoration:none;border-top:1px solid rgba(255,255,255,.08)}
+.promo b{color:#D8B48A;font-weight:600}
+.promo:hover .promo-long,.promo:hover .promo-short{text-decoration:underline;text-underline-offset:3px}
+.promo-count{color:#B3A797}
+.promo-short{display:none}
+@media (max-width:640px){.promo-long{display:none}.promo-short{display:inline}.promo-count{display:none}}
+.has-promo .sec--first{padding-top:calc(clamp(108px,12vw,148px) + 34px)}
+.has-promo [id]{scroll-margin-top:120px}
+
+/* Guide call-to-action straight after the quick answer */
+.gcta{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:14px 20px;margin:22px 0 8px;padding:18px 22px;
+  border-radius:var(--r-lg);background:var(--surface-2);border:1px solid var(--line)}
+.gcta p{margin:0;flex:1 1 320px;line-height:1.55}
+.gcta a:not(.btn){color:inherit;text-decoration:underline;text-underline-offset:3px}
+.gcta__actions{display:flex;gap:10px;flex-wrap:wrap}
+.gcta--quiet{background:transparent}

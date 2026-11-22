@@ -7,7 +7,7 @@ from datetime import date
 ROOT = os.path.dirname(os.path.abspath(__file__))
 DIST = os.path.join(ROOT, 'dist')
 BASE = 'https://www.messify.me'
-TODAY = '2026-11-13'
+TODAY = '2026-11-22'
 UPDATED_LABEL = 'November 2026'
 
 PHONE_DISPLAY = '+971 50 251 3033'
@@ -269,17 +269,32 @@ def quote_bar(has_form):
     return (f'<div class="qbar" data-qbar><a class="btn" href="{href}" data-k="quote">Get a quote</a>'
             f'<a class="btn btn--ghost" href="{wa}" target="_blank" rel="noopener" data-k="whatsapp">{I["wa"]}WhatsApp</a></div>')
 
+# Seasonal strip in the fixed header. The build drops it after PROMO_UNTIL; site.js also removes it on the day, without a rebuild.
+PROMO_UNTIL = '2026-12-04'
+def promo_strip():
+    return ('<a class="promo" href="/catering/national-day/#quote" data-promo data-until="2026-12-04T00:00:00+04:00" data-event="2026-12-02T00:00:00+04:00">'
+            '<b>Eid Al Etihad is on 2 December.</b> '
+            '<span class="promo-long">Book your office or family National Day catering now.</span>'
+            '<span class="promo-short">Book National Day catering.</span>'
+            '<span class="promo-count" data-promo-count></span> <span aria-hidden="true">→</span></a>')
+
 def render(page, body):
     qbar = ''
     if page.get('mode') == 'catering':
         body, has_form = lift_quote(body)
         qbar = quote_bar(has_form)
         page = dict(page, body_class=(page.get('body_class', '') + ' has-qbar').strip())
+    promo = TODAY < PROMO_UNTIL and page.get('path') not in ('/404.html', '/404/') and not page.get('file')
+    if promo:
+        page = dict(page, body_class=(page.get('body_class', '') + ' has-promo').strip())
+    hdr = header(page)
+    if promo:
+        hdr = hdr.replace('</header>', promo_strip() + '\n</header>', 1)
     out = head(page) + f'''
 <body class="{page.get('body_class', '')}">
 <a class="skip" href="#content">Skip to content</a>
 {page.get('pre', '')}
-{header(page)}
+{hdr}
 <main id="content">
 {body}
 </main>
@@ -1688,6 +1703,23 @@ def read_time(htmltext):
     words = len(re.sub(r'<[^>]+>', ' ', htmltext).split())
     return max(3, round(words / 200))
 
+OFFICE_GUIDES = {'/guides/staff-meal-plans-companies-dubai/', '/guides/office-lunch-delivery-silicon-oasis/', '/guides/office-lunch-delivery-jebel-ali-jafza/', '/guides/meal-plans-working-professionals-dubai/'}
+
+def guide_cta(kind, path):
+    """Catering guides ask for the quote straight after the quick answer; office meal-plan guides point teams to catering."""
+    nd = TODAY < PROMO_UNTIL and path != '/guides/uae-national-day-office-celebration/'
+    season = (' <a href="/catering/national-day/">Eid Al Etihad is on 2 December: see National Day catering</a>.' if nd else '')
+    if kind == 'catering':
+        wa = WA + '?text=' + quote("Hi Messify, I'd like a catering quote.")
+        return f'''<div class="gcta">
+      <p><b>Planning an event?</b> Send your date, emirate and headcount and we'll come back with a menu and a price.{season}</p>
+      <div class="gcta__actions"><a class="btn btn--sm" href="#quote">Get a quote</a><a class="btn btn--sm btn--ghost" href="{wa}" target="_blank" rel="noopener">WhatsApp</a></div>
+    </div>'''
+    if path in OFFICE_GUIDES:
+        extra = (' <a href="/catering/national-day/">Planning a National Day celebration for your team?</a>' if nd else '')
+        return f'''<div class="gcta gcta--quiet"><p><b>Also feeding the whole office for an event?</b> We cater team lunches, town halls and celebrations too: <a href="/catering/corporate-events/">corporate event catering</a>.{extra}</p></div>'''
+    return ''
+
 def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, extra_after='', kind='meals', published='2026-10-13', updated=None):
     modified = max(TODAY, published, updated or '')
     upd_label = date.fromisoformat(modified).strftime('%B %Y')
@@ -1707,6 +1739,7 @@ def article_page(path, crumb, title, desc, h1, kicker, quick, sections, faqs, ex
       <p class="answer__label">Quick answer</p>
       <p class="answer__lead">{quick}</p>
     </div>
+    {guide_cta(kind, path)}
     {sections}
     <h2 id="faq">Questions people ask</h2>
     {faq_html(faqs, open_first=False)}
@@ -3145,6 +3178,8 @@ CATERING_GUIDES += [
      'A vegetarian Diwali menu, how much to order, snacks and sweets, and timing for a party at home or the office.'),
     ('/guides/office-year-end-party-catering/', 'Catering an office year-end party',
      'Dates, budget, menu, dietary needs and logistics for a December office party in the UAE.'),
+    ('/guides/uae-national-day-office-celebration/', 'National Day office celebration ideas',
+     'When to hold it, formats, an Emirati-inspired menu, how much food to order and a booking timeline for Eid Al Etihad.'),
 ]
 OG_DATE = '2026-10-23'
 
@@ -3327,7 +3362,7 @@ def page_guide_diwali():
 def page_guide_year_end():
     sections = '''
     <h2>Fix the date first</h2>
-    <p>December is the busiest month for events in the UAE. UAE National Day is on 2 and 3 December 2026, and most companies hold their year-end party in the first three weeks of December, before people travel. Popular dates go first, so set your date as early as you can (ideally by October or early November) and book the caterer straight away.</p>
+    <p>December is the busiest month for events in the UAE. UAE National Day is on 2 and 3 December 2026, and most companies hold their year-end party in the first three weeks of December, before people travel. Popular dates go first, so set your date and book the caterer straight away. Four to six weeks ahead is ideal; if your date is closer than that, send your enquiry now rather than waiting. If you're also marking National Day, see our guide to a <a href="/guides/uae-national-day-office-celebration/">National Day office celebration</a>.</p>
 
     <h2>Choose the format</h2>
     <ul>
@@ -3357,7 +3392,7 @@ def page_guide_year_end():
     <h2>Book your year-end party catering</h2>
     <p>We cater office year-end parties, Christmas lunches and New Year gatherings across the UAE, with custom 100% halal menus and buffet setups. See <a href="/catering/christmas-year-end-parties/">Christmas and year-end catering</a> or send your date, venue and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
     faqs = [
-        ('When should we book catering for a December office party?', 'In October or early November. The first three weeks of December are the busiest weeks of the year for events in the UAE.'),
+        ('When should we book catering for a December office party?', 'Four to six weeks ahead is ideal, because the first three weeks of December are the busiest of the year for events in the UAE. If your date is closer, enquire now: we need at least one day\'s notice.'),
         ('What food works for an office year-end party?', 'A mix of cuisines for an international team: a festive Continental dish, an Indian or Arabic favourite, a vegetarian main and a good dessert, all halal.'),
         ('Lunch or evening party?', 'Lunch at the office is the easiest and most inclusive. An evening party feels more like an occasion but needs a venue and more planning.'),
         ('How much food for an office party?', 'For a full buffet, plan about 150 g of rice, 175 g of mains, 100 g of vegetable dishes, a salad and a dessert per guest. For bites only, around 10 to 12 pieces per guest for two hours.'),
@@ -3366,8 +3401,63 @@ def page_guide_year_end():
     article_page('/guides/office-year-end-party-catering/', 'Year-end party catering', 'Office Year-End Party Catering in the UAE | Messify',
                  'Plan catering for an office year-end party in Dubai and the UAE: when to book in December, format, budget per person, a menu for a mixed team and logistics.',
                  'Catering an office year-end party', 'Catering guide · 2026',
-                 'Book December office party catering in October or early November, because the first three weeks of December are the busiest of the year. Decide between an office lunch, an evening party or bites and drinks, set a budget per person, choose a halal menu that mixes cuisines, and collect dietary needs with RSVPs.',
-                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-13')
+                 'Book December office party catering as early as you can: the first three weeks of December are the busiest of the year, and four to six weeks ahead is ideal. Decide between an office lunch, an evening party or bites and drinks, set a budget per person, choose a halal menu that mixes cuisines, and collect dietary needs with RSVPs.',
+                 sections, faqs, kind='catering', published=OG_DATE, updated='2026-11-22')
+
+
+def page_guide_national_day():
+    sections = '''
+    <h2>When to hold it</h2>
+    <p>Eid Al Etihad, UAE National Day, is a public holiday on Wednesday 2 and Thursday 3 December 2026. Most offices celebrate on one of the last working days before it, between late November and 1 December. Pick the day early: those dates are also the start of year-end party season, so caterers and venues fill up. If you're celebrating with family or the community, lunches and dinners on 2 and 3 December are the most popular.</p>
+
+    <h2>Pick a format</h2>
+    <ul>
+      <li><b>A lunch buffet at the office:</b> the easiest to organise and the most inclusive, because everyone is already there. Allow 45 to 60 minutes.</li>
+      <li><b>A majlis-style morning:</b> Arabic coffee, dates, sweets and karak tea in a seating area dressed for the day. Lighter, and easy to fit around meetings.</li>
+      <li><b>An afternoon celebration:</b> savoury bites, sweets and drinks after a short programme, such as a talk on the UAE's history or a team photo.</li>
+    </ul>
+
+    <h2>Menu ideas</h2>
+    <p>A National Day spread usually starts with Arabic coffee and dates as guests arrive. At the centre is a generous rice dish such as machboos, with grills, salads and mezze around it. Finish with luqaimat and other Arabic sweets. For an international team, mix in a dish or two from other cuisines, and always include a vegetarian main. Keep everything halal so everyone can eat everything.</p>
+    <ul>
+      <li><b>Welcome:</b> Arabic coffee, dates, savoury bites and sambousek</li>
+      <li><b>Mains:</b> machboos or mandi, grilled chicken or lamb, a vegetarian main, salads and mezze, bread</li>
+      <li><b>To finish:</b> luqaimat, Arabic sweets, fruit, karak tea and juices</li>
+    </ul>
+
+    <h2>How much food to order</h2>
+    <p>For a lunch buffet, plan per guest about 150 g of rice, 175 g of meat or chicken, 100 g of vegetable dishes, a portion of salad, 1 to 2 pieces of bread and a dessert. For a coffee morning or afternoon gathering, plan 6 to 8 savoury bites, 3 or 4 sweets or dates and 2 drinks per guest. Our <a href="/guides/how-much-food-per-person-catering/">food per person guide</a> has a calculator for your headcount.</p>
+
+    <h2>Touches people remember</h2>
+    <ul>
+      <li>A traditional dress day, with kandura and abaya welcome for everyone who wants to join.</li>
+      <li>Decor in the flag's red, green, white and black, or Al Sadu weave patterns on table runners.</li>
+      <li>An Arabic coffee corner, served the traditional way.</li>
+      <li>A photo wall and a group photo for the company's channels.</li>
+    </ul>
+
+    <h2>A booking timeline</h2>
+    <ul>
+      <li><b>As soon as you can:</b> fix the date, a rough headcount and the format, and ask for a catering quote.</li>
+      <li><b>3 to 5 days before:</b> confirm the menu, the serving time and building access (delivery pass, service lift, loading bay).</li>
+      <li><b>2 days before:</b> confirm the final headcount and any dietary needs.</li>
+      <li><b>The day before:</b> the last day to place an order with us. We don't take same-day orders.</li>
+    </ul>
+
+    <h2>Book your National Day catering</h2>
+    <p>We cater National Day office lunches, majlis hospitality and family gatherings across the UAE, with Arabic and Emirati-inspired menus that are 100% halal and quoted by headcount. See <a href="/catering/national-day/">National Day catering</a>, or send your date, venue and headcount with the form below.</p>'''
+    faqs = [
+        ('What food is served on UAE National Day?', 'Emirati dishes such as machboos, harees, luqaimat and balaleet, with Arabic coffee and dates. Offices with international teams often mix in dishes from other cuisines.'),
+        ('When should an office celebrate National Day?', 'On one of the last working days before Eid Al Etihad. In 2026 the holiday is on 2 and 3 December, so most offices celebrate between late November and 1 December.'),
+        ('How much food do we need for a National Day lunch?', 'Per guest, about 150 g of rice, 175 g of meat or chicken, 100 g of vegetable dishes, a salad, bread and a dessert.'),
+        ('What are easy National Day ideas for the office?', 'A traditional dress day, decor in the flag colours, an Arabic coffee corner, a photo wall and a shared lunch.'),
+        ('How late can we book National Day catering with Messify?', 'We need at least one day\'s notice and do not take same-day orders. The days just before the holiday fill first, so enquire as early as you can.'),
+    ]
+    article_page('/guides/uae-national-day-office-celebration/', 'National Day office celebration', 'National Day Office Celebration: Food Ideas | Messify',
+                 'Plan a UAE National Day (Eid Al Etihad) office celebration: when to hold it, formats, an Emirati-inspired menu, how much food per person and a booking timeline.',
+                 'How to plan a National Day office celebration', 'Eid Al Etihad guide · 2026',
+                 'Hold your office National Day celebration on one of the last working days before Eid Al Etihad (2 and 3 December 2026). The simplest formats are a lunch buffet or a majlis-style coffee morning: Arabic coffee and dates on arrival, an Emirati-inspired rice dish such as machboos at the centre, grills, salads and a vegetarian main, and luqaimat to finish. Fix the headcount early and book catering at least a day ahead.',
+                 sections, faqs, kind='catering', published='2026-11-22', updated='2026-11-22')
 
 # ---------------------------------------------------------------- catering by event type and occasion
 I.update({
@@ -3717,11 +3807,11 @@ CATER_TYPES = {
  'national-day': {
   'kind': 'occasion', 'name': 'UAE National Day catering', 'short': 'National Day', 'icon': 'flag', 'img': 0, 'form': 'National Day',
   'card': 'Eid Al Etihad celebrations for offices, schools, communities and families.',
-  'title': 'UAE National Day Catering (Eid Al Etihad) | Messify',
-  'desc': 'UAE National Day (Eid Al Etihad) catering for office celebrations, community events and family gatherings, with Emirati-inspired, 100% halal menus.',
+  'title': 'National Day Catering Dubai 2026 | Eid Al Etihad | Messify',
+  'desc': 'National Day catering in Dubai and the UAE for 2 December 2026: office celebrations, majlis hospitality and family gatherings. Emirati-inspired, 100% halal menus. Book now.',
   'kicker': 'UAE National Day catering', 'h1': 'UAE National Day catering for Eid Al Etihad.',
-  'lede': "Office celebrations, community events and family gatherings for UAE National Day. We cater Eid Al Etihad across the UAE with Arabic and Emirati-inspired menus, 100% halal, quoted by headcount.",
-  'facts': [('2–3 Dec', 'Eid Al Etihad 2026 holiday'), ('100%', 'halal menus'), ('Buffet', 'setups at your venue')],
+  'lede': "Eid Al Etihad is on 2 December. Most offices celebrate in the last working days before the holiday, so send your date and headcount now. We cater National Day lunches, majlis hospitality and family gatherings across the UAE with Arabic and Emirati-inspired menus, 100% halal, quoted by headcount.",
+  'facts': [('2–3 Dec', 'Eid Al Etihad 2026 holiday'), ('1 day', 'minimum notice: no same-day orders'), ('100%', 'halal, custom menus')],
   'offers': [
     ('flag', 'Office celebrations', 'National Day lunches for teams, usually in the days before the holiday.'),
     ('users', 'Community events', 'Food for community and residents\' celebrations.'),
@@ -3731,20 +3821,23 @@ CATER_TYPES = {
     ('box', 'Staff meals', 'Bulk festive meals for staff and sites.'),
   ],
   'plan_title': 'National Day falls in the busiest weeks.',
-  'plan': '''<p>The Eid Al Etihad public holiday in 2026 is on 2 and 3 December. Offices usually celebrate in the last working days before the holiday, which overlaps with the start of year-end party season, so book early.</p>
+  'plan': '''<p>The Eid Al Etihad public holiday in 2026 is on Wednesday 2 and Thursday 3 December. Offices usually celebrate in the last working days before it, from late November to 1 December, which is also the start of year-end party season. Those days fill first, so send your date and headcount as soon as you know them. We need at least one day's notice and do not take same-day orders.</p>
+<p>For ideas on format, menu and timing, read our guide to <a href="/guides/uae-national-day-office-celebration/">planning a National Day office celebration</a>.</p>
 <p>Arabic coffee and dates for guests, a generous rice dish at the centre, grills and salads, and luqaimat to finish make a classic National Day spread. Tell us whether you want an Emirati-inspired menu, a mix of cuisines that reflects your team, or both.</p>
 <p>See every key date in our <a href="/guides/uae-event-catering-calendar/">UAE event catering calendar</a>.</p>''',
   'menu': [('Welcome', ['Arabic coffee and dates', 'Savoury bites and sambousek']),
            ('Mains', ['Machboos, mandi and rice dishes', 'Grills and roasts', 'Salads and mezze', 'Vegetarian mains']),
            ('To finish', ['Luqaimat and Arabic sweets', 'Fruit', 'Karak tea, juices and soft drinks'])],
   'faqs': [
-    ('When is UAE National Day 2026?', 'The Eid Al Etihad public holiday in 2026 is on 2 and 3 December.'),
-    ('When do offices hold National Day celebrations?', 'Usually in the last working days before the holiday. Book early, because those days overlap with year-end party season.'),
+    ('When is UAE National Day 2026?', 'The Eid Al Etihad public holiday in 2026 is on Wednesday 2 and Thursday 3 December.'),
+    ('When do offices hold National Day celebrations?', 'Usually in the last working days before the holiday, from late November to 1 December. Book early, because those days overlap with year-end party season.'),
+    ('How late can I book National Day catering?', 'We need at least one day\'s notice: we do not take same-day orders. The days just before the holiday fill first, so send your date, venue and headcount as soon as you can.'),
+    ('Can you cater a National Day lunch at our office?', 'Yes. We deliver ready to serve, or set up a full buffet at your office, with a menu built around your headcount.'),
     ('Can you cater an Emirati-inspired menu?', 'Yes. We build Arabic and Emirati-inspired menus, and can mix in other cuisines to suit your guests.'),
     ('Do you cater community and school events?', 'We cater community and campus events where outside catering is allowed. Tell us the venue and headcount.'),
     ('Is your food halal?', 'Yes. All our catering menus are 100% halal.'),
   ],
-  'guides': ['/guides/uae-event-catering-calendar/', '/guides/corporate-event-catering-checklist/', '/guides/how-much-food-per-person-catering/'],
+  'guides': ['/guides/uae-national-day-office-celebration/', '/guides/uae-event-catering-calendar/', '/guides/how-much-food-per-person-catering/'],
  },
 }
 
@@ -3985,6 +4078,6 @@ if __name__ == '__main__':
     page_guide_jafza(); page_guide_staff_meals(); page_guide_healthy(); page_guide_professionals()
     page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
     for s in CATER_AREAS: page_cater_area(s)
-    page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end()
+    page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end(); page_guide_national_day()
     for s in CATER_TYPES: page_cater_type(s)
     page_start(); page_catering(); page_about(); page_terms(); page_privacy(); page_404(); tech_files()
