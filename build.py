@@ -14,6 +14,10 @@ PHONE_DISPLAY = '+971 50 251 3033'
 PHONE_TEL = '+971502513033'
 EMAIL = 'info@messify.me'
 WA = 'https://wa.me/971502513033'
+# Catering enquiries go to a separate number: every catering page, form, button and Messibot catering chat.
+CATER_PHONE_DISPLAY = '+971 50 493 9564'
+CATER_PHONE_TEL = '+971504939564'
+CATER_WA = 'https://wa.me/971504939564'
 IG = 'https://www.instagram.com/messify.me/'
 APP_STORE = 'https://apps.apple.com/ae/app/my-messify/id6749799177'
 GOOGLE_PLAY = 'https://play.google.com/store/apps/details?id=com.messifyfzc.messify'
@@ -286,6 +290,10 @@ def render(page, body):
 </body>
 </html>
 '''
+    if page.get('mode') == 'catering':
+        # Catering pages: every phone, call and WhatsApp link (and FAQ text) uses the catering number; the company schema keeps the main line.
+        out = out.replace(PHONE_DISPLAY, CATER_PHONE_DISPLAY).replace(PHONE_TEL, CATER_PHONE_TEL).replace(WA, CATER_WA)
+        out = out.replace(f'"telephone": "{CATER_PHONE_TEL}"', f'"telephone": "{PHONE_TEL}"')  # company schema keeps the main line
     path = os.path.join(DIST, page['path'].strip('/'), 'index.html') if page['path'] != '/' else os.path.join(DIST, 'index.html')
     if page.get('file'): path = os.path.join(DIST, page['file'])
     os.makedirs(os.path.dirname(path), exist_ok=True)
@@ -1441,6 +1449,7 @@ def page_about():
         ('How to order', 'Messify app (App Store and Google Play) or WhatsApp'),
         ('Opening hours', 'Every day, 8 AM to 11 PM'),
         ('Contact', f'{PHONE_DISPLAY} (phone and WhatsApp), {EMAIL}'),
+        ('Catering enquiries', f'{CATER_PHONE_DISPLAY} (phone and WhatsApp)'),
         ('Instagram', '@messify.me'),
     ]
     trs = ''.join(f'<tr><th scope="row">{k}</th><td>{v}</td></tr>' for k, v in rows)
@@ -3926,6 +3935,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 
 ## Contact
 - Phone and WhatsApp: {PHONE_DISPLAY}
+- Catering enquiries (phone and WhatsApp): {CATER_PHONE_DISPLAY}
 - Email: {EMAIL}
 - Instagram: @messify.me
 - Opening hours: every day, 8 AM to 11 PM (Gulf Standard Time)

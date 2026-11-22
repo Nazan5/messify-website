@@ -4,6 +4,7 @@
 
   var CONFIG = {
     whatsapp: '971502513033',
+    cateringWhatsapp: '971504939564', // catering forms and buttons
     // Form submissions are emailed to this address through FormSubmit (formsubmit.co).
     // The first submission sends an activation email to this inbox: click the link once to switch it on.
     formEndpoint: 'https://formsubmit.co/ajax/info@messify.me'
@@ -24,7 +25,7 @@
   var $$ = function (s, r) { return Array.prototype.slice.call((r || document).querySelectorAll(s)); };
   var fmt = function (n) { return n.toLocaleString('en-US'); };
   var mealsLabel = function (m) { return m + (m > 1 ? ' meals' : ' meal') + ' a day'; };
-  var waLink = function (text) { return 'https://wa.me/' + CONFIG.whatsapp + '?text=' + encodeURIComponent(text); };
+  var waLink = function (text, num) { return 'https://wa.me/' + (num || CONFIG.whatsapp) + '?text=' + encodeURIComponent(text); };
 
   $$('[data-year]').forEach(function (el) { el.textContent = new Date().getFullYear(); });
 
@@ -269,6 +270,9 @@
     var status = $('.form-status', form);
     var btn = $('button[type="submit"]', form);
     var done = document.getElementById(form.dataset.done);
+    var cat = form.dataset.form === 'catering';
+    var num = cat ? CONFIG.cateringWhatsapp : CONFIG.whatsapp;
+    var phoneShown = cat ? '+971 50 493 9564' : '+971 50 251 3033';
     form.addEventListener('submit', function (e) {
       e.preventDefault();
       if (status) status.textContent = '';
@@ -278,7 +282,7 @@
         var t = done && $('[data-done-title]', done);
         if (t && name) t.textContent = 'Thanks, ' + name + '. We’ve got it.';
         var wa = done && $('[data-done-wa]', done);
-        if (wa) wa.href = waLink(summarise(form));
+        if (wa) wa.href = waLink(summarise(form), num);
         if (typeof window.gtag === 'function') window.gtag('event', 'generate_lead', { form_type: form.dataset.form });
         form.hidden = true;
         if (done) { done.hidden = false; done.focus && done.focus(); }
@@ -305,7 +309,7 @@
       }).catch(function () {
         btn.disabled = false;
         btn.textContent = oldText;
-        if (status) status.innerHTML = 'We couldn’t send that just now. <a href="' + waLink(summarise(form)) + '" target="_blank" rel="noopener">Send it on WhatsApp instead</a> or call +971 50 251 3033.';
+        if (status) status.innerHTML = 'We couldn’t send that just now. <a href="' + waLink(summarise(form), num) + '" target="_blank" rel="noopener">Send it on WhatsApp instead</a> or call ' + phoneShown + '.';
       });
     });
   });

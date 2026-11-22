@@ -61,6 +61,8 @@ const msgs = $("#msgs"), box = $("#box"), sendBtn = $("#send");
 const CONFIG = {
   whatsapp: "971502513033",
   whatsappDisplay: "+971 50 251 3033",
+  cateringWhatsapp: "971504939564",          // catering briefs go to this number
+  cateringWhatsappDisplay: "+971 50 493 9564",
   email: "info@messify.me",
   areas: ["Academic City", "Dubai Silicon Oasis", "International City", "Dubai Festival City", "Al Aweer", "Dubai Investments Park", "Jebel Ali / JAFZA", "Al Furjan", "Dubai South"],
   emirates: ["Dubai", "Sharjah", "Ajman", "Abu Dhabi", "Ras Al Khaimah", "Umm Al Quwain"],
@@ -134,7 +136,7 @@ const TOPICS = {
       ["Understand the event","Occasion, guest count, emirate and date. One question at a time."],
       ["Shape the menu","Courses and flavours from your builder: Indian, Arabic, Continental, Italian, Chinese."],
       ["Reassure on scale","5,000+ meals a day, centralised kitchen, on-time delivery across six emirates."],
-      ["Hand over a brief","Never quotes a price. Sends the full brief to " + CONFIG.whatsappDisplay + " for your team to quote."]
+      ["Hand over a brief","Never quotes a price. Sends the full brief to " + CONFIG.cateringWhatsappDisplay + " for your team to quote."]
     ]
   }
 };
@@ -213,10 +215,10 @@ function showHandoff(){
   const t = waText(), cat = topic === "catering";
   const d = document.createElement("div"); d.className = "handoff";
   d.innerHTML = (cat ? `<small class="k">Your brief</small><p class="brief">${briefText().html}</p>` : `<small class="k">Your summary</small><pre></pre>`) +
-    `<a class="wa" target="_blank" rel="noopener" href="https://wa.me/${CONFIG.whatsapp}?text=${encodeURIComponent(t)}">
+    `<a class="wa" target="_blank" rel="noopener" href="https://wa.me/${cat ? CONFIG.cateringWhatsapp : CONFIG.whatsapp}?text=${encodeURIComponent(t)}">
     <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2zm5.4 14.2c-.2.6-1.3 1.2-1.8 1.3-.5 0-1 .2-3.3-.7-2.8-1.1-4.5-4-4.7-4.2-.1-.2-1.1-1.5-1.1-2.8s.7-2 1-2.3c.2-.3.5-.3.7-.3h.5c.2 0 .4 0 .6.5l.8 2c.1.2.1.4 0 .5l-.3.5-.4.4c-.1.2-.3.3-.1.6.2.3.8 1.3 1.7 2.1 1.2 1 2.1 1.3 2.4 1.5.3.1.5.1.6-.1l.9-1c.2-.3.4-.2.6-.1l1.9.9c.3.1.5.2.5.3.1.2.1.7-.1 1.3z"/></svg>
     ${cat ? "Send brief on WhatsApp" : "Continue on WhatsApp"}</a>
-    <span class="fine">Opens WhatsApp to ${CONFIG.whatsappDisplay} with this ${cat ? "brief" : "summary"}. Your answers are shared with the Messify team.${cat ? "" : ` Prefer the app? <a href="${CONFIG.appStore}" target="_blank" rel="noopener">iOS</a> · <a href="${CONFIG.playStore}" target="_blank" rel="noopener">Android</a>`}</span>`;
+    <span class="fine">Opens WhatsApp to ${cat ? CONFIG.cateringWhatsappDisplay : CONFIG.whatsappDisplay} with this ${cat ? "brief" : "summary"}. Your answers are shared with the Messify team.${cat ? "" : ` Prefer the app? <a href="${CONFIG.appStore}" target="_blank" rel="noopener">iOS</a> · <a href="${CONFIG.playStore}" target="_blank" rel="noopener">Android</a>`}</span>`;
   if (!cat) d.querySelector("pre").textContent = t;
   d.querySelector(".wa").addEventListener("click", () => track("whatsapp_click"));
   msgs.append(d); scroll();
