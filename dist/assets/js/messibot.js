@@ -65,7 +65,7 @@ const CONFIG = {
   cateringWhatsappDisplay: "+971 50 493 9564",
   email: "info@messify.me",
   areas: ["Academic City", "Dubai Silicon Oasis", "International City", "Dubai Festival City", "Al Aweer", "Dubai Investments Park", "Jebel Ali / JAFZA", "Al Furjan", "Dubai South"],
-  emirates: ["Dubai", "Sharjah", "Ajman", "Abu Dhabi", "Ras Al Khaimah", "Umm Al Quwain"],
+  emirates: ["Dubai", "Sharjah", "Ajman", "Abu Dhabi", "Ras Al Khaimah", "Umm Al Quwain", "Fujairah"],
   daysPerWeek: 7, daysPerMonth: 26,
   plans: [
     { mpd: 1, weekly: 215, weeklyWas: 300,  monthly: 715,  monthlyWas: 1000 },
@@ -119,7 +119,7 @@ const TOPICS = {
     eyebrow: "Messify Catering",
     title: "Your event, <em>fed properly.</em>",
     facts: [["5,000+","meals a day capacity"],["6","emirates covered"],["100%","custom menus"]],
-    greeting: { reply: "Welcome to Messify Catering. We cater corporate events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with a menu built around you. What's the occasion?",
+    greeting: { reply: "Welcome to Messify Catering. We cater corporate events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with a menu built around you. What's the occasion?",
       quick_replies: ["Corporate / office", "Wedding", "Party / family", "Iftar / Ramadan"] },
     stripLabel: "From our events",
     photos: [
@@ -135,7 +135,7 @@ const TOPICS = {
     playbook: [
       ["Understand the event","Occasion, guest count, emirate and date. One question at a time."],
       ["Shape the menu","Courses and flavours from your builder: Indian, Arabic, Continental, Italian, Chinese."],
-      ["Reassure on scale","5,000+ meals a day, centralised kitchen, on-time delivery across six emirates."],
+      ["Reassure on scale","5,000+ meals a day, centralised kitchen, on-time delivery across all seven emirates."],
       ["Hand over a brief","Never quotes a price. Sends the full brief to " + CONFIG.cateringWhatsappDisplay + " for your team to quote."]
     ]
   }
@@ -266,7 +266,7 @@ function mealsIn(t, cur){
   if (/ (2|two) /.test(t) || / lunch and dinner | breakfast and lunch | breakfast and dinner /.test(t)) return 2;
   if (/ (1|one|single) /.test(t) || (cur && / just | only | lunch | dinner | breakfast /.test(t))) return 1;
 }
-const EMIRATES = [["Dubai", / dubai | dxb /], ["Sharjah", / sharjah | shj /], ["Ajman", / ajman /], ["Abu Dhabi", / abu ?dhabi | auh /], ["Ras Al Khaimah", / ras ?al ?khaimah | rak /], ["Umm Al Quwain", / umm ?al ?quwain | uaq /]];
+const EMIRATES = [["Dubai", / dubai | dxb /], ["Sharjah", / sharjah | shj /], ["Ajman", / ajman /], ["Abu Dhabi", / abu ?dhabi | auh /], ["Ras Al Khaimah", / ras ?al ?khaimah | rak /], ["Umm Al Quwain", / umm ?al ?quwain | uaq /], ["Fujairah", / fujairah | fujeirah | dibba /]];
 const CUISINES = [["Indian", / indian | desi | biryani /], ["Arabic", / arab| lebanese | emirati | khaleeji | middle eastern /], ["Continental", / continental | western /], ["Italian", / italian | pasta /], ["Chinese", / chinese | asian /]];
 const COURSES = [["appetisers", / appeti| starter| canape/], ["main course", / main/], ["salads", / salad/], ["desserts", / dessert| sweet/], ["beverages", / beverage| drink| juice| coffee | tea /]];
 const listJoin = a => a.length < 2 ? a.join("") : a.slice(0, -1).join(", ") + " and " + a[a.length - 1];
@@ -343,7 +343,7 @@ const SCRIPTS = {
         grab: t => { const e = EMIRATES.find(([, re]) => re.test(t)); return e ? e[0] : undefined; },
         free: raw => { lead.emirate = raw; lead.notes = "Location outside the emirates we cover, check coverage"; return true; },
         set: v => { lead.emirate = v; stage = "brief"; },
-        ack: () => CONFIG.emirates.includes(lead.emirate) ? "" : "We cover Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, and the team will confirm if we can reach you." },
+        ack: () => CONFIG.emirates.includes(lead.emirate) ? "" : "We cover Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, and the team will confirm if we can reach you." },
       { key: "date", label: "Date",
         ask: () => "When is it?", chips: () => ["This week", "This month", "Date not fixed yet"],
         grab: (t, cur) => { const M = "(january|jan|february|feb|march|mar|april|apr|may|june|jun|july|jul|august|aug|september|sept|sep|october|oct|november|nov|december|dec)";
@@ -411,7 +411,7 @@ const FAQ = {
     { id: "meals", label: "Meal plans → switch", re: / meal plan| subscription| for myself | daily meals | token/, end: () => ({ reply: "Sounds like a personal meal plan. Switching you over.", switch: "meals" }) },
     { id: "price", label: "Price & quotes", re: / price| cost | how much | quote | per head | per person | budget | rate /, ans: () => "Every quote is built around your headcount and menu, so the team prices it exactly. A few quick details and I'll put your brief together." },
     { id: "capacity", label: "Capacity", re: / capacity | how many can | large | big event | thousands | scale /, ans: () => "Our centralised kitchen can produce 5,000+ meals a day, with the same quality control on every batch." },
-    { id: "areas", label: "Areas covered", re: / where | area| emirates | location| do you cover /, ans: () => "We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with on-time bulk delivery." },
+    { id: "areas", label: "Areas covered", re: / where | area| emirates | location| do you cover /, ans: () => "We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with on-time bulk delivery." },
     { id: "menu", label: "Menu options", re: / menu| cuisine| dish| options | what food /, ans: () => "Menus are fully custom. Pick from appetisers, mains, salads, desserts and beverages, in Indian, Arabic, Continental, Italian, Chinese or other flavours." },
     { id: "service", label: "Staff, setup, timing", re: / staff | server| waiter| setup | set up | equipment| chafing| buffet | live station| tasting| lead time| notice | minimum /, ans: () => "Good one for the team: they'll confirm service staff, setup, timings and any minimums with your quote." },
     { id: "halal", label: "Halal", re: / halal| haram| pork /, ans: () => "Yes, all our food is 100% halal." },
@@ -514,7 +514,7 @@ function showDoors(){
     <button type="button" class="door door--meals" data-go="meals"><img src="${IMG}bag-bowls-640.webp" alt=""><span class="door__shade"></span>
       <span class="door__copy"><span class="door__tag">For every day</span><span class="door__title">Meal plans</span><span class="door__text">All your meals in one chilled bag. From AED 25 a meal.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
     <button type="button" class="door door--catering" data-go="catering"><img src="${IMG}cat-chef-640.webp" alt=""><span class="door__shade"></span>
-      <span class="door__copy"><span class="door__tag">For events</span><span class="door__title">Catering</span><span class="door__text">Corporate, university, weddings and bulk, across six emirates.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
+      <span class="door__copy"><span class="door__tag">For events</span><span class="door__title">Catering</span><span class="door__text">Corporate, university, weddings and bulk, across all seven emirates.</span><span class="door__cta">Explore ${ARROW}</span></span></button>
   </div>
   <div class="gatefoot"><span><b>Daily</b> new menu</span><span><b>5,000+</b> meals a day</span><span><b>4</b> emirates</span></div>`;
   msgs.querySelectorAll(".door").forEach(d => d.onclick = () => openTopic(d.dataset.go));

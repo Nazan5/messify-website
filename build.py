@@ -30,7 +30,7 @@ LOGO = BASE + '/assets/img/messify-logo.png'
 ONE_LINER = ('Messify is a Dubai meal-plan and catering company. Its meals are cooked fresh every day in a partner kitchen in International City '
              'and delivered as weekly and monthly meal plans across Dubai Academic City, Dubai Silicon Oasis, International City, '
              'Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali (JAFZA), Al Furjan and Dubai South, from AED 25.63 a meal. '
-             'It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.')
+             'It also caters corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah.')
 
 PLANS = [  # meals a day, length, tokens, price
     (1, 'weekly', 7, 215), (2, 'weekly', 14, 415), (3, 'weekly', 21, 610),
@@ -55,8 +55,8 @@ PLACES = {
 MEAL_AREAS_TXT = ('Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, '
                   'Dubai Investments Park (DIP), Jebel Ali (including JAFZA), Al Furjan and Dubai South')
 CORE_AREAS_TXT = 'Dubai Academic City, Dubai Silicon Oasis, International City and Dubai Festival City (DFC)'
-CATER_EMIRATES = ['Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi', 'Ras Al Khaimah', 'Umm Al Quwain']
-CATER_TXT = 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain'
+CATER_EMIRATES = ['Dubai', 'Sharjah', 'Ajman', 'Abu Dhabi', 'Ras Al Khaimah', 'Umm Al Quwain', 'Fujairah']
+CATER_TXT = 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah'
 GMAPS = 'https://maps.google.com/maps?cid=12829665698799731370'  # Messify on Google Maps (reviews)
 RATING = '4.9'  # Google rating. Never show the number of reviews.
 
@@ -453,7 +453,7 @@ FAQ_SKIP = ('Can I skip a day?', 'Yes. Skip a day in the app and use that token 
 # ================================================================= PAGES
 def page_home():
     faqs = [FAQ_PRICE, FAQ_AREAS,
-            ('Do you cater parties and events?', 'Yes. We cater corporate events, office lunches, parties and home events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is custom and priced by headcount.'),
+            ('Do you cater parties and events?', 'Yes. We cater corporate events, office lunches, parties and home events, university events, weddings and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah. Every menu is custom and priced by headcount.'),
             FAQ_START]
     page = {
         'path': '/', 'mode': 'meals', 'nav': None, 'body_class': 'has-gate',
@@ -481,7 +481,7 @@ def page_home():
       <div class="door__copy">
         <div class="door__tag">For events</div>
         <p class="door__title">Catering</p>
-        <p class="door__text">Corporate, party, university and wedding catering across six emirates, from Dubai and Sharjah to Abu Dhabi.</p>
+        <p class="door__text">Corporate, party, university and wedding catering across all seven emirates, from Dubai and Sharjah to Abu Dhabi.</p>
         <span class="door__cta">Explore catering {I["arrow"]}</span>
       </div>
     </a>
@@ -495,7 +495,7 @@ def page_home():
     <div class="sec-head" style="max-width:820px">
       <p class="eyebrow">Messify · Dubai</p>
       <h1 class="h2">Meal plans and catering in Dubai.</h1>
-      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. Meal plan subscribers get breakfast, lunch and dinner delivered together in one chilled bag across Dubai Academic City, Silicon Oasis, International City, Dubai Festival City, Al Aweer, Dubai Investments Park, Jebel Ali, Al Furjan and Dubai South. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.</p>
+      <p class="lede">Fresh, balanced meals are cooked every day in our partner kitchen in International City. Meal plan subscribers get breakfast, lunch and dinner delivered together in one chilled bag across Dubai Academic City, Silicon Oasis, International City, Dubai Festival City, Al Aweer, Dubai Investments Park, Jebel Ali, Al Furjan and Dubai South. For events, we cater anything from a house party to a wedding across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah.</p>
     </div>
     <div class="duo">
       <a class="card-link" href="/meal-plans/">
@@ -512,7 +512,7 @@ def page_home():
         <div class="card-link__body">
           <p class="eyebrow" style="margin:0;color:#D8B48A">Catering</p>
           <h3 class="h3">Your event, fed properly.</h3>
-          {ticklist(['Corporate, parties, weddings and buffet setups', 'Fully customisable menus, quoted by headcount', 'Six emirates, including Dubai, Sharjah and Abu Dhabi'], 'x')}
+          {ticklist(['Corporate, parties, weddings and buffet setups', 'Fully customisable menus, quoted by headcount', 'All seven emirates, including Dubai, Sharjah and Abu Dhabi'], 'x')}
           <span class="link-arrow">Explore catering {I["arrow"]}</span>
         </div>
       </a>
@@ -546,7 +546,7 @@ def page_home():
         <tr><th scope="row">Vegetarian</th><td>A vegetarian option every day, for every meal</td></tr>
         <tr><th scope="row">Flexibility</th><td>1 meal = 1 token. Skip a day and use the token later in your plan.</td></tr>
         <tr><th scope="row">Meal plan areas</th><td>{MEAL_AREAS_TXT}</td></tr>
-        <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain</td></tr>
+        <tr><th scope="row">Catering areas</th><td>Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah</td></tr>
         <tr><th scope="row">Google rating</th><td><a href="{GMAPS}" target="_blank" rel="noopener">{RATING} out of 5 on Google reviews</a></td></tr>
       </table>
       <a class="link-arrow" href="/about/">More about Messify {I["arrow"]}</a>
@@ -1213,7 +1213,7 @@ def page_catering():
     faqs = [
         ('What events do you cater?', 'Corporate events and office lunches, parties and home events, university events, weddings, buffet setups and bulk orders.'),
         ('Do you cater parties at home?', "Yes. Birthdays, family gatherings and house parties are welcome. Tell us your headcount and we'll build a menu to fit."),
-        ('Which areas do you cater in?', 'We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Events further from Dubai need a little more notice, so share your date early.'),
+        ('Which areas do you cater in?', 'We cater across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah. Events further from Dubai need a little more notice, so share your date early.'),
         ('How is catering priced?', 'Every quote is custom, based on your headcount and the menu you choose.'),
         ('Do you do buffet setups?', 'Yes. We set up full buffets at your venue, from office lunches and house parties to weddings, with the menu built around your headcount.'),
         ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
@@ -1249,7 +1249,7 @@ def page_catering():
       {cr}
       <p class="kicker rise">Corporate, party &amp; wedding catering</p>
       <h1 class="h2 rise">Catering services in Dubai &amp; the UAE. <em class="it">Your event, fed properly.</em></h1>
-      <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain. Every menu is built around your event and quoted by headcount.</p>
+      <p class="lede rise">Catering services and buffet setups for corporate events, parties, university events and weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah. Every menu is built around your event and quoted by headcount.</p>
       <div class="actions">
         <a class="btn" href="#quote">Get a quote</a>
         <a class="btn btn--ghost" href="{WA}?text=Hi%20Messify%2C%20I%27d%20like%20a%20catering%20quote." target="_blank" rel="noopener">WhatsApp us</a>
@@ -1257,7 +1257,7 @@ def page_catering():
       {rating_badge()}
       <div class="facts">
         <div><b>5,000+</b><span>meals a day of kitchen capacity</span></div>
-        <div><b>6</b><span>emirates covered</span></div>
+        <div><b>7</b><span>emirates covered</span></div>
         <div><b>100%</b><span>customisable menus</span></div>
       </div>
     </div>
@@ -1270,14 +1270,14 @@ def page_catering():
   <div class="wrap">
     <div class="answer">
       <p class="answer__label">Quick answer</p>
-      <p class="answer__lead">Messify is a halal catering company based in International City, Dubai. We cater corporate events, office lunches and meetings, weddings, parties and family gatherings, university events and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, delivered ready to serve or as a full buffet setup. Every menu is custom and quoted by headcount.</p>
+      <p class="answer__lead">Messify is a halal catering company based in International City, Dubai. We cater corporate events, office lunches and meetings, weddings, parties and family gatherings, university events and bulk orders across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, delivered ready to serve or as a full buffet setup. Every menu is custom and quoted by headcount.</p>
       <table class="facts-table">
         <tr><th scope="row">Events</th><td>Corporate events, business meetings, weddings, birthdays, family gatherings, university events, iftars, Eid, Diwali, year-end parties, bulk and staff meals</td></tr>
         <tr><th scope="row">Service styles</th><td>Delivered ready to serve, or a full buffet set up at your venue</td></tr>
         <tr><th scope="row">Cuisines</th><td>Indian, Arabic, Continental, Italian, Chinese and more, mixed any way you like</td></tr>
         <tr><th scope="row">Food</th><td>100% halal; vegetarian dishes in any menu</td></tr>
         <tr><th scope="row">Capacity</th><td>5,000+ meals a day from our partner kitchen operation</td></tr>
-        <tr><th scope="row">Areas</th><td>All of Dubai, including Jebel Ali, DIP and Dubai South, plus Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain</td></tr>
+        <tr><th scope="row">Areas</th><td>All of Dubai, including Jebel Ali, DIP and Dubai South, plus Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah</td></tr>
         <tr><th scope="row">Pricing</th><td>Custom quote by headcount, menu and service style</td></tr>
         <tr><th scope="row">Booking</th><td>At least one day ahead; a few weeks ahead for weddings, large events and peak dates</td></tr>
       </table>
@@ -1341,7 +1341,7 @@ def page_catering():
       <li><b>Scalable production</b><span>Up to <em>5,000+ meals per day</em> from our partner kitchen operation.</span></li>
       <li><b>Centralised kitchen</b><span>Standardised quality control on every batch.</span></li>
       <li><b>Transparent pricing</b><span>Custom quotes based on your headcount.</span></li>
-      <li><b>Reliable logistics</b><span>On-time bulk delivery across six emirates.</span></li>
+      <li><b>Reliable logistics</b><span>On-time bulk delivery across all seven emirates.</span></li>
       <li><b>Your menu, your way</b><span>From a single main course to a full spread, built around your guests.</span></li>
     </ul>
   </div>
@@ -1459,7 +1459,7 @@ def page_about():
         ('Vegetarian', 'A vegetarian option every day, for every meal'),
         ('Food safety', 'Prepared with gloved hands, blast-chilled after cooking, sealed in kraft bowls, packed cold.'),
         ('Catering', 'Corporate and office, parties and home events, university events, weddings, buffet setups and bulk catering. Fully customisable menus, quoted by headcount.'),
-        ('Catering areas', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain'),
+        ('Catering areas', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah'),
         ('Google rating', f'{RATING} out of 5 on Google reviews'),
         ('How to order', 'Messify app (App Store and Google Play) or WhatsApp'),
         ('Opening hours', 'Every day, 8 AM to 11 PM'),
@@ -2675,7 +2675,7 @@ def page_guide_corporate_checklist():
         ('What should I ask a corporate caterer?', 'Ask what the quote includes (delivery, setup, staff, equipment and clean-up), whether VAT is included, the deadline for final numbers, payment terms, and whether they can provide a tax invoice.'),
         ('How do I handle dietary requirements at an office event?', 'Collect them with RSVPs, give the caterer numbers for each need, make sure at least one main dish is vegetarian, and label dishes on the day.'),
         ('Do caterers need access passes for Dubai office buildings?', 'Often, yes. Many towers need a delivery pass, a service lift booking or a loading-bay slot. Ask building management early and share the details with your caterer.'),
-        ('Does Messify cater corporate events?', 'Yes. We cater team lunches, meetings, launches and company events across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus quoted by headcount.'),
+        ('Does Messify cater corporate events?', 'Yes. We cater team lunches, meetings, launches and company events across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with custom 100% halal menus quoted by headcount.'),
     ]
     article_page('/guides/corporate-event-catering-checklist/', 'Corporate catering checklist', 'Corporate Event Catering Checklist (UAE) | Messify',
                  'A step-by-step corporate catering checklist for office events in Dubai and the UAE: headcount, dietary needs, building access, timings and invoices.',
@@ -2727,7 +2727,7 @@ def page_guide_home_party():
       <li>Building access and a contact number.</li>
       <li>Clean-up and leftovers plan.</li>
     </ol>
-    <p>We cater birthdays, family gatherings and house parties at home across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with buffet setups if you want one. <a href="/catering/#quote">Get a party catering quote</a>.</p>'''
+    <p>We cater birthdays, family gatherings and house parties at home across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with buffet setups if you want one. <a href="/catering/#quote">Get a party catering quote</a>.</p>'''
     faqs = [
         ('How much food do I need for a party at home?', 'For a buffet meal, plan about 150 g of rice, 175 g of meat, chicken or fish across all main dishes, 100 g of vegetable dishes, a salad, 1 to 2 pieces of bread and a dessert per adult, with children under 10 counted as half.'),
         ('Can caterers set up a buffet in a flat?', 'Yes, if there is space for a table and, for heated dishes, power nearby. Tell your building security about the delivery and book the service lift if needed.'),
@@ -2841,7 +2841,7 @@ def page_guide_wedding():
 
     <h2>When to book</h2>
     <p>Book the caterer once the venue and date are confirmed, ideally a few months ahead for large weddings, and earlier still for the cooler months from October to April, which are the busiest wedding season. Confirm final numbers about a week before.</p>
-    <p>We cater weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus built around your guest list and full buffet setups. <a href="/catering/#quote">Get a wedding catering quote</a>.</p>'''
+    <p>We cater weddings across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with custom 100% halal menus built around your guest list and full buffet setups. <a href="/catering/#quote">Get a wedding catering quote</a>.</p>'''
     faqs = [
         ('Can I bring an outside caterer to a hotel wedding in the UAE?', 'Many hotels only allow their own catering, and some charge a fee for outside caterers. Ask your venue before you book a caterer.'),
         ('How far in advance should I book wedding catering?', 'Once your venue and date are confirmed, ideally a few months ahead for a large wedding, and earlier for the busy season from October to April. Confirm final numbers about a week before.'),
@@ -3073,6 +3073,30 @@ CATER_AREAS = {
     ('How is catering in Umm Al Quwain priced?', 'Every quote is custom, based on your headcount, menu, service style and location. Send your date, location and headcount for a price.'),
     ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
   ],
+
+ },
+ 'fujairah': {
+  'name': 'Fujairah', 'short': 'Fujairah',
+  'card': 'Weddings, beach and resort events, company functions and family gatherings on the east coast, with custom menus.',
+  'title': 'Catering in Fujairah: Weddings, Events & Parties | Messify',
+  'desc': 'Catering in Fujairah for weddings, family gatherings, beach and resort events, company functions and bulk orders. Custom menus and buffet setups by headcount.',
+  'h1': 'Event and wedding catering in Fujairah.',
+  'lede': "We cater weddings, family gatherings, company functions, beach events and bulk orders across Fujairah, from Fujairah City to Dibba. Every menu is custom and quoted by headcount. Fujairah is a longer drive from our kitchen in Dubai, so share your date as early as you can.",
+  'img': ('cat-chef-640.webp', 'cat-chef.webp', 1024, 1024, 'A chef carving at a buffet station while guests serve themselves at an evening event'),
+  'where_title': 'Across Fujairah.',
+  'groups': [
+    ('home', 'Homes and communities', ['Fujairah City', 'Dibba Al Fujairah', 'Masafi', 'Mirbah and Qidfa']),
+    ('office', 'Offices and business areas', ['Fujairah Free Zone', 'Port of Fujairah and the oil terminals', 'Government and business areas in the city']),
+    ('rings', 'Venues', ['Beach resorts at Al Aqah', 'Hotels and wedding halls', 'Community halls and majlis', 'Outdoor, farm and beach events']),
+  ],
+  'logistics': "Fujairah is about an hour and a half to two hours' drive from International City, depending on where your event is. We plan cooking and transport so food arrives on time and is held safely until it is served. For beach and outdoor events, tell us about shade, power and space for a buffet table. Many resorts use their own kitchens, so check whether your venue allows outside catering before you book.",
+  'faqs': [
+    ('Do you cater in Fujairah?', 'Yes. We cater weddings, family gatherings, company functions, beach events and bulk orders across Fujairah, including Fujairah City and Dibba.'),
+    ('How early should I book catering in Fujairah?', 'As early as you can. Fujairah is the longest drive from our kitchen in Dubai, so earlier notice makes it easier to plan the menu, transport and setup.'),
+    ('Can you cater at a resort or beach in Fujairah?', 'Many resorts only allow their own catering, so check with your venue first. For beach and outdoor events, tell us about shade, power and space for a buffet table.'),
+    ('How is catering in Fujairah priced?', 'Every quote is custom, based on your headcount, menu, service style and location. Send your date, venue and headcount for a price.'),
+    ('Is your catering halal?', 'Yes. All our catering menus are 100% halal.'),
+  ],
  },
 }
 
@@ -3292,7 +3316,7 @@ def page_guide_corporate_iftar():
     <p>If you are catering daytime meetings during Ramadan for non-fasting colleagues, serve food discreetly in a private room, out of sight of colleagues who are fasting.</p>
 
     <h2>Book your corporate iftar</h2>
-    <p>We cater corporate iftars, ghabga nights and staff iftar meals across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with 100% halal menus planned around Maghrib. See <a href="/catering/iftar/">iftar catering</a> or send your date, venue and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
+    <p>We cater corporate iftars, ghabga nights and staff iftar meals across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with 100% halal menus planned around Maghrib. See <a href="/catering/iftar/">iftar catering</a> or send your date, venue and headcount for a <a href="/catering/#quote">quote</a>.</p>'''
     faqs = [
         ('How far ahead should I book a corporate iftar?', 'Four to six weeks ahead. Weekends and the last ten days of Ramadan fill up first.'),
         ('What should a corporate iftar menu include?', 'Dates, water and laban to break the fast, then soup and savoury bites, a main course with a rice dish, grills or curries and a vegetarian option, and sweets with Arabic coffee and tea.'),
@@ -3511,7 +3535,7 @@ CATER_TYPES = {
     ('Can you work around our event agenda?', 'Yes. Send us your serving times for breakfast, breaks and lunch, and we plan the menu and delivery around them.'),
     ('Can you invoice our company?', 'Yes. Share your company details when you request a quote, and tell us if your finance team needs anything specific on the invoice.'),
     ('How far ahead should we book corporate catering?', 'Two to three weeks is comfortable for most events, and earlier for large events and the busy months from October to April.'),
-    ('Which emirates do you cover for corporate events?', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain.'),
+    ('Which emirates do you cover for corporate events?', 'Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah.'),
   ],
   'guides': ['/guides/corporate-event-catering-checklist/', '/guides/how-much-food-per-person-catering/', '/guides/catering-cost-dubai/'],
  },
@@ -3571,7 +3595,7 @@ CATER_TYPES = {
            ('The main spread', ['Biryani, mandi or other rice dishes', 'Curries, grills and roasts', 'Arabic, Indian or Continental mains', 'Vegetarian mains']),
            ('To finish', ['Indian, Arabic and Continental desserts', 'Fruit', 'Tea and coffee'])],
   'faqs': [
-    ('Do you cater weddings in Dubai and across the UAE?', 'Yes. We cater weddings in Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain, with custom 100% halal menus and full buffet setups.'),
+    ('Do you cater weddings in Dubai and across the UAE?', 'Yes. We cater weddings in Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah, with custom 100% halal menus and full buffet setups.'),
     ('Can you cater separate men\'s and women\'s halls?', 'Yes. Give us a headcount for each hall and we will plan the quantities, timings and setup for each.'),
     ('Can you cater a wedding at a hotel?', 'Many hotels only allow their own catering, so check with your venue first. Halls, gardens and homes usually allow outside caterers.'),
     ('How early should we book wedding catering?', 'Once your venue and date are confirmed, ideally a few months ahead for a large wedding, and earlier for the busy season from October to April.'),
@@ -4011,7 +4035,7 @@ Messify sells daily meal plans through the Messify app. Each meal on a plan is a
 - [Meal plans in International City]({BASE}/meal-plans/international-city/): where Messify meals are cooked
 - [Meal plans in Dubai Festival City (DFC)]({BASE}/meal-plans/festival-city/): delivery to homes in Al Badia and offices across DFC
 {new_area_lines}
-- [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah and Umm Al Quwain
+- [Catering]({BASE}/catering/): corporate, party and home events, university events, weddings, buffet setups and bulk catering across Dubai, Sharjah, Ajman, Abu Dhabi, Ras Al Khaimah, Umm Al Quwain and Fujairah
 - [The best meal plans in Dubai, compared]({BASE}/guides/best-meal-plans-dubai/): Messify, Right Bite, Calo, Kcal, VMeals and Meals On Me with published prices
 - [How much does a meal plan cost in Dubai?]({BASE}/guides/meal-plan-cost-dubai/): what a meal costs in Dubai, meal plan prices per meal and per day, with a meal plan vs ordering-in calculator
 - [Student meal plans in Dubai]({BASE}/guides/student-meal-plans-dubai/): costs, delivery to Academic City and Silicon Oasis residences, exams
