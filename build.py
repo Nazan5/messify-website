@@ -708,7 +708,7 @@ def page_meal_plans():
 
 <section class="sec" aria-labelledby="menu-title">
   <div class="wrap">
-    <div class="sec-head"><p class="eyebrow">On the menu</p><h2 class="h2" id="menu-title">A new menu every day. <span class="sample">Sample dishes</span></h2><p class="lede">Healthy, balanced home-style meals, with a different menu every day so the week never gets repetitive. There's a vegetarian option every day, for every meal.</p></div>
+    <div class="sec-head"><p class="eyebrow">On the menu</p><h2 class="h2" id="menu-title">A new menu every day. <span class="sample">Sample dishes</span></h2><p class="lede">Healthy, balanced home-style meals, with a different menu every day so the week never gets repetitive. There's a vegetarian option every day, for every meal: see <a href="/guides/vegetarian-meal-plans-dubai/">vegetarian meal plans</a>.</p></div>
     <div class="dishes">
       <article class="dish"><div class="photo"><img src="/assets/img/biryani.webp" alt="Paneer makhani with saffron rice" width="1600" height="1181" loading="lazy"></div><div class="dish__body"><span class="dish__tag">Indian</span><h3>Paneer makhani with saffron rice</h3><p>Soft paneer in a rich tomato gravy.</p></div></article>
       <article class="dish"><div class="photo"><img src="/assets/img/stroganoff.webp" alt="Creamy chicken with peppers and herb rice" width="1200" height="885" loading="lazy"></div><div class="dish__body"><span class="dish__tag">Continental</span><h3>Creamy chicken with herb rice</h3><p>Peppers and mushrooms in a light cream sauce.</p></div></article>
@@ -1650,8 +1650,10 @@ GUIDES = [
      'Costs per employee, allowance vs canteen vs meal plan, and how to set up staff meals at your workplace.'),
     ('/guides/office-lunch-delivery-jebel-ali-jafza/', 'Office lunch delivery in Jebel Ali and JAFZA',
      'How teams in JAFZA and the Jebel Ali industrial areas sort lunch: options, prices and team plans.'),
+    ('/guides/vegetarian-meal-plans-dubai/', 'Vegetarian meal plans in Dubai',
+     'A vegetarian option at every meal: what to check, the shared kitchen, allergens, prices and delivery areas.'),
 ]
-NEW_GUIDE_PATHS = ['/guides/healthy-meal-plans-dubai/', '/guides/meal-plans-working-professionals-dubai/', '/guides/staff-meal-plans-companies-dubai/', '/guides/office-lunch-delivery-jebel-ali-jafza/']
+NEW_GUIDE_PATHS = ['/guides/healthy-meal-plans-dubai/', '/guides/meal-plans-working-professionals-dubai/', '/guides/staff-meal-plans-companies-dubai/', '/guides/office-lunch-delivery-jebel-ali-jafza/', '/guides/vegetarian-meal-plans-dubai/']
 
 def article_schema(path, headline, desc, published='2026-10-13', modified=None):
     return {'@type': 'Article', '@id': BASE + path + '#article', 'headline': headline, 'description': desc,
@@ -2163,7 +2165,7 @@ def page_guide_halal():
     <p>All meals are cooked fresh daily in our partner kitchen in International City, Dubai. The menu changes every day, and you can see it in the Messify app before you choose. If you want to know more about a dish or an ingredient, message us on WhatsApp and someone on our team will answer.</p>
 
     <h2>Halal and vegetarian, every day</h2>
-    <p>Alongside the halal menu, there is a vegetarian option every day, for every meal: breakfast, lunch and dinner. That helps if you share a plan with a vegetarian housemate or colleague, if you simply want a lighter day, or if you'd rather not eat meat on a particular day. The kitchen cooks both vegetarian and non-vegetarian food.</p>
+    <p>Alongside the halal menu, there is a vegetarian option every day, for every meal: breakfast, lunch and dinner. That helps if you share a plan with a vegetarian housemate or colleague, if you simply want a lighter day, or if you'd rather not eat meat on a particular day. The kitchen cooks both vegetarian and non-vegetarian food. Our <a href="/guides/vegetarian-meal-plans-dubai/">vegetarian meal plans guide</a> explains how the vegetarian option works.</p>
 
     <h2>How a halal meal plan works with Messify</h2>
     <ol>
@@ -2373,7 +2375,7 @@ def page_guide_healthy():
     <h2>Simple ways to eat better on any meal plan</h2>
     <ol>
       <li><b>Keep meals in the fridge</b> and reheat them properly; don't leave them out.</li>
-      <li><b>Pick the vegetarian option</b> a couple of times a week for a lighter day.</li>
+      <li><b>Pick the vegetarian option</b> a couple of times a week for a lighter day. See <a href="/guides/vegetarian-meal-plans-dubai/">vegetarian meal plans in Dubai</a>.</li>
       <li><b>Drink water with meals</b> rather than sugary drinks.</li>
       <li><b>Use the plan for the meals you usually get wrong.</b> For most people that's lunch at work and late dinner.</li>
     </ol>'''
@@ -2390,6 +2392,75 @@ def page_guide_healthy():
                  'Healthy meal plans in Dubai: diet plan or everyday meals?', 'Eating well · 2026',
                  'There are two kinds of healthy meal plans in Dubai. Diet plans are built around calorie, macro or weight targets and usually cost more per meal. Everyday meal plans give you balanced, freshly cooked meals without counting anything. Messify is an everyday meal plan from AED 25 a meal, with a new menu daily, 100% halal and a vegetarian option at every meal.',
                  sections, faqs, published=NG_DATE)
+
+def page_guide_vegetarian():
+    sections = '''
+    <h2>Two kinds of vegetarian meal plan</h2>
+    <p>If you search for a vegetarian meal plan in Dubai, you will find two quite different things. The first is a dedicated vegetarian diet plan: every meal is meat-free, often built around calorie or nutrition targets, and usually priced per day. The second is an everyday meal plan with a vegetarian choice at every meal, where you pick the vegetarian dish whenever you want it.</p>
+    <p>Messify is the second kind. There is a vegetarian option every day, for every meal: breakfast, lunch and dinner. You can eat vegetarian every day of your plan, or only on the days you feel like it. If you want a strict diet programme with nutrition targets, a specialist diet plan is the better fit; our <a href="/guides/best-meal-plans-dubai/">comparison of meal plans in Dubai</a> lists providers that sell dedicated vegetarian plans.</p>
+
+    <h2>What to check before you choose</h2>
+    <p>"Vegetarian" can mean different things to different people, so ask these questions before you pay for any plan:</p>
+    <ul>
+      <li><b>Is there a vegetarian choice at every meal, or only some days?</b> A plan that only has a vegetarian lunch leaves you sorting breakfast and dinner yourself.</li>
+      <li><b>Does the kitchen also cook meat?</b> Many kitchens cook both. If you only eat food from a pure-vegetarian kitchen, or you follow a Jain diet, ask this first.</li>
+      <li><b>Are eggs and dairy used?</b> If you are vegan or avoid eggs or dairy, check the ingredients and allergens on each dish, and ask about anything that isn't clear.</li>
+      <li><b>Does the menu change?</b> The same three vegetarian dishes on repeat is how most people give up on a plan after two weeks.</li>
+      <li><b>Can you skip a day?</b> If you eat with family or friends some days, you don't want to pay for meals you won't eat.</li>
+      <li><b>Does the vegetarian option cost extra?</b> Check the price per meal, not just the headline price.</li>
+    </ul>
+
+    <h2>How vegetarian meals work on a Messify plan</h2>
+    <p>Every day the menu changes, and every meal has a vegetarian option alongside the other dishes. Our menu mixes Indian, Arabic and Continental dishes, so the vegetarian choices change through the week too.</p>
+    <ol>
+      <li><b>Choose a plan</b> in the Messify app: 1, 2 or 3 meals a day, weekly or monthly.</li>
+      <li><b>Pick tomorrow's meals by 6 PM.</b> You see the next day's menu in the app and choose the vegetarian option for any meal you like. Orders are always placed at least a day ahead.</li>
+      <li><b>Check the allergens.</b> Allergens are listed on each meal, so you can see what is in a dish before you choose it.</li>
+      <li><b>Get your meals</b>, chilled, then keep them in the fridge and reheat them when you're ready to eat.</li>
+    </ol>
+    <p>Each meal on your plan is a token. A vegetarian meal uses one token, the same as any other meal. If you are away or eating out one day, skip it in the app and use that meal on another day of your plan.</p>
+
+    <h2>Is the kitchen pure vegetarian?</h2>
+    <p>No, and it's worth being clear about this. All Messify meals are cooked fresh daily in our partner kitchen in International City, and that kitchen cooks both vegetarian and non-vegetarian food. The vegetarian option is a meat-free dish, but it is not cooked in a separate pure-vegetarian kitchen. If you only eat food from a pure-vegetarian kitchen, or you need Jain meals, message us on WhatsApp before you start: we'd rather you know exactly what you're getting than find out later.</p>
+    <p>Every Messify meal, vegetarian or not, is 100% halal. Our <a href="/guides/halal-meal-plans-dubai/">halal meal plans guide</a> explains more.</p>
+
+    <h2>Who a vegetarian-friendly plan suits</h2>
+    <ul>
+      <li><b>Vegetarians who are happy with a shared kitchen</b> and want breakfast, lunch and dinner sorted without cooking.</li>
+      <li><b>Flatmates, couples and colleagues</b> where one person eats vegetarian and the other doesn't. Each person picks their own meals from the same daily menu.</li>
+      <li><b>People eating less meat.</b> Pick the vegetarian option a few days a week for a lighter day. Our <a href="/guides/healthy-meal-plans-dubai/">healthy meal plans guide</a> has more ideas.</li>
+      <li><b>Students</b> who want a fixed food cost for the semester. See <a href="/guides/student-meal-plans-dubai/">student meal plans in Dubai</a>.</li>
+    </ul>
+
+    <h2>What it costs</h2>
+    <p>There is no extra charge for vegetarian meals. Prices start from AED 25 a meal:</p>
+    <ul>
+      <li><b>Weekly:</b> AED 215, 415 or 610 for 1, 2 or 3 meals a day (7 days of meals to use within 9 days).</li>
+      <li><b>Monthly:</b> AED 715, 1,400 or 1,999 for 1, 2 or 3 meals a day (26 days of meals to use within 30 days).</li>
+    </ul>
+    <p>That works out at AED 25.63 to 30.71 per meal, depending on the plan. Our <a href="/guides/meal-plan-cost-dubai/">meal plan cost guide</a> compares this with ordering in, and <a href="/guides/weekly-vs-monthly-meal-plan/">weekly vs monthly</a> helps you pick a length.</p>
+
+    <h2>Where Messify delivers</h2>
+    <p>In <a href="/meal-plans/academic-city/">Dubai Academic City</a>, <a href="/meal-plans/silicon-oasis/">Dubai Silicon Oasis</a>, <a href="/meal-plans/international-city/">International City</a> and <a href="/meal-plans/festival-city/">Dubai Festival City</a> (including Al Badia), all of the day's meals arrive together every morning in one chilled bag.</p>
+    <p>We also deliver to <a href="/meal-plans/al-aweer/">Al Aweer</a>, <a href="/meal-plans/dubai-investments-park/">Dubai Investments Park (DIP)</a>, <a href="/meal-plans/jebel-ali/">Jebel Ali (including JAFZA)</a>, <a href="/meal-plans/al-furjan/">Al Furjan</a> and <a href="/meal-plans/dubai-south/">Dubai South</a>. Meals arrive chilled with ice packs, ready to keep in the fridge and reheat, and our team confirms the delivery details with you on WhatsApp.</p>
+
+    <h2>How to start</h2>
+    <p>Orders aren't taken on this website. Download the Messify app and choose your plan there, or message us on WhatsApp and our team will answer any questions about the vegetarian dishes before you start. See every plan and price on our <a href="/meal-plans/">meal plans in Dubai</a> page, or <a href="/start/">start your plan</a>.</p>
+    <p>Planning an event with vegetarian guests? Vegetarian dishes can go into any of our <a href="/catering/">catering</a> menus.</p>'''
+    faqs = [
+        ('Does Messify have a vegetarian meal plan?', 'Messify has a vegetarian option every day, for every meal: breakfast, lunch and dinner. You can choose the vegetarian dish at every meal, so you can eat vegetarian for your whole plan.'),
+        ('Is the Messify kitchen pure vegetarian?', 'No. Our partner kitchen in International City cooks both vegetarian and non-vegetarian food. If you need a pure-vegetarian kitchen or Jain meals, message us on WhatsApp before you start.'),
+        ('Do vegetarian meals cost more?', 'No. A vegetarian meal uses one token, the same as any other meal. Plans start from AED 25 a meal: AED 215 a week or AED 715 a month for 1 meal a day.'),
+        ('Can I see the allergens before I choose?', 'Yes. Allergens are listed on each meal, and you choose tomorrow\'s meals in the app by 6 PM the day before.'),
+        ('Are the vegetarian meals halal?', 'Yes. Every Messify meal is 100% halal, vegetarian or not.'),
+        ('Which areas do you deliver vegetarian meal plans to?', 'Dubai Academic City, Dubai Silicon Oasis, International City, Dubai Festival City (DFC), Al Aweer, Dubai Investments Park (DIP), Jebel Ali (including JAFZA), Al Furjan and Dubai South.'),
+    ]
+    article_page('/guides/vegetarian-meal-plans-dubai/', 'Vegetarian meal plans',
+                 'Vegetarian Meal Plans in Dubai: What to Check | Messify',
+                 'Vegetarian meal plans in Dubai: a veg option at every meal, 100% halal, allergens listed, from AED 25 a meal. What to check and how it works.',
+                 'Vegetarian meal plans in Dubai', 'Vegetarian food · 2026',
+                 'Messify has a vegetarian option every day, for every meal, so you can eat vegetarian for your whole plan or only when you want to. Every meal is 100% halal, allergens are listed on each one, and the vegetarian option costs the same as any other meal: from AED 25 a meal. Our partner kitchen cooks both vegetarian and non-vegetarian food, so it is not a pure-vegetarian kitchen.',
+                 sections, faqs, published='2026-11-27')
 
 def page_guide_professionals():
     sections = '''
@@ -4099,7 +4170,7 @@ if __name__ == '__main__':
     page_home(); page_meal_plans()
     for s in AREAS: page_area(s)
     page_guides(); page_guide_best(); page_guide_cost(); page_guide_students(); page_guide_weekly_monthly(); page_guide_office_dso(); page_guide_dfc(); page_guide_affordable(); page_guide_halal()
-    page_guide_jafza(); page_guide_staff_meals(); page_guide_healthy(); page_guide_professionals()
+    page_guide_jafza(); page_guide_staff_meals(); page_guide_healthy(); page_guide_professionals(); page_guide_vegetarian()
     page_guide_food_per_person(); page_guide_catering_cost(); page_guide_corporate_checklist(); page_guide_home_party(); page_guide_styles(); page_guide_wedding()
     for s in CATER_AREAS: page_cater_area(s)
     page_guide_calendar(); page_guide_corporate_iftar(); page_guide_diwali(); page_guide_year_end(); page_guide_national_day()
